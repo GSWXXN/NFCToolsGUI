@@ -1,0 +1,234 @@
+:root{
+  --side-bar-width: 40px;
+  --bottom-bar-height: 30px;
+}
+@font-face{
+  font-family: 'SourceCodePro';
+  src: url('font/SourceCodePro-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  margin: 50px auto auto;
+  background-color: #ffffff;
+  max-width: 38rem;
+  padding: 2rem;
+  user-select: none;
+}
+select{
+  width: 120px;
+}
+#title-bar {
+  -webkit-app-region: drag;
+  height: 40px;
+  background-color: #e9e9ec;
+  margin-top: 0;
+  padding-top: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+#app-title{
+  display:block;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  font-size: 16px;
+  float: right;
+  margin-right: 85px;
+}
+.deviceConfigForm{
+  display: flex;
+  margin-right: 20px;
+  height: 28px;
+  float: right;
+}
+.deviceConfigForm .bar-button{
+  margin-left: 10px;
+  margin-top: 2px;
+  width: 36px;
+  height: 36px;
+  -webkit-app-region: none;
+}
+.deviceConfigForm .bar-button:hover{
+  border-radius: 6px;
+  background-color: #f7f8fa;
+}
+.selection{
+  -webkit-app-region: none;
+  height: 28px;
+  margin-top: 6px;
+  line-height: 28px;
+  padding-left: 10px;
+  background-color: #4168cf;
+  border-radius: 6px;
+  position: relative;
+}
+.selection:hover{
+  background: #3a5dbb;
+  border-radius: 6px;
+}
+.selection .selection-value{
+  width: 80%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: transparent;
+  color: white;
+  user-select: none;
+  font-size: 13px;
+}
+.selection-value::placeholder {
+  color: white;
+  opacity: 1;
+}
+.down-arrow {
+  display: inline-block;
+  border-top: 1px solid;
+  border-right: 1px solid;
+  width: 5px;
+  height: 5px;
+  border-color: white;
+  transform: rotate(135deg);
+  margin: 0 10px 3px 0;
+}
+
+.dropdown-menus{
+  position: absolute;
+  top: 38px;
+  right: 91px;
+  max-height: 200px;
+  min-width: 170px;
+  display: none;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 8px;
+  -webkit-box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+  box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+  overflow-y: scroll;
+  min-height: 42px;
+  background-color: white;
+}
+.dropdown-menu{
+  padding: 6px 0;
+  margin: 0 5px 0 5px;
+  list-style: none;
+}
+.menu-item{
+  width: fit-content;
+  height: 30px;
+  cursor: pointer;
+  line-height: 30px;
+  padding-left: 10px;
+  padding-right: 20px;
+  font-size: 13px;
+  user-select: none;
+}
+.menu-item:hover{
+  outline: 0;
+  background: #D2DEF9;
+  border-radius: 5px;
+}
+#left-bar{
+  padding-top: 10px;
+  outline: none;
+  background-color: #f7f8fa;
+  position: fixed;
+  width: var(--side-bar-width);
+  height: 229px;
+  bottom: var(--bottom-bar-height);
+  left: 15px;
+  z-index: 999;
+  text-align: center;
+  border-top-left-radius: 20px;
+
+  border-top: 1px solid #ebecf0;
+  border-left: 1px solid #ebecf0;
+}
+.bar-button{
+  text-align: center;
+  background-color: transparent;
+  border: 0;
+}
+#left-bar .bar-button{
+  margin-top: 5px;
+  width: 35px;
+  height: 35px;
+}
+.button-img{
+  width: 100%;
+  vertical-align: middle;
+}
+#left-bar .bar-button:hover{
+  border-radius: 6px;
+  background-color: #dddfe3;
+}
+
+#bottom-bar{
+  display: flex;
+  align-items: center;
+  height: var(--bottom-bar-height);
+  background-color: #f7f8fa;
+  box-sizing: border-box;
+  border-top: 1px solid #ebecf0;
+  border-left: 1px solid #ebecf0;
+  border-right: 1px solid #ebecf0;
+  margin-top: 0;
+  padding-top: 0;
+  position: fixed;
+  bottom: 0;
+  left: 15px;
+  right: 15px;
+}
+.bottom-bar-item{
+  margin-left: 100px;
+}
+
+.bar-button .tool-tip-text {
+  visibility: hidden;
+  width: 100px;
+  background-color: #27282d;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  border: 1px solid #fff;
+  border-radius: 6px;
+  position: absolute;
+  left: 45px;
+}
+.bar-button:hover .tool-tip-text {
+  visibility: visible;
+}
+#log{
+  position: absolute;
+  bottom: var(--bottom-bar-height);
+  left: 55px;
+  right: 15px;
+  border: none;
+  resize: none;
+  height: 200px;
+  padding: 20px 20px 20px 20px;
+  outline: none;
+  color: #54ad6c;
+  background-color: #151728;
+  font-family: "SourceCodePro", "Heiti SC", serif;
+  font-size: 14px;
+  border-top-right-radius: 20px;
+}
+.main-button{
+  background-color: #f4f5fc;
+  border: none;
+  color: black;
+  width: 150px;
+  height: 50px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgb(96 89 203 / 20%);
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+.main-button:hover{
+  background-color: #6059cb;
+  color: white;
+  transition: 130ms
+}

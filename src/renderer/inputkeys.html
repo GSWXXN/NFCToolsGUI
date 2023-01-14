@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>请输入已知密钥</title>
+</head>
+<body>
+    <div>请输入已知的Key, 以英文半角逗号分隔</div>
+    <label>
+        <input type="text" id="keys" value="ffffffffffff">
+    </label>
+    <br>
+    <button onclick="window.electronAPI.closeInputKeysWindow()">取消</button>
+    <button onclick="window.electronAPI.okayInputKeysWindow(nextAction, document.getElementById('keys').value)">确定</button>
+</body>
+<script>
+    let nextAction = null
+    window.electronAPI.onCreateInputKeysWindow((_event, value) => {nextAction = value})
+</script>
+</html>
