@@ -2,6 +2,12 @@ let mainProcess = window["electronAPI"]
 let currentUSBPorts = []
 let isConnectingDevice = false
 let isLockScroll = false
+let isTimerRunning = false;
+let intervalID = undefined;
+let timerSecond = 0
+
+
+mainProcess.getVersion().then((v) =>{$("#version-value").html(v)})
 
 // 接收更新 Log 输出
 mainProcess.onUpdateLogOutput((_event, value) => {
@@ -14,6 +20,42 @@ mainProcess.onUpdateLogOutput((_event, value) => {
     textarea.value += value
     if (!isLockScroll && value.indexOf("\n") >= 0) {
         textarea.scroll({top: textarea.scrollHeight, left: 0, behavior: "smooth"})
+    }
+})
+
+// 接收状态更新
+mainProcess.onUpdateStatus((_event, value) => {
+    $("#status-text").html(value["text"])
+
+    const statusIndicator = $("#status-indicator")
+    switch (value["indicator"]) {
+        case "free":
+            statusIndicator.css("background-color", "transparent")
+            clearInterval(intervalID)
+            isTimerRunning = false
+            timerSecond = 0
+            break
+        case "running":
+            statusIndicator.css("background-color", "green")
+
+            if (isTimerRunning) return
+            isTimerRunning = true
+            let double = function (m) {
+                return m < 10 ? `0${m}` : `${m}`;
+            }
+            intervalID = setInterval(function () {
+                timerSecond++;
+                const hour = parseInt(timerSecond / 3600);
+                const min = parseInt(timerSecond / 60) % 60;
+                const sec = timerSecond % 60;
+                $("#timer-value").html( `${double(hour)}:${double(min)}:${double(sec)}`)
+            }, 1000);
+            break
+        case "error":
+            statusIndicator.css("background-color", "red")
+            clearInterval(intervalID)
+            isTimerRunning = false
+            timerSecond = 0
     }
 })
 
@@ -95,7 +137,7 @@ function selectedValue(obj, e){
 }
 
 // 点击其他位置关闭下拉列表
-document.addEventListener("click", (e) => {
+document.addEventListener("click", () => {
     if ($(".dropdown-menus").is(":visible")) {
         $('.dropdown-menus').hide();
     }

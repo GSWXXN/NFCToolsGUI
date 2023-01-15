@@ -1,4 +1,4 @@
-const {exec, killProcess, printExitLog, printLog} = require("./execUtils")
+const {exec, killProcess, printExitLog, printLog, printStatus} = require("./execUtils")
 const fs = require('fs')
 const {dialog} = require('electron')
 const {createInputKeysWindow, createHardNestedWindow, webContentsSend} = require("./windows")
@@ -14,7 +14,7 @@ const nfcConfigFilePath = "/usr/local/etc/nfc/libnfc.conf"
 let newKeys = []
 let knownKeyInfo = []
 let unknownKeyInfo = []
-let totalUnknownKeys
+let totalUnknownKeys = 0
 
 const defaultKeys = [
     "ffffffffffff",
@@ -48,19 +48,23 @@ const actions = {
     // 连接设备
     "conn-usb-devices": (device) => {
         if (device === " ") {status.currentDevice = null; return}
+        printStatus("正在连接设备")
         status.currentDevice = device
         setNFCConfig()
     },
 
     // 速度设置
-    "set-speed": (speed) => {
-        if (status.currentDevice === null) {dialog.showErrorBox("错误", "请先选择设备"); return}
-        status.currentSpeed = speed
-        setNFCConfig()
-    },
+    // "set-speed": (speed) => {
+    //     if (status.currentDevice === null) {dialog.showErrorBox("错误", "请先选择设备"); return}
+    //     status.currentSpeed = speed
+    //     setNFCConfig()
+    // },
 
     // 一键解卡
-    "read-IC": () => {mfoc([`-O${tempMFDFilePath}`, `-f${knownKeysFile}`])},
+    "read-IC": () => {
+        printStatus("正在解卡")
+        mfoc([`-O${tempMFDFilePath}`, `-f${knownKeysFile}`])
+    },
 
     // 一键写卡
     "write-IC": () => {
@@ -74,7 +78,7 @@ const actions = {
             let mfdFilePath = result["filePaths"][0]
 
             readICThenExec(
-                "开始执行写入 M1 卡片",
+                "开始执行写入 M1 卡片", "正在写卡",
                 "nfc-mfclassic", ["w", "A", "u", mfdFilePath, tempMFDFilePath, "f"]
             )
         })
@@ -83,7 +87,7 @@ const actions = {
     // 格式化
     "format-card": () => {
         readICThenExec(
-            "开始执行格式化 M1 卡片",
+            "开始执行格式化 M1 卡片", "正在格式化卡片",
             "nfc-mfclassic", ["f", "A", "u", tempMFDFilePath, tempMFDFilePath, "f"]
         )
     },
@@ -95,6 +99,7 @@ const actions = {
         keys.match(/[0-9A-Fa-f]{12}/g).forEach(key => {
             keyArg.push(`-k${key}`)
         })
+        printStatus("正在解卡")
         mfoc(keyArg.concat([`-O${tempMFDFilePath}`, `-f${knownKeysFile}`]))
     },
 
@@ -103,6 +108,7 @@ const actions = {
         checkKeyFileExist()
         knownKeyInfo = []
         unknownKeyInfo = []
+        printStatus("正在检测卡片")
         exec(
             "开始执行检测卡片类型",
             'nfc-mfdetect', [`-O${tempMFDFilePath}`, `-f${knownKeysFile}`],
@@ -127,13 +133,13 @@ const actions = {
             message: "该操作将会锁死UFUID卡片！！！\n锁死后不可恢复！无法再次更改0块！请确认是否要继续操作？",
         }).then((response) => {
             if (response.response === 1) {
+                printStatus("正在锁 UFUID")
                 exec("开始执行UFUID卡片锁定", "nfc-mflock", ["-q"])
             }
         })
     },
 
     // HardNested 解密
-    // Todo:  自动任务
     "hard-nested": () => {
         try {createHardNestedWindow({
             knownKey: knownKeyInfo[0][0],
@@ -144,16 +150,30 @@ const actions = {
         })}
         catch (e) {createHardNestedWindow()}},
     "hard-nested-config-done": (configs) => {
-        if (configs.autoRun) readICThenExec("开始自动解密 HardHested", () => {
-            if (knownKeyInfo.length === 0) {printLog("\n未发现已知密钥"); printExitLog(1); return;}
-            if (unknownKeyInfo.length === 0) {printLog("\n已尝试解密全部未知密钥"); printExitLog(0); return;}
-            configs.knownKey = knownKeyInfo[0][0]
-            configs.knownSector = knownKeyInfo[0][1]
-            configs.knownKeyType = knownKeyInfo[0][2]
-            configs.targetSector = unknownKeyInfo[0][0]
-            configs.targetKeyType = unknownKeyInfo[0][1]
-            execAction("run-hard-nested", configs)
-        })
+        if (configs.autoRun) {
+            readICThenExec("开始自动解密 HardHested", `正在 HardNested 解密 - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`,
+                () => {
+                    if (configs.fromUser) totalUnknownKeys = unknownKeyInfo.length
+                    printStatus(`正在 HardNested解密 - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`)
+
+                    if (knownKeyInfo.length === 0) {
+                        printLog("\n未发现已知密钥");
+                        printExitLog(1);
+                        return;
+                    }
+                    if (unknownKeyInfo.length === 0) {
+                        printLog("\n已尝试解密全部未知密钥\n");
+                        printExitLog(0);
+                        return;
+                    }
+                    configs.knownKey = knownKeyInfo[0][0]
+                    configs.knownSector = knownKeyInfo[0][1]
+                    configs.knownKeyType = knownKeyInfo[0][2]
+                    configs.targetSector = unknownKeyInfo[0][0]
+                    configs.targetKeyType = unknownKeyInfo[0][1]
+                    execAction("run-hard-nested", configs)
+                })
+        }
         else execAction("run-hard-nested", configs)
     },
     "run-hard-nested": (configs) => {
@@ -274,9 +294,6 @@ const actions = {
             })
         }
     },
-    "test": () => {
-
-    }
 }
 
 // 保存密钥
@@ -291,13 +308,14 @@ function saveKeys(keys) {
 }
 
 // 先读卡，然后进行后续操作
-function readICThenExec(msg, cmd, args, processHandler, finishHandler) {
+function readICThenExec(msg, statusMsg, cmd, args, processHandler, finishHandler) {
     let isCmdFunc = true
-    if (arguments.length === 2) isCmdFunc = false
+    if (arguments.length === 3) isCmdFunc = false
     checkKeyFileExist()
     newKeys = []
     knownKeyInfo = []
     unknownKeyInfo = []
+    printStatus("正在检测卡片")
     exec(
         "先读卡，然后利用解卡密钥进行后续操作\n\n# 开始执行MFOC解密",
         'nfc-mfdetect', [`-O${tempMFDFilePath}`, `-f${knownKeysFile}`],
@@ -309,6 +327,7 @@ function readICThenExec(msg, cmd, args, processHandler, finishHandler) {
             }
         },
         () => {
+            printStatus(statusMsg)
             if (!isCmdFunc) {cmd(); return;}
             if (!fs.existsSync(tempMFDFilePath)) {
                 printExitLog(0)
@@ -403,7 +422,8 @@ function setNFCConfig() {
                     status.isDeviceConnected = false
                 }
             },
-            () => {webContentsSend("setting-nfc-config", status.isDeviceConnected ? "success" : "failed")})
+            () => {webContentsSend("setting-nfc-config", status.isDeviceConnected ? "success" : "failed")},
+            () => {if (status.isDeviceConnected) printExitLog(0); else printExitLog(1)})
     })
 }
 

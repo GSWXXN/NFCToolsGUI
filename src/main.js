@@ -1,5 +1,5 @@
 const {execAction} = require('./command')
-const {app, BrowserWindow, ipcMain, dialog} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 const {createMainWindow, closeInputKeysWindow, closeHardNestedWindow} = require('./windows')
 const {killProcess} = require('./execUtils')
 
@@ -8,6 +8,7 @@ if (require('electron-squirrel-startup')) {
     app.quit()
 }
 
+ipcMain.handle('get-app-version', () => {return app.getVersion()})
 ipcMain.handle('exec-action', (event, action, arg) => {
     execAction(action, arg)
 })

@@ -7,6 +7,7 @@ let task = null
 
 function exec(msg, cmd, args, processHandler, finishHandler, followupTask) {
     if (status.currentDevice === null || (!status.isDeviceConnected && cmd !== "nfc-list")) {
+        printStatus("出错", "error")
         dialog.showErrorBox("错误", "请先连接设备")
         return
     }
@@ -47,22 +48,25 @@ function printLog(msg) {
     webContentsSend("update-log-output", msg)
 }
 
-function printStatus(msg) {
-    webContentsSend("update-status", msg)
+function printStatus(msg, indicator="running") {
+    webContentsSend("update-status", {"text": msg, "indicator": indicator})
 }
 
 function printExitLog(code) {
     switch (code) {
         case 0:
+            printStatus("空闲", "free")
             printLog("\n### 运行完毕 ###")
             break
         case 1:
+            printStatus("出错", "error")
             printLog("\n### 运行出错 ###")
             break
         case 2:
+            printStatus("空闲", "free")
             printLog("\n### 停止任务 ###")
             break
     }
 }
 
-module.exports = {exec, killProcess, printExitLog, printLog}
+module.exports = {exec, killProcess, printExitLog, printLog, printStatus}

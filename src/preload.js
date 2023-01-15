@@ -2,6 +2,7 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 const {contextBridge, ipcRenderer} = require('electron')
 
+
 contextBridge.exposeInMainWorld('electronAPI', {
     devicePrefix: "/dev/tty.",
     onUpdateLogOutput: (callback) => ipcRenderer.on("update-log-output", callback),
@@ -11,6 +12,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onCreateInputKeysWindow: (nextAction) => ipcRenderer.on("input-keys-window-next-action", nextAction),
     onCreateHardNestedWindow: (config) => ipcRenderer.on("update-hard-nested-config", config),
 
+    getVersion: () => ipcRenderer.invoke("get-app-version"),
     execAction: (action, arg) => ipcRenderer.invoke("exec-action", action, arg),
     closeInputKeysWindow: () => ipcRenderer.invoke("close-input-keys-window"),
     okayInputKeysWindow: (nextAction, keys) => ipcRenderer.invoke("okay-input-keys-window", nextAction, keys),

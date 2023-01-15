@@ -8,7 +8,9 @@
   font-weight: normal;
   font-style: normal;
 }
-
+img{
+  pointer-events:none;
+}
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   margin: 50px auto auto;
@@ -23,13 +25,14 @@ select{
 #title-bar {
   -webkit-app-region: drag;
   height: 40px;
-  background-color: #e9e9ec;
+  background-color: #dbdbdc;
   margin-top: 0;
   padding-top: 0;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  box-shadow: 0 6px 12px rgb(0 0 0 / 10%);
 }
 #app-title{
   display:block;
@@ -153,7 +156,29 @@ select{
 
 
 .bottom-bar-item{
-  margin-left: 100px;
+  width: calc(100% / 4 - 20px);
+  display: flex;
+  align-items: center;
+}
+.bottom-bar-item span{
+  white-space: nowrap;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  padding-right: 5px;
+}
+#status-indicator {
+  width: 10px;
+  height: 10px;
+  background-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+  margin-left: 15px;
+}
+#timer img{
+  width: 20px;
 }
 
 .bar-button .tool-tip-text {
