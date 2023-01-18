@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onSettingNFCConfig: (callback) => ipcRenderer.on("setting-nfc-config", callback),
     onCreateInputKeysWindow: (nextAction) => ipcRenderer.on("input-keys-window-next-action", nextAction),
     onCreateHardNestedWindow: (config) => ipcRenderer.on("update-hard-nested-config", config),
+    onCreateDictTestWindow: (config) => ipcRenderer.on("update-dict-test-config", config),
 
     getVersion: () => ipcRenderer.invoke("get-app-version"),
     execAction: (action, arg) => ipcRenderer.invoke("exec-action", action, arg),
@@ -18,4 +19,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     okayInputKeysWindow: (nextAction, keys) => ipcRenderer.invoke("okay-input-keys-window", nextAction, keys),
     closeHardNestedWindow: () => ipcRenderer.invoke("close-hard-nested-window"),
     okayHardNestedWindow: (configs) => ipcRenderer.invoke("okay-hard-nested-window", configs),
+    closeDictTestWindow: () => ipcRenderer.invoke("close-dict-test-window"),
+    okayDictTestWindow: (configs) => ipcRenderer.invoke("okay-dict-test-window", configs),
 })

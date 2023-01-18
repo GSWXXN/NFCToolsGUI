@@ -1,6 +1,6 @@
 const {execAction} = require('./command')
 const {app, BrowserWindow, ipcMain} = require('electron')
-const {createMainWindow, closeInputKeysWindow, closeHardNestedWindow} = require('./windows')
+const {createMainWindow, closeInputKeysWindow, closeHardNestedWindow, closeDictTestWindow} = require('./windows')
 const {killProcess} = require('./execUtils')
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -21,6 +21,11 @@ ipcMain.handle('close-hard-nested-window', closeHardNestedWindow)
 ipcMain.handle('okay-hard-nested-window', (event, configs) => {
     execAction("hard-nested-config-done", configs)
     closeHardNestedWindow()
+})
+ipcMain.handle('close-dict-test-window', closeDictTestWindow)
+ipcMain.handle('okay-dict-test-window', (event, configs) => {
+    execAction("dict-test-config-done", configs)
+    closeDictTestWindow()
 })
 
 // This method will be called when Electron has finished

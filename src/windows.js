@@ -8,6 +8,7 @@ const status = require("./status");
 let mainWindow = null
 let inputKeysWindow = null
 let hardNestedWindow = null
+let dictTestWindow = null
 
 const createMainWindow = () => {
     mainWindow = new BrowserWindow({
@@ -80,12 +81,35 @@ const createHardNestedWindow = (config) => {
     hardNestedWindow.webContents.send("update-hard-nested-config", config)
 }
 
+const createDictTestWindow = (config) => {
+    dictTestWindow = new BrowserWindow({
+        parent: mainWindow,
+        modal: true,
+        width: 400,
+        height: 350,
+        show: false,
+        resizable: false,
+        maximizable: false,
+        minimizable: false,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+        },
+    })
+    dictTestWindow.once("ready-to-show", () => {dictTestWindow.show()})
+    dictTestWindow.loadFile(path.join(__dirname, 'renderer/dictTest.html'))
+    dictTestWindow.webContents.send("update-dict-test-config", config)
+}
+
 const closeInputKeysWindow = () => {
     inputKeysWindow.close()
 }
 
 const closeHardNestedWindow = () => {
     hardNestedWindow.close()
+}
+
+const closeDictTestWindow = () => {
+    dictTestWindow.close()
 }
 
 const webContentsSend = (channel, args) => {
@@ -96,4 +120,4 @@ const webContentsSend = (channel, args) => {
     }
 }
 
-module.exports = {createMainWindow, createInputKeysWindow, webContentsSend: webContentsSend, closeInputKeysWindow, createHardNestedWindow, closeHardNestedWindow}
+module.exports = {createMainWindow, createInputKeysWindow, webContentsSend: webContentsSend, closeInputKeysWindow, createHardNestedWindow, closeHardNestedWindow, createDictTestWindow, closeDictTestWindow}

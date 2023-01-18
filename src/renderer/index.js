@@ -12,9 +12,9 @@ mainProcess.getVersion().then((v) =>{$("#version-value").html(v)})
 // 接收更新 Log 输出
 mainProcess.onUpdateLogOutput((_event, value) => {
     const textarea = document.getElementById("log")
-    if (value.indexOf("[2K") >= 0) {
+    if (value.indexOf("\33[2K") >= 0) {
         textarea.value = textarea.value.substring(0, textarea.value.lastIndexOf('\n'))
-        value = value.replace("[2K", "")
+        value = value.replace("\33[2K", "")
     }
 
     textarea.value += value

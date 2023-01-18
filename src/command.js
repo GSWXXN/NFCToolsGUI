@@ -1,7 +1,7 @@
 const {exec, killProcess, printExitLog, printLog, printStatus} = require("./execUtils")
 const fs = require('fs')
 const {dialog} = require('electron')
-const {createInputKeysWindow, createHardNestedWindow, webContentsSend} = require("./windows")
+const {createInputKeysWindow, createHardNestedWindow, createDictTestWindow, webContentsSend} = require("./windows")
 const cp = require("child_process");
 const status = require("./status")
 
@@ -10,6 +10,7 @@ const tempMFDFilePath = "temp.mfd"
 const dumpFilesPath = "./dumpfiles"
 const noncesFilesPath = "./nonces.bin"
 const nfcConfigFilePath = "/usr/local/etc/nfc/libnfc.conf"
+const dictPath = "./dict.dic"
 
 let newKeys = []
 let knownKeyInfo = []
@@ -78,7 +79,7 @@ const actions = {
             let mfdFilePath = result["filePaths"][0]
 
             readICThenExec(
-                "开始执行写入 M1 卡片", "正在写卡",
+                "开始执行写入 M1 卡片", "正在写卡", true,
                 "nfc-mfclassic", ["w", "A", "u", mfdFilePath, tempMFDFilePath, "f"]
             )
         })
@@ -87,7 +88,7 @@ const actions = {
     // 格式化
     "format-card": () => {
         readICThenExec(
-            "开始执行格式化 M1 卡片", "正在格式化卡片",
+            "开始执行格式化 M1 卡片", "正在格式化卡片", true,
             "nfc-mfclassic", ["f", "A", "u", tempMFDFilePath, tempMFDFilePath, "f"]
         )
     },
@@ -111,7 +112,7 @@ const actions = {
         printStatus("正在检测卡片")
         exec(
             "开始执行检测卡片类型",
-            'nfc-mfdetect', [`-O${tempMFDFilePath}`, `-f${knownKeysFile}`],
+            'nfc-mfdetect', [`-N`, `-f${knownKeysFile}`],
             (value) => {keyInfoStatistic(value)},
             () => {
                 if (fs.statSync(tempMFDFilePath).size === 0) {
@@ -151,7 +152,9 @@ const actions = {
         catch (e) {createHardNestedWindow()}},
     "hard-nested-config-done": (configs) => {
         if (configs.autoRun) {
-            readICThenExec("开始自动解密 HardHested", `正在 HardNested 解密 - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`,
+            readICThenExec("开始自动解密 HardHested",
+                `正在 HardNested 解密 - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`,
+                false,
                 () => {
                     if (configs.fromUser) totalUnknownKeys = unknownKeyInfo.length
                     printStatus(`正在 HardNested解密 - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`)
@@ -264,6 +267,36 @@ const actions = {
         )
     },
 
+    // 字典测试
+    "dict-test": () => {
+        try {
+            createDictTestWindow({
+                targetSector: unknownKeyInfo[0][0],
+                targetKeyType: unknownKeyInfo[0][1]
+            })
+        }
+        catch (e) {createDictTestWindow()}
+    },
+    "dict-test-config-done": (configs) => {
+        printStatus("正在字典测试")
+        exec("开始执行字典测试",
+            "nfc-mfdict", [`-s${configs.sector}`, `-t${configs.keyType}`, `-l${configs.startPosition}`, `-d${dictPath}`],
+            (value) => {
+                let i = value.indexOf("Found Key: ")
+                if (i >= 0) {
+                    i += 11
+                    const key = value.substring(i, i + 12)
+                    saveKeys([key])
+                    if (unknownKeyInfo.length === 0) return
+                    if (unknownKeyInfo[0][0] === configs.sector && unknownKeyInfo[0][1] === configs.keyType) unknownKeyInfo.shift()
+                }
+            }
+        )
+    },
+
+    // 打开历史密钥
+    "open-history-keys": () => {cp.exec("open " + knownKeysFile)},
+
     // 取消任务
     "cancel-task": () => {
         killProcess()
@@ -308,7 +341,7 @@ function saveKeys(keys) {
 }
 
 // 先读卡，然后进行后续操作
-function readICThenExec(msg, statusMsg, cmd, args, processHandler, finishHandler) {
+function readICThenExec(msg, statusMsg, isSaveDumpFile, cmd, args, processHandler, finishHandler) {
     let isCmdFunc = true
     if (arguments.length === 3) isCmdFunc = false
     checkKeyFileExist()
@@ -318,7 +351,7 @@ function readICThenExec(msg, statusMsg, cmd, args, processHandler, finishHandler
     printStatus("正在检测卡片")
     exec(
         "先读卡，然后利用解卡密钥进行后续操作\n\n# 开始执行MFOC解密",
-        'nfc-mfdetect', [`-O${tempMFDFilePath}`, `-f${knownKeysFile}`],
+        'nfc-mfdetect', isSaveDumpFile ? [`-O${tempMFDFilePath}`, `-f${knownKeysFile}`] : [`-N`, `-f${knownKeysFile}`],
         (value) => {keyInfoStatistic(value)},
         () => {
             saveKeys(newKeys)
