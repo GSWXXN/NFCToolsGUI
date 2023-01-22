@@ -1,6 +1,7 @@
 :root{
   --side-bar-width: 40px;
-  --bottom-bar-height: 30px;
+  --bottom-bar-height: 40px;
+  --console-height: 340px;
 }
 @font-face{
   font-family: 'SourceCodePro';
@@ -13,7 +14,7 @@ img{
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  margin: 50px auto auto;
+  margin: 50px 0 0;
   max-width: 38rem;
   padding: 2rem;
   user-select: none;
@@ -25,7 +26,7 @@ select{
 #title-bar {
   -webkit-app-region: drag;
   height: 40px;
-  background-color: #dbdbdc;
+  background-color: #f7f8fa;
   margin-top: 0;
   padding-top: 0;
   position: fixed;
@@ -56,7 +57,7 @@ select{
   height: 36px;
   -webkit-app-region: none;
 }
-.deviceConfigForm .bar-button:hover{
+.bar-button:hover{
   border-radius: 6px;
   background-color: #f7f8fa;
 }
@@ -102,8 +103,6 @@ select{
 .dropdown-menus{
   position: absolute;
   top: 38px;
-  right: 91px;
-  max-height: 200px;
   min-width: 170px;
   display: none;
   border: 1px solid rgba(0,0,0,.15);
@@ -113,6 +112,16 @@ select{
   overflow-y: scroll;
   min-height: 42px;
   background-color: white;
+}
+
+.usb-ports-list .dropdown-menus{
+  position: absolute;
+  right: 91px;
+  max-height: 200px;
+}
+.tools-list .dropdown-menus{
+  position: absolute;
+  right: 20px;
 }
 .dropdown-menu{
   padding: 6px 0;
@@ -149,7 +158,7 @@ select{
   width: 100%;
   vertical-align: middle;
 }
-#left-bar .bar-button:hover{
+.bar-button:hover{
   border-radius: 6px;
   background-color: #dddfe3;
 }
@@ -197,12 +206,12 @@ select{
   visibility: visible;
 }
 .main-button-area{
-  width: 580px;
-  margin: 15px auto auto;
+  width: 700px;
+  margin: 0 25px;
 }
 .main-button{
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
   margin-bottom: 40px;
   background-color: #f4f5fc;
   border: none;
@@ -210,12 +219,12 @@ select{
   width: 150px;
   height: 50px;
   border-radius: 12px;
-  box-shadow: 0 6px 12px rgb(96 89 203 / 20%);
+  box-shadow: 0 6px 12px rgb(65 104 207 / 20%);
   font-size: 15px;
   cursor: pointer;
 }
 .main-button:hover{
-  background-color: #6059cb;
+  background-color: #4168cf;
   color: white;
   transition: 130ms;
 }
@@ -237,7 +246,7 @@ select{
   outline: none;
   background-color: #f7f8fa;
   width: var(--side-bar-width);
-  height: 280px;
+  height: calc(var(--console-height) + 30px);
   bottom: var(--bottom-bar-height);
   text-align: center;
   border-top-left-radius: 20px;
@@ -247,7 +256,7 @@ select{
 #log{
   border: none;
   resize: none;
-  height: 250px;
+  height: var(--console-height);
   padding: 20px 20px 20px 20px;
   outline: none;
   color: #54ad6c;

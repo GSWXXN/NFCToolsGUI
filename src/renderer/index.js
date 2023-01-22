@@ -63,7 +63,8 @@ mainProcess.onUpdateStatus((_event, value) => {
 mainProcess.onUpdateUSBDevices((_event, value) => {
     if (isListEqual(value, currentUSBPorts)) return
     currentUSBPorts = value
-    $("ul.dropdown-menu, [data-id='usb-port']").empty()
+    const usbPorts = $(".dropdown-menu[data-id='usb-port']")
+    usbPorts.empty()
 
     value.forEach((v) => {
         // <li class="menu-item ec-active" data-value="0" data-label="专线"><span class="text">专线</span></li>
@@ -76,7 +77,7 @@ mainProcess.onUpdateUSBDevices((_event, value) => {
         deviceItem.setAttribute("data-value", v)
         deviceItem.setAttribute("data-label", deviceItemSpan.innerText)
         deviceItem.appendChild(deviceItemSpan)
-        $("ul.dropdown-menu, [data-id='usb-port']").append(deviceItem)
+        usbPorts.append(deviceItem)
     })
 })
 
@@ -96,8 +97,7 @@ mainProcess.onSettingNFCConfig((_event, value) => {
 
 
 // 显示选择设备下拉列表
-function showDropdown(obj, e){
-    if (isConnectingDevice) return
+function showDropdown(obj, e, action){
     e.stopPropagation(); //阻止冒泡
     //阻止默认浏览器动作(W3C)
     if ( e && e.preventDefault ){
@@ -105,10 +105,12 @@ function showDropdown(obj, e){
     } else{
         window.event.returnValue = false;
     }
-    if ($(".dropdown-menus").is(":visible")) {
-        $('.dropdown-menus').hide();
+    const dropdownMenus = $(obj).next()
+    if (dropdownMenus.is(":visible")) {
+        dropdownMenus.hide();
     }else{
-        mainProcess.execAction('scan-usb-devices')
+        $('.dropdown-menus').hide()
+        if (action) action()
         $(obj).next().show();
     }
 }

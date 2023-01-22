@@ -10,7 +10,7 @@
 <div id="title-bar">
     <div class="deviceConfigForm">
         <div class="select-container usb-ports-list">
-            <div class="selection" onclick="showDropdown(this,event)">
+            <div class="selection" onclick="if (!isConnectingDevice) showDropdown(this,event, ()=>{mainProcess.execAction('scan-usb-devices')})">
                 <input type="hidden" value="" id="usb-port-value">
                 <input type="text" readonly="readonly" class="selection-value" placeholder="选择设备" id="usb-port-label">
                 <span class="down-arrow"></span>
@@ -19,16 +19,26 @@
                 <ul class="dropdown-menu" onclick="selectedValue(this, event)" data-id="usb-port"></ul>
             </div>
         </div>
-        <button class="bar-button" onclick="">
-            <img class="button-img" src="./assert/icon/tools.png" alt="工具">
-        </button>
+
+
+        <div class="tools-list">
+            <button class="bar-button" onclick="showDropdown(this, event)">
+                <img class="button-img" src="./assert/icon/tools.png" alt="工具">
+            </button>
+            <div class="dropdown-menus">
+                <ul class="dropdown-menu">
+                    <li class="menu-item" onclick="mainProcess.execAction('open-history-keys')"><span class="text">编辑历史密钥</span></li>
+                </ul>
+            </div>
+        </div>
+        
         <button class="bar-button" onclick="">
             <img class="button-img" src="./assert/icon/settings.png" alt="设置">
         </button>
+
     </div>
     <span id="app-title">NFCToolsGUI</span>
 </div>
-
 
 <div class="main-button-area">
     <button class="main-button" onclick="mainProcess.execAction('read-IC')">开始解卡</button>
@@ -39,9 +49,8 @@
     <button class="main-button" onclick="mainProcess.execAction('lock-ufuid')">锁 UFUID</button>
     <button class="main-button" onclick="mainProcess.execAction('hard-nested')">HardNested 解密</button>
     <button class="main-button" onclick="mainProcess.execAction('dict-test')">字典测试</button>
-    <button class="main-button" onclick="mainProcess.execAction('open-history-keys')">编辑历史密钥</button>
 </div>
-<br><br>
+
 <div class="bottom-area">
     <div id="left-bar">
         <button class="bar-button" onclick="isLockScroll = !isLockScroll; $(this).children('.button-img').attr('src', isLockScroll ? './assert/icon/locked.png' : './assert/icon/unlock.png'); $(this).children('.tool-tip-text').html(isLockScroll ? '锁定滚动' : '自动滚动')">
@@ -68,7 +77,7 @@
             <span id="status-text">空闲</span>
         </div>
         <div class="bottom-bar-item" id="timer">
-            <img src="assert/icon/timer.png">
+            <img src="assert/icon/timer.png" alt="timer">
             <span id="timer-text">计时器</span>
             <span id="timer-value"></span>
         </div>
