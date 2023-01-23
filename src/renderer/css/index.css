@@ -5,7 +5,7 @@
 }
 @font-face{
   font-family: 'SourceCodePro';
-  src: url('font/SourceCodePro-Regular.ttf');
+  src: url('../assert/font/SourceCodePro-Regular.ttf');
   font-weight: normal;
   font-style: normal;
 }
@@ -165,9 +165,12 @@ select{
 
 
 .bottom-bar-item{
-  width: calc(100% / 4 - 20px);
   display: flex;
   align-items: center;
+}
+#check-update{
+  display: block;
+  margin-left: 20px;
 }
 .bottom-bar-item span{
   white-space: nowrap;

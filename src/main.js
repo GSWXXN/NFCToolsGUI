@@ -13,10 +13,6 @@ ipcMain.handle('exec-action', (event, action, arg) => {
     execAction(action, arg)
 })
 ipcMain.handle('close-input-keys-window', closeInputKeysWindow)
-ipcMain.handle('okay-input-keys-window', (event, nextAction, keys) => {
-    execAction(nextAction, keys)
-    closeInputKeysWindow()
-})
 ipcMain.handle('close-hard-nested-window', closeHardNestedWindow)
 ipcMain.handle('okay-hard-nested-window', (event, configs) => {
     execAction("hard-nested-config-done", configs)

@@ -31,9 +31,7 @@ mainProcess.onUpdateStatus((_event, value) => {
     switch (value["indicator"]) {
         case "free":
             statusIndicator.css("background-color", "transparent")
-            clearInterval(intervalID)
-            isTimerRunning = false
-            timerSecond = 0
+            resetStatus(true)
             break
         case "running":
             statusIndicator.css("background-color", "green")
@@ -53,9 +51,7 @@ mainProcess.onUpdateStatus((_event, value) => {
             break
         case "error":
             statusIndicator.css("background-color", "red")
-            clearInterval(intervalID)
-            isTimerRunning = false
-            timerSecond = 0
+            resetStatus(true)
     }
 })
 
@@ -145,16 +141,15 @@ document.addEventListener("click", () => {
     }
 });
 
-// 比较两个 List
-function isListEqual(a, b) {
-    if (a.length !== b.length) {
-        return false
+// 重置状态
+function resetStatus(fromMain=false) {
+    if (isTimerRunning || fromMain) {
+        clearInterval(intervalID)
+        isTimerRunning = false
+        timerSecond = 0
     } else {
-        for (let i = 0; i < a.length; i++) {
-            if (a[i] !== b[i]) {
-                return false
-            }
-        }
-        return true;
+        $("#timer-value").html("")
+        $("#status-text").html("空闲")
+        $("#status-indicator").css("background-color", "transparent")
     }
 }

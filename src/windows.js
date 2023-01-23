@@ -43,12 +43,12 @@ const createMainWindow = () => {
     mainWindow.loadFile(path.join(__dirname, 'renderer/index.html'));
 }
 
-const createInputKeysWindow = (nextAction) => {
+const createInputKeysWindow = () => {
     inputKeysWindow = new BrowserWindow({
         parent: mainWindow,
         modal: true,
         width: 400,
-        height: 150,
+        height: 200,
         show: false,
         resizable: false,
         maximizable: false,
@@ -59,15 +59,14 @@ const createInputKeysWindow = (nextAction) => {
     })
     inputKeysWindow.once("ready-to-show", () => {inputKeysWindow.show()})
     inputKeysWindow.loadFile(path.join(__dirname, 'renderer/inputkeys.html'))
-    inputKeysWindow.webContents.send("input-keys-window-next-action", nextAction)
 }
 
 const createHardNestedWindow = (config) => {
     hardNestedWindow = new BrowserWindow({
         parent: mainWindow,
         modal: true,
-        width: 400,
-        height: 350,
+        width: 500,
+        height: 610,
         show: false,
         resizable: false,
         maximizable: false,
@@ -76,17 +75,19 @@ const createHardNestedWindow = (config) => {
             preload: path.join(__dirname, 'preload.js'),
         },
     })
-    hardNestedWindow.once("ready-to-show", () => {hardNestedWindow.show()})
+    hardNestedWindow.once("ready-to-show", () => {
+        hardNestedWindow.webContents.send("update-hard-nested-config", config)
+        hardNestedWindow.show()
+    })
     hardNestedWindow.loadFile(path.join(__dirname, 'renderer/hardNested.html'))
-    hardNestedWindow.webContents.send("update-hard-nested-config", config)
 }
 
 const createDictTestWindow = (config) => {
     dictTestWindow = new BrowserWindow({
         parent: mainWindow,
         modal: true,
-        width: 400,
-        height: 350,
+        width: 450,
+        height: 340,
         show: false,
         resizable: false,
         maximizable: false,
@@ -95,9 +96,11 @@ const createDictTestWindow = (config) => {
             preload: path.join(__dirname, 'preload.js'),
         },
     })
-    dictTestWindow.once("ready-to-show", () => {dictTestWindow.show()})
+    dictTestWindow.once("ready-to-show", () => {
+        dictTestWindow.webContents.send("update-dict-test-config", config)
+        dictTestWindow.show()
+    })
     dictTestWindow.loadFile(path.join(__dirname, 'renderer/dictTest.html'))
-    dictTestWindow.webContents.send("update-dict-test-config", config)
 }
 
 const closeInputKeysWindow = () => {

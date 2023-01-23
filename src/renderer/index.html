@@ -3,7 +3,7 @@
 <html lang="">
 <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="css/index.css" />
     <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
 </head>
 <body>
@@ -57,7 +57,7 @@
             <img class="button-img" src="./assert/icon/unlock.png" alt="锁定滚动">
             <span class="tool-tip-text">锁定滚动</span>
         </button>
-        <button class="bar-button" onclick="mainProcess.execAction('cancel-task')">
+        <button class="bar-button" onclick="resetStatus();mainProcess.execAction('cancel-task')">
             <img class="button-img" src="./assert/icon/stop.png" alt="停止任务">
             <span class="tool-tip-text">停止任务</span>
         </button>
@@ -72,24 +72,23 @@
     </div>
     <textarea id="log" readonly>Hello cardman!</textarea>
     <div id="bottom-bar">
-        <div class="bottom-bar-item" id="status">
+        <div class="bottom-bar-item" id="status" style="width: 300px">
             <div id="status-indicator"></div>
             <span id="status-text">空闲</span>
         </div>
-        <div class="bottom-bar-item" id="timer">
+        <div class="bottom-bar-item" id="timer" style="width: 240px">
             <img src="assert/icon/timer.png" alt="timer">
             <span id="timer-text">计时器</span>
             <span id="timer-value"></span>
         </div>
-        <div class="bottom-bar-item" id="version">
+        <div class="bottom-bar-item" id="version" style="width: 240px">
             <span id="version-text">当前版本:</span>
             <span id="version-value"></span>
-        </div>
-        <div class="bottom-bar-item" id="check-update">
-            <button>检查更新</button>
+            <button id="check-update">检查更新</button>
         </div>
     </div>
 </div>
 </body>
-<script src="index.js"></script>
+<script src="js/index.js"></script>
+<script src="js/utils.js"></script>
 </html>

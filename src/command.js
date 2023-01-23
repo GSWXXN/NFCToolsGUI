@@ -114,13 +114,6 @@ const actions = {
             "开始执行检测卡片类型",
             'nfc-mfdetect', [`-N`, `-f${knownKeysFile}`],
             (value) => {keyInfoStatistic(value)},
-            () => {
-                if (fs.statSync(tempMFDFilePath).size === 0) {
-                    fs.unlink(tempMFDFilePath, (err) => {
-                        if(err) throw err;
-                    })
-                }
-            }
         )
     },
 
@@ -128,12 +121,11 @@ const actions = {
     "lock-ufuid": () => {
         dialog.showMessageBox({
             type: "warning",
-            buttons: ["取消", "确定"],
+            buttons: ["确定", "取消"],
             title: "危险操作警告",
-            defaultId: 0,
             message: "该操作将会锁死UFUID卡片！！！\n锁死后不可恢复！无法再次更改0块！请确认是否要继续操作？",
         }).then((response) => {
-            if (response.response === 1) {
+            if (response.response === 0) {
                 printStatus("正在锁 UFUID")
                 exec("开始执行UFUID卡片锁定", "nfc-mflock", ["-q"])
             }
@@ -343,7 +335,7 @@ function saveKeys(keys) {
 // 先读卡，然后进行后续操作
 function readICThenExec(msg, statusMsg, isSaveDumpFile, cmd, args, processHandler, finishHandler) {
     let isCmdFunc = true
-    if (arguments.length === 3) isCmdFunc = false
+    if (arguments.length === 4) isCmdFunc = false
     checkKeyFileExist()
     newKeys = []
     knownKeyInfo = []
@@ -355,14 +347,14 @@ function readICThenExec(msg, statusMsg, isSaveDumpFile, cmd, args, processHandle
         (value) => {keyInfoStatistic(value)},
         () => {
             saveKeys(newKeys)
-            if (fs.statSync(tempMFDFilePath).size === 0) {
+            if (isSaveDumpFile && fs.statSync(tempMFDFilePath).size === 0) {
                 fs.unlinkSync(tempMFDFilePath)
             }
         },
         () => {
             printStatus(statusMsg)
             if (!isCmdFunc) {cmd(); return;}
-            if (!fs.existsSync(tempMFDFilePath)) {
+            if (isSaveDumpFile && !fs.existsSync(tempMFDFilePath)) {
                 printExitLog(0)
                 return
             }

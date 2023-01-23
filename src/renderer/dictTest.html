@@ -3,28 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>请输入已知密钥</title>
+    <link rel="stylesheet" href="css/subWindow.css">
     <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
 </head>
 <body>
-<label for="sector">扇区: </label><input type="text" id="sector" value="0">
-<div>类型</div>
-<label for="target-key-type-A">KeyA</label>
-<input type="radio" id="target-key-type-A" name="target-key-type" value="A" checked>
-<label for="target-key-type-B">KeyB</label>
-<input type="radio" id="target-key-type-B" name="target-key-type" value="B">
-<label for="start-position">起始位置: </label><input type="text" id="start-position" value="0">
+<div class="title">输入你想要测试的扇区信息以及字典起始位置, 以便接着上次跑</div>
+<br>
+
+<label for="sector">扇区</label>
+<input type="text" id="sector" value="0">
+<br>
+<label>类型</label>
+<div class="radio-group">
+    <input type="radio" id="target-key-type-A" name="target-key-type" value="A" checked>
+    <label class="radio-wrapper" for="target-key-type-A">KeyA</label>
+    <input type="radio" id="target-key-type-B" name="target-key-type" value="B">
+    <label class="radio-wrapper" for="target-key-type-B">KeyB</label>
+</div>
+
+<br>
+<label for="start-position">起始位置</label><input type="text" id="start-position" value="0">
 
 
 <br>
-<button onclick="window.electronAPI.closeDictTestWindow()">取消</button>
-<button onclick="window.electronAPI.okayDictTestWindow(
-    {
-        sector: $('#sector').val(),
-        keyType: getRatioValue('target-key-type'),
-        startPosition: $('#start-position').val(),
-    }
-)">确定</button>
+<br>
+<div class="final-button">
+    <button onclick="window.electronAPI.closeDictTestWindow()">取消</button>
+    <button onclick="window.electronAPI.okayDictTestWindow(
+        {
+            sector: $('#sector').val(),
+            keyType: getRatioValue('target-key-type'),
+            startPosition: $('#start-position').val(),
+        }
+    )">确定</button>
+</div>
 </body>
+<script src="js/utils.js"></script>
 <script>
     window.electronAPI.onCreateDictTestWindow((_event, config) => {
         if (config) {
@@ -36,14 +50,5 @@
             }
         }
     })
-
-    function getRatioValue(name){
-        const radio = document.getElementsByName(name);
-        for (let i = 0; i < radio.length; i++) {
-            if (radio[i].checked) {
-                return radio[i].value
-            }
-        }
-    }
 </script>
 </html>

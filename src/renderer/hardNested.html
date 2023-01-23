@@ -2,44 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/subWindow.css">
 </head>
 <body>
 
-<label for="auto-run">自动执行</label>
 <input type="checkbox" id="auto-run" name="auto-run" onclick="checkboxOnclick(this)">
+<label class="checkbox-wrapper" for="auto-run">自动执行</label>
 
-<div>[已知信息]</div>
+<hr class="hr-edge-weak">
+
+<div class="sub-title">已知信息</div>
 <label for="known-key">已知的 Key</label>
 <input type="text" id="known-key" value="ffffffffffff">
 <br>
 <label for="known-sector">扇区号</label>
 <input type="text" id="known-sector" value="0">
 <br>
-<div>类型</div>
-<label for="known-key-type-A">KeyA</label>
-<input type="radio" id="known-key-type-A" name="known-key-type" value="A" checked>
-<label for="known-key-type-B">KeyB</label>
-<input type="radio" id="known-key-type-B" name="known-key-type" value="B">
+<label>Key 类型</label>
+<div class="radio-group">
+    <input type="radio" id="known-key-type-A" name="known-key-type" value="A" checked>
+    <label class="radio-wrapper" for="known-key-type-A">KeyA</label>
+    <input type="radio" id="known-key-type-B" name="known-key-type" value="B">
+    <label class="radio-wrapper" for="known-key-type-B">KeyB</label>
+</div>
 
-<br>
-<br>
 
-<div>[目标扇区解密信息]</div>
-<label for="collect-only">只采集不计算</label>
-<input type="checkbox" id="collect-only" name="collect-only">
-<br>
+<hr class="hr-edge-weak">
+
+<div class="sub-title">目标扇区解密信息</div>
+
 <label for="target-sector">扇区号</label>
 <input type="text" id="target-sector" value="0">
 <br>
-<div>类型</div>
-<label for="target-key-type-A">KeyA</label>
-<input type="radio" id="target-key-type-A" name="target-key-type" value="A" checked>
-<label for="target-key-type-B">KeyB</label>
-<input type="radio" id="target-key-type-B" name="target-key-type" value="B">
+<label>Key 类型</label>
+<div class="radio-group">
+    <input type="radio" id="target-key-type-A" name="target-key-type" value="A" checked>
+    <label class="radio-wrapper" for="target-key-type-A">KeyA</label>
+    <input type="radio" id="target-key-type-B" name="target-key-type" value="B">
+    <label class="radio-wrapper" for="target-key-type-B">KeyB</label>
+</div>
 
-<br>
-<br>
+<br><br><br>
 
+<input type="checkbox" id="collect-only" name="collect-only">
+<label class="checkbox-wrapper" for="collect-only">只采集不计算</label>
+
+<br><br>
+
+<div class="final-button">
 <button onclick="window.electronAPI.closeHardNestedWindow()">取消</button>
 <button onclick="window.electronAPI.okayHardNestedWindow({
     knownKey: document.getElementById('known-key').value,
@@ -52,6 +62,7 @@
     fromUser: true
 })">执行</button>
 
+</div>
 </body>
 <script>
     window.electronAPI.onCreateHardNestedWindow((_event, config) => {
@@ -63,38 +74,6 @@
             setRatioValue('target-key-type', config.targetKeyType)
         }
     })
-
-    function checkboxOnclick(checkbox) {
-        const obj = document.getElementsByTagName("input")
-        if (checkbox.checked === true) {
-            for (let i = 0; i < obj.length; i++) {
-                if (obj[i].id === "auto-run") continue
-                obj[i].disabled = true
-            }
-        } else {
-            for (let i = 0; i < obj.length; i++) {
-                if (obj[i].id === "auto-run") continue
-                obj[i].disabled = false
-            }
-        }
-    }
-
-    function getRatioValue(name){
-        const radio = document.getElementsByName(name);
-        for (let i = 0; i < radio.length; i++) {
-            if (radio[i].checked) {
-                return radio[i].value
-            }
-        }
-    }
-
-    function setRatioValue(name, value){
-        const radio = document.getElementsByName(name);
-        for (let i = 0; i < radio.length; i++) {
-            if (radio[i].value === value) {
-                radio[i].checked = true
-            }
-        }
-    }
 </script>
+<script src="js/utils.js"></script>
 </html>
