@@ -17,7 +17,7 @@ function exec(msg, cmd, args, processHandler, finishHandler, followupTask) {
     }
     status.isRunningTask = true
     printLog(`\n\n### ${msg}\n`)
-    task = cp.spawn(cmd, args)
+    task = cp.spawn(`./framework/bin/${cmd}`, args)
 
     task.stdout.on('data', (data) => {
         printLog(data.toString());

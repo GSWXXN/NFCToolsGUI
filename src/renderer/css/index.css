@@ -282,3 +282,13 @@ select{
   margin-top: 0;
   padding-top: 0;
 }
+#check-update{
+  font-size: 14px;
+  color: #333434;
+  cursor: pointer;
+  background-color: #dddfe3;
+  border: none;
+  border-radius: 6px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}

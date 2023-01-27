@@ -9,7 +9,7 @@ const knownKeysFile = "keys.txt"
 const tempMFDFilePath = "temp.mfd"
 const dumpFilesPath = "./dumpfiles"
 const noncesFilesPath = "./nonces.bin"
-const nfcConfigFilePath = "/usr/local/etc/nfc/libnfc.conf"
+const nfcConfigFilePath = "./libnfc.conf"
 const dictPath = "./dict.dic"
 
 let newKeys = []
@@ -178,7 +178,7 @@ const actions = {
 
         exec(
             "开始执行收集 Nonces\n\n",
-            "libnfc_collect", [
+            "libnfc-collect", [
                 configs.knownKey,
                 configs.knownSector,
                 configs.knownKeyType,
