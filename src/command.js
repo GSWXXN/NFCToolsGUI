@@ -228,7 +228,7 @@ const actions = {
                 if (!configs.collectOnly)  {
                     exec(
                         "开始执行 HardNested 解密",
-                        "hfmfhard", [],
+                        "cropto1_bs", [],
                         (value) => {
                             let i = value.indexOf("Key found:")
                             if (i >= 0) {

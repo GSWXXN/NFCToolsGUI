@@ -1,8 +1,10 @@
-workdir=$HOME/Desktop/folder
+#!/bin/bash -e
+workdir=$(pwd)
 
 
 prefix=$workdir/framework
-mkdir $workdir
+#mkdir $workdir
+rm -rf $prefix
 mkdir $prefix
 mkdir $workdir/work
 cd $workdir/work
@@ -73,12 +75,12 @@ autoreconf -is
 make && make install
 cd ../
 
-# hfmfhard
-curl -LO https://github.com/GSWXXN/proxmark3/archive/refs/heads/hfmfhard.zip
-unzip hfmfhard.zip
-cd ./proxmark3-hfmfhard/client
+# cropto1_bs
+curl -LO https://github.com/GSWXXN/cropto1_bs/archive/refs/heads/cropto1_bs.zip
+unzip cropto1_bs.zip
+cd ./cropto1_bs-cropto1_bs
 autoreconf -is
-./configure prefix=$prefix
+./configure prefix=$prefix CFLAGS=-I/opt/local/include' '-I$prefix/include LDFLAGS=-L$prefix/lib
 make && make install
 
 mkdir $prefix/bin2/
@@ -90,8 +92,7 @@ mv $prefix/bin2/mfoc $prefix/bin/mfoc
 mv $prefix/bin2/nfc-mfdetect $prefix/bin/nfc-mfdetect
 mv $prefix/bin2/nfc-mflock $prefix/bin/nfc-mflock
 mv $prefix/bin2/libnfc-collect $prefix/bin/libnfc-collect
-mv $prefix/bin2/hfmfhard $prefix/bin/hfmfhard
-mv $prefix/bin2/hardnested $prefix/bin/hardnested
+mv $prefix/bin2/cropto1_bs $prefix/bin/cropto1_bs
 rm -rf $prefix/bin2/
 rm -rf $prefix/include/
 rm -rf $prefix/share/
@@ -101,4 +102,4 @@ for i in $(ls $prefix/bin); do install_name_tool -change $prefix/lib/libnfc.6.dy
 for i in $(ls $prefix/bin); do install_name_tool -change /usr/local/lib/libnfc.6.dylib @loader_path/../lib/libnfc.6.dylib $prefix/bin/$i; done
 
 cd $workdir
-open .
+#open .
