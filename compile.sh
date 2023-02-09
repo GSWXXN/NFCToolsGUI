@@ -35,7 +35,7 @@ cd "$workdir"/work
 if [ "$os" == "Darwin" ]; then
     echo
     echo
-    echo ============================== libusb ==============================
+    echo "============================== libusb =============================="
     curl -LO https://pub-3d2f9df4304d45e38bbebe723816c4a3.r2.dev/libusb-legacy-0.1.12_4.darwin_22.x86_64.tbz2
     tar -xvf libusb-legacy-0.1.12_4.darwin_22.x86_64.tbz2
     mv ./opt/local/* "$prefix"/
@@ -188,7 +188,7 @@ rm -rf "$prefix"/include/
 rm -rf "$prefix"/share/
 rm -rf "$workdir"/work
 if [ "$os" == "Msys" ]; then
-    rm -rf "$prefix"/lib/
+    rm -rf "${prefix:?}/lib/"
 fi
 
 
@@ -197,6 +197,13 @@ if [ "$os" == "Darwin" ]; then
     echo
     echo
     echo "============================== install_name_tool =============================="
-    for i in $(ls "$prefix"/bin); do install_name_tool -change "$prefix"/lib/libnfc.6.dylib @loader_path/../lib/libnfc.6.dylib "$prefix"/bin/"$i"; done
-    for i in $(ls "$prefix"/bin); do install_name_tool -change /usr/local/lib/libnfc.6.dylib @loader_path/../lib/libnfc.6.dylib "$prefix"/bin/"$i"; done
+    cd "$prefix"/bin
+    for i in *; do
+        install_name_tool -change "$prefix"/lib/libnfc.6.dylib @loader_path/../lib/libnfc.6.dylib "$prefix"/bin/"$i"
+    done
+
+    for i in *; do
+        install_name_tool -change /usr/local/lib/libnfc.6.dylib @loader_path/../lib/libnfc.6.dylib "$prefix"/bin/"$i"
+    done
 fi
+echo "Done!"
