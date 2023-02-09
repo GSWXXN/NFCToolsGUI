@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onSettingNFCConfig: (callback) => ipcRenderer.on("setting-nfc-config", callback),
     onCreateHardNestedWindow: (config) => ipcRenderer.on("update-hard-nested-config", config),
     onCreateDictTestWindow: (config) => ipcRenderer.on("update-dict-test-config", config),
+    onOpenDictFile: (callback) => ipcRenderer.on("dict-file-name", callback),
 
     platform: process.platform,
     getVersion: () => ipcRenderer.invoke("get-app-version"),

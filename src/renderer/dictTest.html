@@ -10,6 +10,12 @@
 <div class="title">输入你想要测试的扇区信息以及字典起始位置, 以便接着上次跑</div>
 <br>
 
+<label for="dict-file">字典文件</label>
+<div id="dict-file">
+    <span>内置字典</span>
+    <button onclick="window.electronAPI.execAction('open-dict-file')">选择文件</button>
+</div>
+<br>
 <label for="sector">扇区</label>
 <input type="text" id="sector" value="0">
 <br>
@@ -49,6 +55,9 @@
                 $('#target-key-type-A').prop('checked', true)
             }
         }
+    })
+    window.electronAPI.onOpenDictFile((_event, filePath) => {
+        $('#dict-file span').text(filePath)
     })
 </script>
 </html>

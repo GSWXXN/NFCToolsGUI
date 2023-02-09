@@ -1,6 +1,6 @@
 const cp = require('child_process')
 const {dialog} = require('electron')
-const {webContentsSend} = require("./windows")
+const {sendToMainWindow} = require("./windows")
 const status = require("./status")
 
 let task = null
@@ -45,11 +45,11 @@ function killProcess() {
 }
 
 function printLog(msg) {
-    webContentsSend("update-log-output", msg)
+    sendToMainWindow("update-log-output", msg)
 }
 
 function printStatus(msg, indicator="running") {
-    webContentsSend("update-status", {"text": msg, "indicator": indicator})
+    sendToMainWindow("update-status", {"text": msg, "indicator": indicator})
 }
 
 function printExitLog(code) {

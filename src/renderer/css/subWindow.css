@@ -109,3 +109,26 @@ label:not(.radio-wrapper):not(.checkbox-wrapper){
     width:80px;
     vertical-align: center;
 }
+#dict-file{
+    display: inline-block;
+    width: 200px;
+    text-align: right;
+}
+button{
+    background-color: #f4f5fc;
+    border: none;
+    color: black;
+    border-radius: 10px;
+    width: 80px;
+    height: 30px;
+    box-shadow: 0 6px 12px rgb(65 104 207 / 20%);
+    margin-top: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 15px;
+}
+button:hover{
+    background-color: #4168cf;
+    color: white;
+    transition: 80ms;
+}

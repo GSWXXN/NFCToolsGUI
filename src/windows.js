@@ -90,7 +90,7 @@ const createDictTestWindow = (config) => {
         parent: mainWindow,
         modal: true,
         width: 450,
-        height: process.platform === "win32" ? 300 : 340,
+        height: process.platform === "win32" ? 350 : 390,
         show: false,
         resizable: false,
         maximizable: false,
@@ -126,12 +126,28 @@ const closeDictTestWindow = () => {
     dictTestWindow.close()
 }
 
-const webContentsSend = (channel, args) => {
+const sendToMainWindow = (channel, args) => {
     try {
         mainWindow.webContents.send(channel, args)
-    } catch (e) {
-
-    }
+    } catch (e) {}
 }
 
-module.exports = {createMainWindow, closeMainWindow, minMainWindow,createInputKeysWindow, webContentsSend: webContentsSend, closeInputKeysWindow, createHardNestedWindow, closeHardNestedWindow, createDictTestWindow, closeDictTestWindow}
+const sentToDictTestWindow = (channel, args) => {
+    try {
+        dictTestWindow.webContents.send(channel, args)
+    } catch (e) {}
+}
+
+module.exports = {
+    createMainWindow,
+    closeMainWindow,
+    minMainWindow,
+    createInputKeysWindow,
+    sendToMainWindow,
+    sentToDictTestWindow,
+    closeInputKeysWindow,
+    createHardNestedWindow,
+    closeHardNestedWindow,
+    createDictTestWindow,
+    closeDictTestWindow
+}

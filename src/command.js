@@ -1,7 +1,7 @@
 const {exec, killProcess, printExitLog, printLog, printStatus} = require("./execUtils")
 const fs = require('fs')
 const {dialog} = require('electron')
-const {createInputKeysWindow, createHardNestedWindow, createDictTestWindow, webContentsSend} = require("./windows")
+const {createInputKeysWindow, createHardNestedWindow, createDictTestWindow, sendToMainWindow, sentToDictTestWindow} = require("./windows")
 const cp = require("child_process");
 const status = require("./status")
 const { SerialPort } = require('serialport')
@@ -11,7 +11,7 @@ const tempMFDFilePath = "temp.mfd"
 const dumpFilesPath = "./dumpfiles"
 const noncesFilesPath = "./nonces.bin"
 const nfcConfigFilePath = "./libnfc.conf"
-const dictPath = "./dict.dic"
+let dictPath = "./dict.dic"
 
 let newKeys = []
 let knownKeyInfo = []
@@ -43,7 +43,7 @@ const actions = {
                 ports.forEach(port => {
                     devices.push(`/dev/ttyS${(parseInt(port["path"].split("COM")[1]) - 1)}`)
                 })
-                webContentsSend("update-usb-devices", devices)
+                sendToMainWindow("update-usb-devices", devices)
             });
         } else if (process.platform === "darwin") {
             cp.exec("ls /dev/tty.*", (err, stdout) => {
@@ -52,7 +52,7 @@ const actions = {
                 devices.forEach((value, index) => {
                     if (value.length === 0) devices.splice(index, 1)
                 })
-                webContentsSend("update-usb-devices", devices)
+                sendToMainWindow("update-usb-devices", devices)
             })
         }
     },
@@ -270,6 +270,21 @@ const actions = {
         )
     },
 
+    //打开字典文件
+    "open-dict-file": () => {
+        const url = dialog.showOpenDialogSync({
+            title: "选择字典文件",
+            defaultPath: dictPath,
+            filters: [{ name: '字典文件', extensions: ['txt', 'dic'] }],
+            message: "选择字典文件",
+            properties: ['openFile']
+        })
+        if (url) {
+            dictPath = url[0]
+            const pathArray = dictPath.split(/[\/\\]/g)
+            sentToDictTestWindow("dict-file-name", pathArray[pathArray.length - 1])
+        }
+    },
     // 字典测试
     "dict-test": () => {
         try {
@@ -442,7 +457,7 @@ function checkKeyFileExist() {
 
 // 配置 libnfc.conf
 function setNFCConfig() {
-    webContentsSend("setting-nfc-config", "start")
+    sendToMainWindow("setting-nfc-config", "start")
     const content = `device.name = "NFC_Device"\ndevice.connstring = "pn532_uart:${status.currentDevice}:${status.currentSpeed}"`
     fs.writeFile(nfcConfigFilePath, content, (err) => {
         if (err) throw err
@@ -458,7 +473,7 @@ function setNFCConfig() {
                     status.isDeviceConnected = false
                 }
             },
-            () => {webContentsSend("setting-nfc-config", status.isDeviceConnected ? "success" : "failed")},
+            () => {sendToMainWindow("setting-nfc-config", status.isDeviceConnected ? "success" : "failed")},
             () => {if (status.isDeviceConnected) printExitLog(0); else printExitLog(1)})
     })
 }
