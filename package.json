@@ -28,7 +28,9 @@
         },
         {
           "name": "@electron-forge/maker-zip",
-          "platforms": ["darwin"]
+          "platforms": [
+            "darwin"
+          ]
         },
         {
           "name": "@electron-forge/maker-deb",
@@ -43,7 +45,9 @@
   },
   "dependencies": {
     "child_process": "^1.0.2",
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "serialport": "^10.5.0",
+    "usb": "^2.7.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.4",

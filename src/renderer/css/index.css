@@ -35,18 +35,26 @@ select{
   right: 0;
   box-shadow: 0 6px 12px rgb(0 0 0 / 10%);
 }
-#app-title{
-  display:block;
-  height: 40px;
+.title{
+  display: flex;
+  float: right;
+  align-items: center;
+  margin-right: 85px;
+}
+.title span{
+  display:inline-block;
   text-align: center;
   line-height: 40px;
   font-size: 16px;
-  float: right;
-  margin-right: 85px;
+}
+.title img{
+  display: none;
+  width: 36px;
+  height: 36px;
+
 }
 .deviceConfigForm{
   display: flex;
-  margin-right: 20px;
   height: 28px;
   float: right;
 }
@@ -62,14 +70,13 @@ select{
   background-color: #f7f8fa;
 }
 .selection{
+  display: flex;
   -webkit-app-region: none;
   height: 28px;
   margin-top: 6px;
-  line-height: 28px;
   padding-left: 10px;
   background-color: #4168cf;
   border-radius: 6px;
-  position: relative;
 }
 .selection:hover{
   background: #3a5dbb;
@@ -77,6 +84,8 @@ select{
 }
 .selection .selection-value{
   width: 80%;
+  line-height: 28px;
+  display: inline-block;
   border: none;
   outline: none;
   cursor: pointer;
@@ -90,14 +99,13 @@ select{
   opacity: 1;
 }
 .down-arrow {
-  display: inline-block;
   border-top: 1px solid;
   border-right: 1px solid;
   width: 5px;
   height: 5px;
   border-color: white;
   transform: rotate(135deg);
-  margin: 0 10px 3px 0;
+  margin-top: 10px;
 }
 
 .dropdown-menus{
@@ -112,12 +120,18 @@ select{
   overflow-y: scroll;
   min-height: 42px;
   background-color: white;
+  ::-webkit-scrollbar: none;
+}
+.dropdown-menus::-webkit-scrollbar{
+  display: none;
 }
 
 .usb-ports-list .dropdown-menus{
   position: absolute;
-  right: 91px;
   max-height: 200px;
+}
+.tools-list {
+  margin-right: 20px;
 }
 .tools-list .dropdown-menus{
   position: absolute;
@@ -291,4 +305,22 @@ select{
   border-radius: 6px;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.windows-control button{
+  background-color: transparent;
+  border: none;
+  width: 45px;
+  height: 40px;
+  -webkit-app-region: none;
+}
+#close-app:hover{
+  background-color: #eb7171;
+}
+#minimize-app:hover{
+  background-color: #ebecf0;
+}
+.windows-control button img{
+  width: 70%;
+  vertical-align: middle;
 }

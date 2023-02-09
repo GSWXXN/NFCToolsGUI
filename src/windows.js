@@ -1,6 +1,6 @@
 // noinspection JSIgnoredPromiseFromCall
 
-const {BrowserWindow, dialog} = require("electron")
+const {BrowserWindow, dialog, Menu} = require("electron")
 const path = require("path")
 const status = require("./status");
 
@@ -11,12 +11,13 @@ let hardNestedWindow = null
 let dictTestWindow = null
 
 const createMainWindow = () => {
+    Menu.setApplicationMenu(null)
     mainWindow = new BrowserWindow({
         width: 800,
         height: 700,
         resizable: false,
         maximizable: false,
-        titleBarStyle: 'hiddenInset',
+        titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
         },
@@ -48,11 +49,12 @@ const createInputKeysWindow = () => {
         parent: mainWindow,
         modal: true,
         width: 400,
-        height: 200,
+        height: process.platform === "win32" ? 160 : 200,
         show: false,
         resizable: false,
         maximizable: false,
         minimizable: false,
+        titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
         },
@@ -65,12 +67,13 @@ const createHardNestedWindow = (config) => {
     hardNestedWindow = new BrowserWindow({
         parent: mainWindow,
         modal: true,
-        width: 500,
-        height: 610,
+        width:  500,
+        height: process.platform === "win32" ? 570 : 610,
         show: false,
         resizable: false,
         maximizable: false,
         minimizable: false,
+        titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
         },
@@ -87,11 +90,12 @@ const createDictTestWindow = (config) => {
         parent: mainWindow,
         modal: true,
         width: 450,
-        height: 340,
+        height: process.platform === "win32" ? 300 : 340,
         show: false,
         resizable: false,
         maximizable: false,
         minimizable: false,
+        titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
         },
@@ -101,6 +105,13 @@ const createDictTestWindow = (config) => {
         dictTestWindow.show()
     })
     dictTestWindow.loadFile(path.join(__dirname, 'renderer/dictTest.html'))
+}
+
+const closeMainWindow = () => {
+    mainWindow.close()
+}
+const minMainWindow = () => {
+    mainWindow.minimize()
 }
 
 const closeInputKeysWindow = () => {
@@ -123,4 +134,4 @@ const webContentsSend = (channel, args) => {
     }
 }
 
-module.exports = {createMainWindow, createInputKeysWindow, webContentsSend: webContentsSend, closeInputKeysWindow, createHardNestedWindow, closeHardNestedWindow, createDictTestWindow, closeDictTestWindow}
+module.exports = {createMainWindow, closeMainWindow, minMainWindow,createInputKeysWindow, webContentsSend: webContentsSend, closeInputKeysWindow, createHardNestedWindow, closeHardNestedWindow, createDictTestWindow, closeDictTestWindow}

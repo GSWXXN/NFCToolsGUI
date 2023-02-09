@@ -46,6 +46,7 @@ fi
 echo
 echo
 echo "============================== libnfc =============================="
+cd "$workdir"/work
 curl -LO https://github.com/GSWXXN/libnfc/archive/refs/heads/libnfc.zip
 unzip ./libnfc.zip
 cd ./libnfc-libnfc
@@ -56,20 +57,19 @@ autoreconf -vis
 autoreconf -is
 ./configure prefix="$prefix" LDFLAGS=-L"$prefix"/lib/libusb-legacy --with-drivers=pn532_uart
 make && make install
-cd ../
 
 
 # mfoc
 echo
 echo
 echo "============================== mfoc =============================="
+cd "$workdir"/work
 curl -Lo mfoc.zip https://github.com/GSWXXN/mfoc/archive/refs/heads/master.zip
 unzip mfoc.zip
 cd ./mfoc-master
 autoreconf -vis
 ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
 make && make install
-cd ../
 
 
 
@@ -77,45 +77,46 @@ cd ../
 echo
 echo
 echo "============================== nfc-mfdict =============================="
+cd "$workdir"/work
 curl -LO https://github.com/GSWXXN/mfoc/archive/refs/heads/nfc-mfdict.zip
 unzip nfc-mfdict.zip
 cd ./mfoc-nfc-mfdict
 autoreconf -vis
 ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
 make && make install
-cd ../
 
 
 # nfc-mfdetect
 echo
 echo
 echo "============================== nfc-mfdetect =============================="
+cd "$workdir"/work
 curl -LO https://github.com/GSWXXN/mfoc/archive/refs/heads/nfc-mfdetect.zip
 unzip nfc-mfdetect.zip
 cd ./mfoc-nfc-mfdetect
 autoreconf -vis
 ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
 make && make install
-cd ../
 
 
 # nfc-mflock
 echo
 echo
 echo "============================== nfc-mflock =============================="
+cd "$workdir"/work
 curl -LO https://github.com/GSWXXN/nfc-mflock/archive/refs/heads/nfc-mflock.zip
 unzip nfc-mflock.zip
 cd ./nfc-mflock-nfc-mflock
 autoreconf -vis
 ./configure LDFLAGS=-L"$prefix"/lib prefix="$prefix" CPPFLAGS=-I"$prefix"/include
 make && make install
-cd ../
 
 
 # libnfc_collect
 echo
 echo
 echo "============================== libnfc_collect =============================="
+cd "$workdir"/work
 curl -LO https://github.com/GSWXXN/crypto1_bs/archive/refs/heads/libnfc_collect.zip
 unzip libnfc_collect.zip
 cd ./crypto1_bs-libnfc_collect
@@ -131,13 +132,13 @@ else
     ./configure LDFLAGS=-L"$prefix"/lib' '-Wl,--allow-multiple-definition prefix="$prefix" CPPFLAGS=-I"$prefix"/include CFLAGS='-std=gnu99 -O3 -march=native'
 fi
 make && make install
-cd ../
 
 
 # cropto1_bs
 echo
 echo
 echo "============================== cropto1_bs =============================="
+cd "$workdir"/work
 curl -LO https://github.com/GSWXXN/cropto1_bs/archive/refs/heads/cropto1_bs.zip
 unzip cropto1_bs.zip
 cd ./cropto1_bs-cropto1_bs
@@ -149,9 +150,7 @@ make && make install
 
 # copy library
 if [ "$os" == "Msys" ]; then
-    echo
-    echo
-    echo "============================== copy library =============================="
+    echo "- copy library"
     cp /usr/bin/msys-lzma-5.dll "$prefix"/bin
     cp /usr/bin/msys-2.0.dll "$prefix"/bin
     cp /usr/bin/msys-readline8.dll "$prefix"/bin
@@ -161,9 +160,7 @@ fi
 
 
 # delete useless program
-echo
-echo
-echo "============================== delete useless program =============================="
+echo "- delete useless program"
 mkdir "$prefix"/bin2/
 mv "$prefix"/bin/* "$prefix"/bin2/
 
@@ -180,9 +177,7 @@ if [ "$os" == "Msys" ]; then
 fi
 
 # clean
-echo
-echo
-echo "============================== clean up =============================="
+echo "- clean up"
 rm -rf "$prefix"/bin2/
 rm -rf "$prefix"/include/
 rm -rf "$prefix"/share/
@@ -194,9 +189,7 @@ fi
 
 # install_name_tool -change
 if [ "$os" == "Darwin" ]; then
-    echo
-    echo
-    echo "============================== install_name_tool =============================="
+    echo "- install_name_tool"
     cd "$prefix"/bin
     for i in *; do
         install_name_tool -change "$prefix"/lib/libnfc.6.dylib @loader_path/../lib/libnfc.6.dylib "$prefix"/bin/"$i"
@@ -206,4 +199,4 @@ if [ "$os" == "Darwin" ]; then
         install_name_tool -change /usr/local/lib/libnfc.6.dylib @loader_path/../lib/libnfc.6.dylib "$prefix"/bin/"$i"
     done
 fi
-echo "Done!"
+echo "- Done!"

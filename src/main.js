@@ -1,6 +1,6 @@
 const {execAction} = require('./command')
 const {app, BrowserWindow, ipcMain} = require('electron')
-const {createMainWindow, closeInputKeysWindow, closeHardNestedWindow, closeDictTestWindow} = require('./windows')
+const {closeMainWindow, minMainWindow,createMainWindow, closeInputKeysWindow, closeHardNestedWindow, closeDictTestWindow} = require('./windows')
 const {killProcess} = require('./execUtils')
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -9,6 +9,8 @@ if (require('electron-squirrel-startup')) {
 }
 
 ipcMain.handle('get-app-version', () => {return app.getVersion()})
+ipcMain.handle('close-app', closeMainWindow)
+ipcMain.handle('minimize-window', minMainWindow)
 ipcMain.handle('exec-action', (event, action, arg) => {
     execAction(action, arg)
 })
@@ -26,7 +28,7 @@ ipcMain.handle('okay-dict-test-window', (event, configs) => {
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+// Some APIs can onlybe used after this event occurs.
 app.on('ready', createMainWindow)
 
 // Quit when all windows are closed, except on macOS. There, it's common

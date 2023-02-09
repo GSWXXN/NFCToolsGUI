@@ -6,6 +6,13 @@ let isTimerRunning = false;
 let intervalID = undefined;
 let timerSecond = 0
 
+if (mainProcess.platform !== "darwin") {
+    const titleArea = $(".title")
+    $(".windows-control").show()
+    titleArea.css("float", "none")
+    titleArea.css("margin-left", "10px")
+    $("#app-title-icon").css("display", "inline-block")
+}
 
 mainProcess.getVersion().then((v) =>{$("#version-value").html(v)})
 

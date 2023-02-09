@@ -30,14 +30,25 @@
                     <li class="menu-item" onclick="mainProcess.execAction('open-history-keys')"><span class="text">编辑历史密钥</span></li>
                 </ul>
             </div>
+<!--            <button class="bar-button" onclick="">-->
+<!--                <img class="button-img" src="./assert/icon/settings.png" alt="设置">-->
+<!--            </button>-->
         </div>
-        
-        <button class="bar-button" onclick="">
-            <img class="button-img" src="./assert/icon/settings.png" alt="设置">
-        </button>
 
+        <div class="windows-control" hidden>
+            <button id="minimize-app" onclick="mainProcess.minimizeWindow()">
+                <img src="./assert/icon/minimize.png" alt="最小化">
+            </button>
+            <button id="close-app" onclick="mainProcess.closeApp()">
+                <img src="./assert/icon/close.png" alt="关闭">
+            </button>
+        </div>
     </div>
-    <span id="app-title">NFCToolsGUI</span>
+
+    <div class="title">
+        <img id="app-title-icon" src="./assert/icon/stop.png" alt="icon">
+        <span id="app-title">NFCToolsGUI</span>
+    </div>
 </div>
 
 <div class="main-button-area">

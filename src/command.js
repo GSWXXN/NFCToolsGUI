@@ -4,6 +4,7 @@ const {dialog} = require('electron')
 const {createInputKeysWindow, createHardNestedWindow, createDictTestWindow, webContentsSend} = require("./windows")
 const cp = require("child_process");
 const status = require("./status")
+const { SerialPort } = require('serialport')
 
 const knownKeysFile = "keys.txt"
 const tempMFDFilePath = "temp.mfd"
@@ -36,14 +37,24 @@ const defaultKeys = [
 const actions = {
     // 扫描设备
     "scan-usb-devices": () => {
-        cp.exec("ls /dev/tty.*", (err, stdout) => {
-            if (err) throw err
-            const devices = stdout.split(/\s+/g)
-            devices.forEach((value, index) => {
-                if (value.length === 0) devices.splice(index, 1)
+        if (process.platform === "win32") {
+            SerialPort.list().then(ports => {
+                const devices = []
+                ports.forEach(port => {
+                    devices.push(`/dev/ttyS${(parseInt(port["path"].split("COM")[1]) - 1)}`)
+                })
+                webContentsSend("update-usb-devices", devices)
+            });
+        } else if (process.platform === "darwin") {
+            cp.exec("ls /dev/tty.*", (err, stdout) => {
+                if (err) throw err
+                const devices = stdout.split(/\s+/g)
+                devices.forEach((value, index) => {
+                    if (value.length === 0) devices.splice(index, 1)
+                })
+                webContentsSend("update-usb-devices", devices)
             })
-            webContentsSend("update-usb-devices", devices)
-        })
+        }
     },
 
     // 连接设备
@@ -149,7 +160,7 @@ const actions = {
                 false,
                 () => {
                     if (configs.fromUser) totalUnknownKeys = unknownKeyInfo.length
-                    printStatus(`正在 HardNested解密 - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`)
+                    printStatus(`正在执行 HardNested 解密 - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`)
 
                     if (knownKeyInfo.length === 0) {
                         printLog("\n未发现已知密钥");
@@ -177,7 +188,7 @@ const actions = {
         configs.targetSector = (parseInt(configs.targetSector) + 1) * 4 - 1
 
         exec(
-            "开始执行收集 Nonces\n\n",
+            "开始收集 Nonces\n\n",
             "libnfc-collect", [
                 configs.knownKey,
                 configs.knownSector,
@@ -287,7 +298,7 @@ const actions = {
     },
 
     // 打开历史密钥
-    "open-history-keys": () => {cp.exec("open " + knownKeysFile)},
+    "open-history-keys": () => {cp.exec(`${process.platform === "win32" ? "start" : "open"} ${knownKeysFile}`)},
 
     // 取消任务
     "cancel-task": () => {
@@ -432,17 +443,17 @@ function checkKeyFileExist() {
 // 配置 libnfc.conf
 function setNFCConfig() {
     webContentsSend("setting-nfc-config", "start")
-    const content = `device.name = "NFC Device"\ndevice.connstring = "pn532_uart:${status.currentDevice}:${status.currentSpeed}"`
+    const content = `device.name = "NFC_Device"\ndevice.connstring = "pn532_uart:${status.currentDevice}:${status.currentSpeed}"`
     fs.writeFile(nfcConfigFilePath, content, (err) => {
         if (err) throw err
         exec("连接设备",
             "nfc-list", [],
             (value) => {
-                if (value.indexOf("NFC device: NFC Device opened") >= 0) {
+                if (value.indexOf("NFC device: NFC_Device opened") >= 0) {
                     printLog("\n*** 发现设备 ***\n")
                     status.isDeviceConnected = true
                 }
-                if (value.indexOf("Unable to open NFC device") >= 0) {
+                if (value.indexOf("Unable to open NFC_device") >= 0) {
                     printLog("\n*** 未发现设备! ***\n")
                     status.isDeviceConnected = false
                 }
