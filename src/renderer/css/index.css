@@ -39,7 +39,7 @@ select{
   display: flex;
   float: right;
   align-items: center;
-  margin-right: 85px;
+  margin-right: 135px;
 }
 .title span{
   display:inline-block;
@@ -169,7 +169,8 @@ select{
   height: 35px;
 }
 .button-img{
-  width: 100%;
+  width: 80%;
+  border: none;
   vertical-align: middle;
 }
 .bar-button:hover{
@@ -204,7 +205,8 @@ select{
   margin-left: 15px;
 }
 #timer img{
-  width: 20px;
+  width: 15px;
+  margin-right: 5px;
 }
 
 .bar-button .tool-tip-text {
@@ -306,7 +308,6 @@ select{
   padding-top: 5px;
   padding-bottom: 5px;
 }
-
 .windows-control button{
   background-color: transparent;
   border: none;
@@ -321,6 +322,6 @@ select{
   background-color: #ebecf0;
 }
 .windows-control button img{
-  width: 70%;
+  width: 50%;
   vertical-align: middle;
 }

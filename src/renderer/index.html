@@ -23,7 +23,7 @@
 
         <div class="tools-list">
             <button class="bar-button" onclick="showDropdown(this, event)">
-                <img class="button-img" src="./assert/icon/tools.png" alt="工具">
+                <img class="button-img" src="./assert/icon/tools.svg" alt="工具">
             </button>
             <div class="dropdown-menus">
                 <ul class="dropdown-menu">
@@ -31,22 +31,22 @@
                 </ul>
             </div>
 <!--            <button class="bar-button" onclick="">-->
-<!--                <img class="button-img" src="./assert/icon/settings.png" alt="设置">-->
+<!--                <img class="button-img" src="./assert/icon/settings.svg" alt="设置">-->
 <!--            </button>-->
         </div>
 
         <div class="windows-control" hidden>
             <button id="minimize-app" onclick="mainProcess.minimizeWindow()">
-                <img src="./assert/icon/minimize.png" alt="最小化">
+                <img src="./assert/icon/minimize.svg" alt="最小化">
             </button>
             <button id="close-app" onclick="mainProcess.closeApp()">
-                <img src="./assert/icon/close.png" alt="关闭">
+                <img src="./assert/icon/close.svg" alt="关闭">
             </button>
         </div>
     </div>
 
     <div class="title">
-        <img id="app-title-icon" src="./assert/icon/stop.png" alt="icon">
+        <img id="app-title-icon" src="./assert/icon/stop.svg" alt="icon">
         <span id="app-title">NFCToolsGUI</span>
     </div>
 </div>
@@ -64,20 +64,20 @@
 
 <div class="bottom-area">
     <div id="left-bar">
-        <button class="bar-button" onclick="isLockScroll = !isLockScroll; $(this).children('.button-img').attr('src', isLockScroll ? './assert/icon/locked.png' : './assert/icon/unlock.png'); $(this).children('.tool-tip-text').html(isLockScroll ? '锁定滚动' : '自动滚动')">
-            <img class="button-img" src="./assert/icon/unlock.png" alt="锁定滚动">
+        <button class="bar-button" onclick="isLockScroll = !isLockScroll; $(this).children('.button-img').attr('src', isLockScroll ? './assert/icon/locked.svg' : './assert/icon/unlock.svg'); $(this).children('.tool-tip-text').html(isLockScroll ? '锁定滚动' : '自动滚动')">
+            <img class="button-img" src="./assert/icon/unlock.svg" alt="锁定滚动">
             <span class="tool-tip-text">锁定滚动</span>
         </button>
         <button class="bar-button" onclick="resetStatus();mainProcess.execAction('cancel-task')">
-            <img class="button-img" src="./assert/icon/stop.png" alt="停止任务">
+            <img class="button-img" src="./assert/icon/stop.svg" alt="停止任务">
             <span class="tool-tip-text">停止任务</span>
         </button>
         <button class="bar-button" onclick="mainProcess.execAction('save-log', $('#log').val())">
-            <img class="button-img" src="./assert/icon/save.png" alt="保存日志">
+            <img class="button-img" src="./assert/icon/save.svg" alt="保存日志">
             <span class="tool-tip-text">保存日志</span>
         </button>
         <button class="bar-button" onclick="document.getElementById('log').value=''">
-            <img class="button-img" src="./assert/icon/trash.png" alt="清除日志">
+            <img class="button-img" src="./assert/icon/trash.svg" alt="清除日志">
             <span class="tool-tip-text">清除日志</span>
         </button>
     </div>
@@ -88,7 +88,7 @@
             <span id="status-text">空闲</span>
         </div>
         <div class="bottom-bar-item" id="timer" style="width: 240px">
-            <img src="assert/icon/timer.png" alt="timer">
+            <img src="assert/icon/timer.svg" alt="timer">
             <span id="timer-text">计时器</span>
             <span id="timer-value"></span>
         </div>
