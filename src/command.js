@@ -1,7 +1,7 @@
 const {exec, killProcess, printExitLog, printLog, printStatus} = require("./execUtils")
 const fs = require('fs')
 const {dialog} = require('electron')
-const {createInputKeysWindow, createHardNestedWindow, createDictTestWindow, sendToMainWindow, sentToDictTestWindow} = require("./windows")
+const {createDumpEditorWindow, createInputKeysWindow, createHardNestedWindow, createDictTestWindow, sendToMainWindow, sentToDictTestWindow, sentToDumpEditorWindow} = require("./windows")
 const cp = require("child_process");
 const status = require("./status")
 const { SerialPort } = require('serialport')
@@ -314,6 +314,40 @@ const actions = {
 
     // 打开历史密钥
     "open-history-keys": () => {cp.exec(`${process.platform === "win32" ? "start" : "open"} ${knownKeysFile}`)},
+
+    // 转储编辑器
+    "open-dump-editor": createDumpEditorWindow,
+    "dump-editor-choose-file": () => {
+        const filePaths = dialog.showOpenDialogSync({
+            title: "选择转储文件",
+            defaultPath: dictPath,
+            properties: ['openFile'],
+            filters: [{ name: 'Dump Files', extensions: ['mfd', 'dump'] }],
+            message: "选择转储文件",
+        })
+        fs.readFile(filePaths[0], (err, data) => {
+            if (err) throw err;
+            const hexDataArray = Array.from(new Uint8Array(data), function(byte) {
+                return ('0' + (byte & 0xff).toString(16)).slice(-2);
+            }).join('').match(/.{1,32}/g);
+            const groupedHexData = [];
+            for (let i = 0; i < hexDataArray.length; i += 4) {
+                groupedHexData.push((hexDataArray.slice(i, i + 4)).join('\n'));
+            }
+            sentToDumpEditorWindow('binary-data', {url: filePaths[0], data: groupedHexData});
+        });
+    },
+    "dump-editor-save": (data) => {
+        const binaryArray = new Buffer.from(data.hexData, "hex")
+
+        fs.writeFile(data.url, binaryArray, (error) => {
+            if (error) {
+                throw error
+            } else {
+                sentToDumpEditorWindow('saved-binary-data');
+            }
+        });
+    },
 
     // 取消任务
     "cancel-task": () => {

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dump Editor</title>
+    <link rel="stylesheet" href="css/subWindow.css">
+    <link rel="stylesheet" href="css/dumpEditor.css">
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div id="binary-data-content"></div>
+
+<div id="bottom-area">
+    <div id="file-info">
+        <img id="drag" draggable="true" src="assets/icon/128/drag.png" height="16" alt="drag">
+        <span>当前文件: </span>
+        <span id="current-file"></span>
+        <br>
+        <button id="choose-file">打开文件</button>
+        <button id="save-file">保存文件</button>
+    </div>
+    <span>图例: </span>
+    <span class="uid">UID & 厂家信息</span>
+    <span> | </span>
+    <span class="keyA">密钥 A</span>
+    <span> | </span>
+    <span class="keyB">密钥 B</span>
+    <span> | </span>
+    <span class="accessControl">访问控制</span>
+    <button id="update-tag-color">更新配色</button>
+</div>
+</body>
+<script src="js/dumpEditor.js"></script>
+</html>

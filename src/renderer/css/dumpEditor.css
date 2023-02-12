@@ -1,0 +1,78 @@
+.uid{
+    color: #7742b8;
+}
+.keyA{
+    color: #96e187;
+}
+.keyB{
+    color: #4d8027;
+}
+.accessControl{
+    color: #e2702f;
+}
+
+body{
+    margin-bottom: 120px;
+    margin-top: 0;
+}
+
+.binary-input{
+    margin:0 auto;
+    white-space: pre-wrap;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: "SourceCodePro", serif;
+    text-align: center;
+    width: fit-content;
+    padding: 8px;
+}
+.binary-input:focus{
+    border-color: #66afe9;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+}
+.textarea-label{
+    display: flex;
+    margin: 20px auto 5px;
+    font-size: 14px;
+}
+
+
+#bottom-area{
+    position: fixed;
+    z-index: 999;
+    bottom: 0;
+    text-align: left;
+    background-color: white;
+    padding-bottom: 5px;
+    padding-top: 8px;
+    font-size: 12px;
+}
+#update-tag-color{
+    font-size: 12px;
+    background-color: lightgray;
+    border: none;
+    color: black;
+    border-radius: 10px;
+    width: 60px;
+    height: 20px;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 10px;
+    margin-left: 15px;
+}
+#file-info{
+    text-align: center;
+    width: 100%;
+}
+#file-info span{
+    vertical-align: middle;
+}
+#file-info button{
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+#file-info img{
+    vertical-align: middle;
+}

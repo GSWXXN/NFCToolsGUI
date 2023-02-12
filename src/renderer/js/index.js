@@ -70,7 +70,6 @@ mainProcess.onUpdateUSBDevices((_event, value) => {
     usbPorts.empty()
 
     value.forEach((v) => {
-        // <li class="menu-item ec-active" data-value="0" data-label="专线"><span class="text">专线</span></li>
         const deviceItemSpan = document.createElement("span")
         deviceItemSpan.setAttribute("class", "text")
         deviceItemSpan.innerText = v.replace(mainProcess.devicePrefix, "")

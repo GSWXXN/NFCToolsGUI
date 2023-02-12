@@ -1,6 +1,6 @@
 // noinspection JSIgnoredPromiseFromCall
 
-const {BrowserWindow, dialog, Menu} = require("electron")
+const {BrowserWindow, dialog} = require("electron")
 const path = require("path")
 const status = require("./status");
 
@@ -9,9 +9,9 @@ let mainWindow = null
 let inputKeysWindow = null
 let hardNestedWindow = null
 let dictTestWindow = null
+let dumpEditorWindow = null
 
 const createMainWindow = () => {
-    Menu.setApplicationMenu(null)
     mainWindow = new BrowserWindow({
         width: 800,
         height: 700,
@@ -107,6 +107,25 @@ const createDictTestWindow = (config) => {
     dictTestWindow.loadFile(path.join(__dirname, 'renderer/dictTest.html'))
 }
 
+const createDumpEditorWindow = () => {
+    dumpEditorWindow = new BrowserWindow({
+        width: 380,
+        height: 720,
+        show: false,
+        resizable: false,
+        maximizable: false,
+        minimizable: false,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+        },
+    })
+    dumpEditorWindow.once("ready-to-show", () => {
+        dumpEditorWindow.show()
+    })
+    dumpEditorWindow.loadFile(path.join(__dirname, 'renderer/dumpEditor.html'))
+    return dumpEditorWindow
+}
+
 const closeMainWindow = () => {
     mainWindow.close()
 }
@@ -138,13 +157,21 @@ const sentToDictTestWindow = (channel, args) => {
     } catch (e) {}
 }
 
+const sentToDumpEditorWindow = (channel, args) => {
+    try {
+        dumpEditorWindow.webContents.send(channel, args)
+    } catch (e) {}
+}
+
 module.exports = {
     createMainWindow,
     closeMainWindow,
     minMainWindow,
     createInputKeysWindow,
+    createDumpEditorWindow,
     sendToMainWindow,
     sentToDictTestWindow,
+    sentToDumpEditorWindow,
     closeInputKeysWindow,
     createHardNestedWindow,
     closeHardNestedWindow,

@@ -5,6 +5,8 @@ const {contextBridge, ipcRenderer} = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
     devicePrefix: "/dev/tty.",
+    platform: process.platform,
+
     onUpdateLogOutput: (callback) => ipcRenderer.on("update-log-output", callback),
     onUpdateStatus: (callback) => ipcRenderer.on("update-status", callback),
     onUpdateUSBDevices: (callback) => ipcRenderer.on("update-usb-devices", callback),
@@ -12,8 +14,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onCreateHardNestedWindow: (config) => ipcRenderer.on("update-hard-nested-config", config),
     onCreateDictTestWindow: (config) => ipcRenderer.on("update-dict-test-config", config),
     onOpenDictFile: (callback) => ipcRenderer.on("dict-file-name", callback),
+    onOpenDumpFile: (callback) => ipcRenderer.on("binary-data", callback),
+    onSavedDumpFile: (callback) => ipcRenderer.on("saved-binary-data", callback),
 
-    platform: process.platform,
     getVersion: () => ipcRenderer.invoke("get-app-version"),
     closeApp: () => ipcRenderer.invoke("close-app"),
     minimizeWindow: () => ipcRenderer.invoke("minimize-window"),
@@ -23,4 +26,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     okayHardNestedWindow: (configs) => ipcRenderer.invoke("okay-hard-nested-window", configs),
     closeDictTestWindow: () => ipcRenderer.invoke("close-dict-test-window"),
     okayDictTestWindow: (configs) => ipcRenderer.invoke("okay-dict-test-window", configs),
+
+    startDrag: (path) => {ipcRenderer.send('ondragstart', path)}
 })
