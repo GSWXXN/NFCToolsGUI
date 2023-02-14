@@ -10,6 +10,7 @@ let inputKeysWindow = null
 let hardNestedWindow = null
 let dictTestWindow = null
 let dumpEditorWindow = null
+let dumpComparatorWindow = null
 
 const createMainWindow = () => {
     mainWindow = new BrowserWindow({
@@ -41,7 +42,7 @@ const createMainWindow = () => {
             })
         }
     })
-    mainWindow.loadFile(path.join(__dirname, 'renderer/index.html'));
+    mainWindow.loadFile(path.join(__dirname, 'renderer/html/index.html'));
 }
 
 const createInputKeysWindow = () => {
@@ -60,7 +61,7 @@ const createInputKeysWindow = () => {
         },
     })
     inputKeysWindow.once("ready-to-show", () => {inputKeysWindow.show()})
-    inputKeysWindow.loadFile(path.join(__dirname, 'renderer/inputkeys.html'))
+    inputKeysWindow.loadFile(path.join(__dirname, 'renderer/html/inputkeys.html'))
 }
 
 const createHardNestedWindow = (config) => {
@@ -82,7 +83,7 @@ const createHardNestedWindow = (config) => {
         hardNestedWindow.webContents.send("update-hard-nested-config", config)
         hardNestedWindow.show()
     })
-    hardNestedWindow.loadFile(path.join(__dirname, 'renderer/hardNested.html'))
+    hardNestedWindow.loadFile(path.join(__dirname, 'renderer/html/hardNested.html'))
 }
 
 const createDictTestWindow = (config) => {
@@ -104,7 +105,7 @@ const createDictTestWindow = (config) => {
         dictTestWindow.webContents.send("update-dict-test-config", config)
         dictTestWindow.show()
     })
-    dictTestWindow.loadFile(path.join(__dirname, 'renderer/dictTest.html'))
+    dictTestWindow.loadFile(path.join(__dirname, 'renderer/html/dictTest.html'))
 }
 
 const createDumpEditorWindow = () => {
@@ -122,8 +123,27 @@ const createDumpEditorWindow = () => {
     dumpEditorWindow.once("ready-to-show", () => {
         dumpEditorWindow.show()
     })
-    dumpEditorWindow.loadFile(path.join(__dirname, 'renderer/dumpEditor.html'))
+    dumpEditorWindow.loadFile(path.join(__dirname, 'renderer/html/dumpEditor.html'))
     return dumpEditorWindow
+}
+
+const createDumpComparatorWindow = () => {
+    dumpComparatorWindow = new BrowserWindow({
+        width: 380,
+        height: 720,
+        show: false,
+        resizable: false,
+        maximizable: false,
+        minimizable: false,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+        },
+    })
+    dumpComparatorWindow.once("ready-to-show", () => {
+        dumpComparatorWindow.show()
+    })
+    dumpComparatorWindow.loadFile(path.join(__dirname, 'renderer/html/dumpComparator.html'))
+    return dumpComparatorWindow
 }
 
 const closeMainWindow = () => {
@@ -163,18 +183,30 @@ const sentToDumpEditorWindow = (channel, args) => {
     } catch (e) {}
 }
 
+const sentToDumpComparatorWindow = (channel, args) => {
+    try {
+        dumpComparatorWindow.webContents.send(channel, args)
+    } catch (e) {}
+}
+
 module.exports = {
-    createMainWindow,
-    closeMainWindow,
     minMainWindow,
+
+    createMainWindow,
+    createDictTestWindow,
     createInputKeysWindow,
     createDumpEditorWindow,
+    createDumpComparatorWindow,
+    createHardNestedWindow,
+
+
     sendToMainWindow,
     sentToDictTestWindow,
     sentToDumpEditorWindow,
+    sentToDumpComparatorWindow,
+
     closeInputKeysWindow,
-    createHardNestedWindow,
+    closeMainWindow,
     closeHardNestedWindow,
-    createDictTestWindow,
-    closeDictTestWindow
+    closeDictTestWindow,
 }

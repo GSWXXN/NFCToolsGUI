@@ -1,0 +1,78 @@
+@font-face{
+    font-family: 'SourceCodePro';
+    src: url('../assets/font/SourceCodePro-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+.dump-text{
+    font-family: "SourceCodePro", serif;
+    font-size: 14px;
+    white-space: pre;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #fff;
+    color: #000;
+    user-select: text;
+}
+.sector-tag{
+    margin-bottom: 8px;
+}
+
+#top-bar{
+    background-color: white;
+    padding-top: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+#top-bar span{
+    margin-left: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}
+#top-bar button{
+    height: 20px;
+    background-color: #486bc7;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    vertical-align: middle;
+    box-shadow: 0 0 5px rgb(72 107 199 / 30%);
+}
+#top-bar button:active{
+    background-color: #3856b0;
+}
+
+#top-bar button:focus{
+    outline: none;
+}
+#top-bar hr {
+    background-color: white;
+    margin-bottom: 0;
+}
+#compare-container{
+    margin-top: 80px;
+    text-align: center;
+}
+#compare-container hr{
+    border: 0;
+    padding-top: 1px;
+    background: linear-gradient(to right, transparent, #b0b0b4, transparent);
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+body{
+    user-select: none;
+}
+mark{
+    background-color: #ffd6d6;
+}
+button{
+    cursor: pointer;
+}

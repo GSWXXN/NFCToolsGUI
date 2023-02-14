@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>请输入已知密钥</title>
-    <link rel="stylesheet" href="css/subWindow.css">
-    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../css/subWindow.css">
 </head>
 <body>
 <div class="title">输入你想要测试的扇区信息以及字典起始位置, 以便接着上次跑</div>
@@ -44,7 +43,8 @@
     )">确定</button>
 </div>
 </body>
-<script src="js/utils.js"></script>
+<script src="../js/jquery-3.6.3.min.js"></script>
+<script src="../js/utils.js"></script>
 <script>
     window.electronAPI.onCreateDictTestWindow((_event, config) => {
         if (config) {
