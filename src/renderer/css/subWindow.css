@@ -97,9 +97,11 @@ input[type="radio"]:checked + .radio-wrapper{
     transition: 130ms;
 }
 input[type="radio"]:disabled + .radio-wrapper{
-    background-color: #fafafa;
-    color: black;
     transition: 0ms;
+    color: #ccc;
+    cursor: not-allowed;
+    background-color: #e0e0e0;
+    box-shadow: none;
 }
 
 label:not(.radio-wrapper):not(.checkbox-wrapper){
@@ -115,6 +117,7 @@ label:not(.radio-wrapper):not(.checkbox-wrapper){
     text-align: right;
 }
 button{
+    outline: 0;
     background-color: #f4f5fc;
     border: none;
     color: black;
@@ -131,4 +134,13 @@ button:hover{
     background-color: #4168cf;
     color: white;
     transition: 80ms;
+}
+input{
+    outline: 0;
+}
+input:disabled{
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+    box-shadow: none;
+    cursor: not-allowed;
 }

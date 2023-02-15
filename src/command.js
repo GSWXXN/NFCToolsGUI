@@ -1,10 +1,11 @@
 const {exec, killProcess, printExitLog, printLog, printStatus} = require("./execUtils")
 const fs = require('fs')
 const {dialog} = require('electron')
-const {createDumpComparatorWindow, createDumpEditorWindow, createInputKeysWindow, createHardNestedWindow, createDictTestWindow, sendToMainWindow, sentToDictTestWindow, sentToDumpEditorWindow, sentToDumpComparatorWindow} = require("./windows")
+const {createDumpHistoryWindow, createDumpComparatorWindow, createDumpEditorWindow, createInputKeysWindow, createHardNestedWindow, createDictTestWindow, sendToMainWindow, sentToDictTestWindow, sentToDumpEditorWindow, sentToDumpComparatorWindow, sentToDumpHistoryWindow} = require("./windows")
 const cp = require("child_process");
 const status = require("./status")
 const { SerialPort } = require('serialport')
+const path = require("path");
 
 const knownKeysFile = "keys.txt"
 const tempMFDFilePath = "temp.mfd"
@@ -12,6 +13,7 @@ const dumpFilesPath = "./dumpfiles"
 const noncesFilesPath = "./nonces.bin"
 const nfcConfigFilePath = "./libnfc.conf"
 let dictPath = "./dict.dic"
+const dumpsFolder = path.join(__dirname, "../dumpfiles")
 
 let newKeys = []
 let knownKeyInfo = []
@@ -316,16 +318,19 @@ const actions = {
     "open-history-keys": () => {cp.exec(`${process.platform === "win32" ? "start" : "open"} ${knownKeysFile}`)},
 
     // 转储编辑器
-    "open-dump-editor": createDumpEditorWindow,
-    "dump-editor-choose-file": () => {
-        const filePaths = dialog.showOpenDialogSync({
+    "open-dump-editor": (file) => {
+        createDumpEditorWindow(file ? path.join(dumpsFolder, file) : null)
+    },
+    "dump-editor-choose-file": (filePath) => {
+        console.log(filePath)
+        const filePaths = filePath ? filePath : dialog.showOpenDialogSync({
             title: "选择转储文件",
             defaultPath: dictPath,
             properties: ['openFile'],
             filters: [{ name: 'Dump Files', extensions: ['mfd', 'dump'] }],
             message: "选择转储文件",
-        })
-        fs.readFile(filePaths[0], (err, data) => {
+        })[0]
+        fs.readFile(filePaths, (err, data) => {
             if (err) throw err;
             const hexDataArray = Array.from(new Uint8Array(data), function(byte) {
                 return ('0' + (byte & 0xff).toString(16)).slice(-2);
@@ -334,7 +339,7 @@ const actions = {
             for (let i = 0; i < hexDataArray.length; i += 4) {
                 groupedHexData.push((hexDataArray.slice(i, i + 4)).join('\n'));
             }
-            sentToDumpEditorWindow('binary-data', {url: filePaths[0], data: groupedHexData});
+            sentToDumpEditorWindow('binary-data', {url: filePaths, data: groupedHexData});
         });
     },
     "dump-editor-save": (data) => {
@@ -350,16 +355,24 @@ const actions = {
     },
 
     // 转储比较器
-    "open-dump-comparator": createDumpComparatorWindow,
+    "open-dump-comparator": (dumpFilesData) => {
+        // dumpFilesData = {A: "dump1.mfd", B: "dump2.mfd"}
+        if (dumpFilesData) {
+            dumpFilesData.A = path.join(dumpsFolder, dumpFilesData.A);
+            dumpFilesData.B = path.join(dumpsFolder, dumpFilesData.B)
+        }
+        createDumpComparatorWindow(dumpFilesData)
+    },
     "dump-comparator-choose-file": (type) => {
-        const filePaths = dialog.showOpenDialogSync({
+        const dumpType = type.type
+        const filePaths = type.path ? type.path : dialog.showOpenDialogSync({
             title: "选择转储文件",
             defaultPath: dictPath,
             properties: ['openFile'],
             filters: [{ name: 'Dump Files', extensions: ['mfd', 'dump'] }],
             message: "选择转储文件",
-        })
-        fs.readFile(filePaths[0], (err, data) => {
+        })[0]
+        fs.readFile(filePaths, (err, data) => {
             if (err) throw err;
             const hexDataArray = Array.from(new Uint8Array(data), function(byte) {
                 return ('0' + (byte & 0xff).toString(16)).slice(-2);
@@ -368,7 +381,40 @@ const actions = {
             for (let i = 0; i < hexDataArray.length; i += 4) {
                 groupedHexData.push(hexDataArray.slice(i, i + 4));
             }
-            sentToDumpComparatorWindow('binary-data', {url: filePaths[0], data: groupedHexData, type: type});
+            sentToDumpComparatorWindow('binary-data', {url: filePaths, data: groupedHexData, type: dumpType});
+        });
+    },
+
+    // 历史记录
+    "dump-history": () => {
+        const dumpFiles = fs.readdirSync(dumpsFolder).filter(file => file.endsWith('.mfd'));
+        createDumpHistoryWindow(dumpFiles)
+    },
+    // 删除历史记录
+    "delete-dump": (files) => {
+        // 弹出确认框
+        const confirmDelete = dialog.showMessageBoxSync({
+            type: 'question',
+            buttons: ['确定', '取消'],
+            message: "你确定要删除这些转储吗?",
+            detail: files.join('\n'),
+        });
+
+        if (confirmDelete === 0) { // 用户点击 Yes
+            files.forEach((file) => {
+                fs.unlink(path.join(dumpsFolder, file), (err) => {
+                    if (err) throw err;
+                    updateDumpFiles()
+                });
+            });
+        }
+    },
+    // 重命名
+    "rename-dump-file": (fileObj) => {
+        const { oldName, newName } = fileObj;
+        fs.rename(path.join(dumpsFolder, oldName), path.join(dumpsFolder, newName), (err) => {
+            if (err) throw err;
+            updateDumpFiles()
         });
     },
 
@@ -550,6 +596,11 @@ function getTimeList() {
         else time[index] = `${value}`
     })
     return time
+}
+
+function updateDumpFiles() {
+    const dumpFiles = fs.readdirSync(dumpsFolder).filter(file => file.endsWith('.mfd'));
+    sentToDumpHistoryWindow('update-dump-history', dumpFiles)
 }
 
 function execAction(action, arg) {

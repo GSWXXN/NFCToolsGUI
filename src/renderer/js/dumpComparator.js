@@ -1,14 +1,19 @@
 let dumpA = []
 let dumpB = []
 
+window['electronAPI'].onUpdateDumpComparatorFile((event, data) => {
+    window['electronAPI'].execAction('dump-comparator-choose-file', {type: 'A', path: data.A})
+    window['electronAPI'].execAction('dump-comparator-choose-file', {type: 'B', path: data.B})
+})
+
 $(document).on('mousedown', function(event) {
     if (event.target.tagName.toLowerCase() !== 'input' && window.getSelection().toString() !== '') {
         window.getSelection().removeAllRanges();
     }
 });
 
-$('#dump-A').click(() => {window['electronAPI'].execAction('dump-comparator-choose-file', 'A')})
-$('#dump-B').click(() => {window['electronAPI'].execAction('dump-comparator-choose-file', 'B')})
+$('#dump-A').click(() => {window['electronAPI'].execAction('dump-comparator-choose-file', {type: 'A'})})
+$('#dump-B').click(() => {window['electronAPI'].execAction('dump-comparator-choose-file', {type: 'B'})})
 
 window['electronAPI'].onOpenDumpFile((event, data) => {
     const pathArray = data.url.split(/[\/\\]/g)

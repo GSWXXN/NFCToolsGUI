@@ -4,13 +4,13 @@ const {BrowserWindow, dialog} = require("electron")
 const path = require("path")
 const status = require("./status");
 
-
 let mainWindow = null
 let inputKeysWindow = null
 let hardNestedWindow = null
 let dictTestWindow = null
 let dumpEditorWindow = null
 let dumpComparatorWindow = null
+let dumpHistoryWindow = null
 
 const createMainWindow = () => {
     mainWindow = new BrowserWindow({
@@ -108,7 +108,7 @@ const createDictTestWindow = (config) => {
     dictTestWindow.loadFile(path.join(__dirname, 'renderer/html/dictTest.html'))
 }
 
-const createDumpEditorWindow = () => {
+const createDumpEditorWindow = (filePath) => {
     dumpEditorWindow = new BrowserWindow({
         width: 380,
         height: 720,
@@ -121,13 +121,14 @@ const createDumpEditorWindow = () => {
         },
     })
     dumpEditorWindow.once("ready-to-show", () => {
+        dumpEditorWindow.webContents.send("update-dump-editor-file", filePath)
         dumpEditorWindow.show()
     })
     dumpEditorWindow.loadFile(path.join(__dirname, 'renderer/html/dumpEditor.html'))
     return dumpEditorWindow
 }
 
-const createDumpComparatorWindow = () => {
+const createDumpComparatorWindow = (dumpFilesData) => {
     dumpComparatorWindow = new BrowserWindow({
         width: 380,
         height: 720,
@@ -140,10 +141,31 @@ const createDumpComparatorWindow = () => {
         },
     })
     dumpComparatorWindow.once("ready-to-show", () => {
+        dumpComparatorWindow.webContents.send("update-dump-comparator-files", dumpFilesData)
         dumpComparatorWindow.show()
     })
     dumpComparatorWindow.loadFile(path.join(__dirname, 'renderer/html/dumpComparator.html'))
     return dumpComparatorWindow
+}
+
+const createDumpHistoryWindow = (dumpFiles) => {
+    dumpHistoryWindow = new BrowserWindow({
+        width: 380,
+        height: 720,
+        show: false,
+        resizable: false,
+        maximizable: false,
+        minimizable: false,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+        },
+    })
+    dumpHistoryWindow.once("ready-to-show", () => {
+        dumpHistoryWindow.webContents.send("update-dump-history", dumpFiles)
+        dumpHistoryWindow.show()
+    })
+    dumpHistoryWindow.loadFile(path.join(__dirname, 'renderer/html/dumpHistory.html'))
+    return dumpHistoryWindow
 }
 
 const closeMainWindow = () => {
@@ -189,6 +211,13 @@ const sentToDumpComparatorWindow = (channel, args) => {
     } catch (e) {}
 }
 
+const sentToDumpHistoryWindow = (channel, args) => {
+    try {
+        dumpHistoryWindow.webContents.send(channel, args)
+    } catch (e) {}
+}
+
+
 module.exports = {
     minMainWindow,
 
@@ -198,12 +227,14 @@ module.exports = {
     createDumpEditorWindow,
     createDumpComparatorWindow,
     createHardNestedWindow,
+    createDumpHistoryWindow,
 
 
     sendToMainWindow,
     sentToDictTestWindow,
     sentToDumpEditorWindow,
     sentToDumpComparatorWindow,
+    sentToDumpHistoryWindow,
 
     closeInputKeysWindow,
     closeMainWindow,

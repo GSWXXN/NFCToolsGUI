@@ -1,5 +1,8 @@
 let currentFilePath = null
-window['electronAPI'].execAction('dump-editor-choose-file')
+
+window['electronAPI'].onUpdateDumpEditorFile((event, data) => {
+    window['electronAPI'].execAction('dump-editor-choose-file', data)
+})
 
 $('#drag').on('dragstart', (e) => {
     e.preventDefault()

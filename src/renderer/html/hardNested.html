@@ -74,6 +74,21 @@
             setRatioValue('target-key-type', config.targetKeyType)
         }
     })
+
+    function checkboxOnclick(checkbox) {
+        const obj = document.getElementsByTagName("input")
+        if (checkbox.checked === true) {
+            for (let i = 0; i < obj.length; i++) {
+                if (obj[i].id === "auto-run") continue
+                obj[i].disabled = true
+            }
+        } else {
+            for (let i = 0; i < obj.length; i++) {
+                if (obj[i].id === "auto-run") continue
+                obj[i].disabled = false
+            }
+        }
+    }
 </script>
 <script src="../js/jquery-3.6.3.min.js"></script>
 <script src="../js/utils.js"></script>
