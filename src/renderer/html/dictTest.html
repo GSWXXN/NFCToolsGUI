@@ -2,23 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>请输入已知密钥</title>
+    <title>{{ html_please_input_known_keys }}</title>
     <link rel="stylesheet" href="../css/subWindow.css">
 </head>
 <body>
-<div class="title">输入你想要测试的扇区信息以及字典起始位置, 以便接着上次跑</div>
+<div class="title">{{ html_input_test_info }}</div>
 <br>
 
-<label for="dict-file">字典文件</label>
+<label for="dict-file">{{ html_dictionary_file }}</label>
 <div id="dict-file">
-    <span>内置字典</span>
-    <button onclick="window.electronAPI.execAction('open-dict-file')">选择文件</button>
+    <span>{{ html_build_in_dictionary }}</span>
+    <button onclick="window.electronAPI.execAction('open-dict-file')">{{ html_choose_file }}</button>
 </div>
 <br>
-<label for="sector">扇区</label>
+<label for="sector">{{ html_sector }}</label>
 <input type="text" id="sector" value="0">
 <br>
-<label>类型</label>
+<label>{{ html_key_type }}</label>
 <div class="radio-group">
     <input type="radio" id="target-key-type-A" name="target-key-type" value="A" checked>
     <label class="radio-wrapper" for="target-key-type-A">KeyA</label>
@@ -27,23 +27,24 @@
 </div>
 
 <br>
-<label for="start-position">起始位置</label><input type="text" id="start-position" value="0">
+<label for="start-position">{{ html_start_position }}</label><input type="text" id="start-position" value="0">
 
 
 <br>
 <br>
 <div class="final-button">
-    <button onclick="window.electronAPI.closeDictTestWindow()">取消</button>
+    <button onclick="window.electronAPI.closeDictTestWindow()">{{ dialog_button_cancel }}</button>
     <button onclick="window.electronAPI.okayDictTestWindow(
         {
             sector: $('#sector').val(),
             keyType: getRatioValue('target-key-type'),
             startPosition: $('#start-position').val(),
         }
-    )">确定</button>
+    )">{{ dialog_button_ok }}</button>
 </div>
 </body>
 <script src="../js/jquery-3.6.3.min.js"></script>
+<script src="../js/i18n.js"></script>
 <script src="../js/utils.js"></script>
 <script>
     window.electronAPI.onCreateDictTestWindow((_event, config) => {

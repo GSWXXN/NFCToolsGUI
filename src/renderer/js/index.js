@@ -5,6 +5,7 @@ let isLockScroll = false
 let isTimerRunning = false;
 let intervalID = undefined;
 let timerSecond = 0
+const $statusText = $("#status-text")
 
 if (mainProcess.platform !== "darwin") {
     const titleArea = $(".title")
@@ -32,7 +33,8 @@ mainProcess.onUpdateLogOutput((_event, value) => {
 
 // 接收状态更新
 mainProcess.onUpdateStatus((_event, value) => {
-    $("#status-text").html(value["text"])
+    $statusText.html(value["text"])
+    $statusText.prop("title", value["text"])
 
     const statusIndicator = $("#status-indicator")
     switch (value["indicator"]) {
@@ -155,7 +157,8 @@ function resetStatus(fromMain=false) {
         timerSecond = 0
     } else {
         $("#timer-value").html("")
-        $("#status-text").html("空闲")
+        $statusText.html(i18n("free"))
+        $statusText.prop("title", i18n("free"))
         $("#status-indicator").css("background-color", "transparent")
     }
 }

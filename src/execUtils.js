@@ -1,18 +1,19 @@
 const cp = require('child_process')
-const {dialog} = require('electron')
-const {sendToMainWindow} = require("./windows")
+const { dialog } = require('electron')
+const { sendToMainWindow } = require("./windows")
 const status = require("./status")
+const { i18n } = require('./i18n')
 
 let task = null
 
 function exec(msg, cmd, args, processHandler, finishHandler, followupTask) {
     if (status.currentDevice === null || (!status.isDeviceConnected && cmd !== "nfc-list")) {
-        printStatus("出错", "error")
-        dialog.showErrorBox("错误", "请先连接设备")
+        printStatus(i18n("indicator_error"), "error")
+        dialog.showErrorBox(i18n("dialog_title_error"), i18n("dialog_msg_not_connected_device"))
         return
     }
     if (status.isRunningTask) {
-        dialog.showErrorBox("设备忙", "有任务进行中，不可执行")
+        dialog.showErrorBox(i18n("dialog_title_device_busy"), i18n("dialog_msg_running_task"))
         return
     }
     status.isRunningTask = true
@@ -55,16 +56,16 @@ function printStatus(msg, indicator="running") {
 function printExitLog(code) {
     switch (code) {
         case 0:
-            printStatus("空闲", "free")
-            printLog("\n### 运行完毕 ###")
+            printStatus(i18n("indicator_free"), "free")
+            printLog(`\n${i18n("log_msg_finished")}`)
             break
         case 1:
-            printStatus("出错", "error")
-            printLog("\n### 运行出错 ###")
+            printStatus(i18n("indicator_error"), "error")
+            printLog(`\n${i18n("log_msg_error")}`)
             break
         case 2:
-            printStatus("空闲", "free")
-            printLog("\n### 停止任务 ###")
+            printStatus(i18n("indicator_free"), "free")
+            printLog(`\n${i18n("log_msg_finished")}`)
             break
     }
 }

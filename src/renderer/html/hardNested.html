@@ -7,50 +7,50 @@
 <body>
 
 <input type="checkbox" id="auto-run" name="auto-run" onclick="checkboxOnclick(this)">
-<label class="checkbox-wrapper" for="auto-run">自动执行</label>
+<label class="checkbox-wrapper" for="auto-run">{{ html_auto_run }}</label>
 
 <hr class="hr-edge-weak">
 
-<div class="sub-title">已知信息</div>
-<label for="known-key">已知的 Key</label>
+<div class="sub-title">{{ html_known_info }}</div>
+<label for="known-key">{{ html_known_key }}</label>
 <input type="text" id="known-key" value="ffffffffffff">
 <br>
-<label for="known-sector">扇区号</label>
+<label for="known-sector">{{ html_sector }}</label>
 <input type="text" id="known-sector" value="0">
 <br>
-<label>Key 类型</label>
+<label>{{ html_key_type }}</label>
 <div class="radio-group">
     <input type="radio" id="known-key-type-A" name="known-key-type" value="A" checked>
-    <label class="radio-wrapper" for="known-key-type-A">KeyA</label>
+    <label class="radio-wrapper" for="known-key-type-A">Key A</label>
     <input type="radio" id="known-key-type-B" name="known-key-type" value="B">
-    <label class="radio-wrapper" for="known-key-type-B">KeyB</label>
+    <label class="radio-wrapper" for="known-key-type-B">Key B</label>
 </div>
 
 
 <hr class="hr-edge-weak">
 
-<div class="sub-title">目标扇区解密信息</div>
+<div class="sub-title">{{ html_target_sector_info }}</div>
 
-<label for="target-sector">扇区号</label>
+<label for="target-sector">{{ html_sector }}</label>
 <input type="text" id="target-sector" value="0">
 <br>
-<label>Key 类型</label>
+<label>{{ html_key_type }}</label>
 <div class="radio-group">
     <input type="radio" id="target-key-type-A" name="target-key-type" value="A" checked>
-    <label class="radio-wrapper" for="target-key-type-A">KeyA</label>
+    <label class="radio-wrapper" for="target-key-type-A">Key A</label>
     <input type="radio" id="target-key-type-B" name="target-key-type" value="B">
-    <label class="radio-wrapper" for="target-key-type-B">KeyB</label>
+    <label class="radio-wrapper" for="target-key-type-B">Key B</label>
 </div>
 
 <br><br><br>
 
 <input type="checkbox" id="collect-only" name="collect-only">
-<label class="checkbox-wrapper" for="collect-only">只采集不计算</label>
+<label class="checkbox-wrapper" for="collect-only">{{ html_collect_only }}</label>
 
 <br><br>
 
 <div class="final-button">
-<button onclick="window.electronAPI.closeHardNestedWindow()">取消</button>
+<button onclick="window.electronAPI.closeHardNestedWindow()">{{ dialog_button_cancel }}</button>
 <button onclick="window.electronAPI.okayHardNestedWindow({
     knownKey: document.getElementById('known-key').value,
     knownSector: document.getElementById('known-sector').value,
@@ -60,7 +60,7 @@
     collectOnly: document.getElementById('auto-run').checked ? false : document.getElementById('collect-only').checked,
     autoRun: document.getElementById('auto-run').checked,
     fromUser: true
-})">执行</button>
+})">{{ html_execute }}</button>
 
 </div>
 </body>
@@ -91,5 +91,6 @@
     }
 </script>
 <script src="../js/jquery-3.6.3.min.js"></script>
+<script src="../js/i18n.js"></script>
 <script src="../js/utils.js"></script>
 </html>

@@ -21,7 +21,7 @@ $('#save-file').click(() => {
             }
         )
     } else {
-        alert('数据格式错误')
+        alert(i18n("html_data_format_wrong"))
     }
 })
 $('#update-tag-color').click(() => {
@@ -30,7 +30,7 @@ $('#update-tag-color').click(() => {
             item.innerHTML = updateTagColor(item.innerText, !i)
         })
     } else {
-        alert('数据格式错误')
+        alert(i18n("html_data_format_wrong"))
     }
 })
 
@@ -44,7 +44,7 @@ window['electronAPI'].onOpenDumpFile((event, data) => {
     $('#current-file').text(pathArray[pathArray.length - 1])
     
     data.data.forEach((item, i)=> {
-        const label = $(`<span class="textarea-label">扇区${sector++}</span>`)
+        const label = $(`<span class="textarea-label">${i18n("html_sector")} ${sector++}</span>`)
         const textarea = $(`<div class="binary-input" wrap="off" spellcheck="false" contenteditable="true">${updateTagColor(item, !i)}</div>`)
 
         container.append($('<br>'))
@@ -55,7 +55,7 @@ window['electronAPI'].onOpenDumpFile((event, data) => {
 })
 
 window['electronAPI'].onSavedDumpFile(() => {
-    alert('保存成功')
+    alert(i18n("html_save_success"))
 })
 
 function updateTagColor(data, isBlock0 = false) {

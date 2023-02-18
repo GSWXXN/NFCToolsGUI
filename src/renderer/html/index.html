@@ -11,7 +11,7 @@
         <div class="select-container usb-ports-list">
             <div class="selection" onclick="if (!isConnectingDevice) showDropdown(this,event, ()=>{mainProcess.execAction('scan-usb-devices')})">
                 <input type="hidden" value="" id="usb-port-value">
-                <input type="text" readonly="readonly" class="selection-value" placeholder="选择设备" id="usb-port-label">
+                <input type="text" readonly="readonly" class="selection-value" placeholder="{{ html_choose_device }}" id="usb-port-label">
                 <span class="down-arrow"></span>
             </div>
             <div class="dropdown-menus">
@@ -22,14 +22,14 @@
 
         <div class="tools-list">
             <button class="bar-button" onclick="showDropdown(this, event)">
-                <img class="button-img" src="../assets/icon/svg/tools.svg" alt="工具">
+                <img class="button-img" src="../assets/icon/svg/tools.svg" alt="{{ html_tools }}">
             </button>
             <div class="dropdown-menus">
                 <ul class="dropdown-menu">
-                    <li class="menu-item" onclick="mainProcess.execAction('open-history-keys')"><span class="text">编辑历史密钥</span></li>
-                    <li class="menu-item" onclick="mainProcess.execAction('open-dump-editor')"><span class="text">转储编辑器</span></li>
-                    <li class="menu-item" onclick="mainProcess.execAction('open-dump-comparator')"><span class="text">转储比较器</span></li>
-                    <li class="menu-item" onclick="mainProcess.execAction('dump-history')"><span class="text">历史记录</span></li>
+                    <li class="menu-item" onclick="mainProcess.execAction('open-history-keys')"><span class="text">{{ html_edit_history_key }}</span></li>
+                    <li class="menu-item" onclick="mainProcess.execAction('open-dump-editor')"><span class="text">{{ html_dump_editor }}</span></li>
+                    <li class="menu-item" onclick="mainProcess.execAction('open-dump-comparator')"><span class="text">{{ html_dump_comparator }}</span></li>
+                    <li class="menu-item" onclick="mainProcess.execAction('dump-history')"><span class="text">{{ html_dump_history }}</span></li>
                 </ul>
             </div>
 <!--            <button class="bar-button" onclick="">-->
@@ -39,70 +39,71 @@
 
         <div class="windows-control" hidden>
             <button id="minimize-app" onclick="mainProcess.minimizeWindow()">
-                <img src="../assets/icon/svg/minimize.svg" alt="最小化">
+                <img src="../assets/icon/svg/minimize.svg" alt="{{ html_minimize }}">
             </button>
             <button id="close-app" onclick="mainProcess.closeApp()">
-                <img src="../assets/icon/svg/close.svg" alt="关闭">
+                <img src="../assets/icon/svg/close.svg" alt="{{ html_close }}">
             </button>
         </div>
     </div>
 
     <div class="title">
         <img id="app-title-icon" src="../assets/icon/svg/stop.svg" alt="icon">
-        <span id="app-title">NFCToolsGUI</span>
+        <span id="app-title">{{ app_name }}</span>
     </div>
 </div>
 
 <div class="main-button-area">
-    <button class="main-button" onclick="mainProcess.execAction('read-IC')">开始解卡</button>
-    <button class="main-button" onclick="mainProcess.execAction('write-IC')">一键写卡</button>
-    <button class="main-button" onclick="mainProcess.execAction('format-card')">格式化</button>
-    <button class="main-button" onclick="mainProcess.execAction('input-keys-read-IC')">已知密钥解卡</button>
-    <button class="main-button" onclick="mainProcess.execAction('detect-card-type')">检测卡片加密</button>
-    <button class="main-button" onclick="mainProcess.execAction('lock-ufuid')">锁 UFUID</button>
-    <button class="main-button" onclick="mainProcess.execAction('hard-nested')">HardNested 解密</button>
-    <button class="main-button" onclick="mainProcess.execAction('dict-test')">字典测试</button>
+    <button class="main-button" onclick="mainProcess.execAction('read-IC')">{{ html_read_card }}</button>
+    <button class="main-button" onclick="mainProcess.execAction('write-IC')">{{ html_write_card }}</button>
+    <button class="main-button" onclick="mainProcess.execAction('format-card')">{{ html_format_card }}</button>
+    <button class="main-button" onclick="mainProcess.execAction('input-keys-read-IC')">{{ html_read_card_with_known_key }}</button>
+    <button class="main-button" onclick="mainProcess.execAction('detect-card-type')">{{ html_detect_card }}</button>
+    <button class="main-button" onclick="mainProcess.execAction('lock-ufuid')">{{ html_lock_ufuid }}</button>
+    <button class="main-button" onclick="mainProcess.execAction('hard-nested')">{{ html_hard_nested }}</button>
+    <button class="main-button" onclick="mainProcess.execAction('dict-test')">{{ html_test_dictionary }}</button>
 </div>
 
 <div class="bottom-area">
     <div id="left-bar">
-        <button class="bar-button" onclick="isLockScroll = !isLockScroll; $(this).children('.button-img').attr('src', isLockScroll ? './assert/icon/locked.svg' : './assert/icon/unlock.svg'); $(this).children('.tool-tip-text').html(isLockScroll ? '锁定滚动' : '自动滚动')">
-            <img class="button-img" src="../assets/icon/svg/unlock.svg" alt="锁定滚动">
-            <span class="tool-tip-text">锁定滚动</span>
+        <button class="bar-button" onclick="isLockScroll = !isLockScroll; $(this).children('.button-img').attr('src', isLockScroll ? '../assets/icon/svg/locked.svg' : '../assets/icon/svg/unlock.svg'); $(this).children('.tool-tip-text').html(isLockScroll ? '{{ html_lock_scroll }}' : '{{ html_unlock_scroll }}')">
+            <img class="button-img" src="../assets/icon/svg/unlock.svg" alt="{{ html_lock_scroll }}">
+            <span class="tool-tip-text">{{ html_lock_scroll }}</span>
         </button>
         <button class="bar-button" onclick="resetStatus();mainProcess.execAction('cancel-task')">
-            <img class="button-img" src="../assets/icon/svg/stop.svg" alt="停止任务">
-            <span class="tool-tip-text">停止任务</span>
+            <img class="button-img" src="../assets/icon/svg/stop.svg" alt="{{ html_stop_task }}">
+            <span class="tool-tip-text">{{ html_stop_task }}</span>
         </button>
         <button class="bar-button" onclick="mainProcess.execAction('save-log', $('#log').val())">
-            <img class="button-img" src="../assets/icon/svg/save.svg" alt="保存日志">
-            <span class="tool-tip-text">保存日志</span>
+            <img class="button-img" src="../assets/icon/svg/save.svg" alt="{{ html_save_log }}">
+            <span class="tool-tip-text">{{ html_save_log }}</span>
         </button>
         <button class="bar-button" onclick="document.getElementById('log').value=''">
-            <img class="button-img" src="../assets/icon/svg/trash.svg" alt="清除日志">
-            <span class="tool-tip-text">清除日志</span>
+            <img class="button-img" src="../assets/icon/svg/trash.svg" alt="{{ html_clear_log }}">
+            <span class="tool-tip-text">{{ html_clear_log }}</span>
         </button>
     </div>
     <textarea id="log" readonly>Hello cardman!</textarea>
     <div id="bottom-bar">
         <div class="bottom-bar-item" id="status" style="width: 300px">
             <div id="status-indicator"></div>
-            <span id="status-text">空闲</span>
+            <span title="{{ indicator_free }}" id="status-text">{{ indicator_free }}</span>
         </div>
         <div class="bottom-bar-item" id="timer" style="width: 240px">
-            <img src="../assets/icon/svg/timer.svg" alt="timer">
-            <span id="timer-text">计时器</span>
+            <img src="../assets/icon/svg/timer.svg" alt="{{ html_timer }}">
+            <span id="timer-text">{{ html_timer }}</span>
             <span id="timer-value"></span>
         </div>
         <div class="bottom-bar-item" id="version" style="width: 240px">
-            <span id="version-text">当前版本:</span>
+            <span id="version-text">{{ html_current_version }}</span>
             <span id="version-value"></span>
-            <button id="check-update">检查更新</button>
+<!--            <button id="check-update">{{ html_check_update }}</button>-->
         </div>
     </div>
 </div>
 </body>
 <script src="../js/jquery-3.6.3.min.js"></script>
+<script src="../js/i18n.js"></script>
 <script src="../js/index.js"></script>
 <script src="../js/utils.js"></script>
 </html>

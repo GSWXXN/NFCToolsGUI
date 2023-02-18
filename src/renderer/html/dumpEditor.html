@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>转储编辑器</title>
+    <title>{{ html_dump_comparator }}</title>
     <link rel="stylesheet" href="../css/subWindow.css">
     <link rel="stylesheet" href="../css/dumpEditor.css">
 </head>
@@ -13,23 +13,29 @@
 <div id="bottom-area">
     <div id="file-info">
         <img id="drag" draggable="true" src="../assets/icon/128/drag.png" height="16" alt="drag">
-        <span>当前文件: </span>
+        <span>{{ html_current_file }}: </span>
         <span id="current-file"></span>
         <br>
-        <button id="choose-file">打开文件</button>
-        <button id="save-file">保存文件</button>
+        <div class="final-button">
+            <button id="choose-file">{{ html_open_file }}</button>
+            <button id="save-file">{{ html_save_file }}</button>
+        </div>
     </div>
-    <span>图例: </span>
-    <span class="uid">UID & 厂家信息</span>
-    <span> | </span>
-    <span class="keyA">密钥 A</span>
-    <span> | </span>
-    <span class="keyB">密钥 B</span>
-    <span> | </span>
-    <span class="accessControl">访问控制</span>
-    <button id="update-tag-color">更新配色</button>
+
+    <div id="caption_area">
+        <span>{{ html_caption }}: </span>
+        <span class="uid">{{ html_uid_manufacture_info }}</span>
+        <span> | </span>
+        <span class="keyA">{{ html_key_a }}</span>
+        <span> | </span>
+        <span class="keyB">{{ html_key_b }}</span>
+        <span> | </span>
+        <span class="accessControl">{{ html_access_control }}</span>
+        <button id="update-tag-color">{{ html_update_colors }}</button>
+    </div>
 </div>
 </body>
 <script src="../js/jquery-3.6.3.min.js"></script>
+<script src="../js/i18n.js"></script>
 <script src="../js/dumpEditor.js"></script>
 </html>

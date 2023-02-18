@@ -43,24 +43,27 @@ body{
     position: fixed;
     z-index: 999;
     bottom: 0;
+    right: 0;
+    left: 0;
     text-align: left;
     background-color: white;
-    padding-bottom: 5px;
+    padding-bottom: 10px;
     padding-top: 8px;
     font-size: 12px;
 }
 #update-tag-color{
-    font-size: 12px;
+    font-size: 11px;
     background-color: lightgray;
     border: none;
     color: black;
     border-radius: 10px;
-    width: 60px;
+    width: max-content;
     height: 20px;
     cursor: pointer;
-    margin-top: 5px;
     margin-right: 10px;
     margin-left: 15px;
+    vertical-align: middle;
+    box-shadow: none;
 }
 #file-info{
     text-align: center;
@@ -74,5 +77,12 @@ body{
     margin-bottom: 8px;
 }
 #file-info img{
+    vertical-align: middle;
+}
+#caption_area{
+    margin-left: 10px;
+}
+#caption_area span{
+    display: inline-block;
     vertical-align: middle;
 }

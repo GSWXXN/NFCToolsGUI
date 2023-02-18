@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>请输入已知密钥</title>
     <link rel="stylesheet" href="../css/subWindow.css">
 </head>
 <body>
-    <div class="title">请输入已知的Key, 以英文半角逗号分隔</div>
+    <div class="title">{{ html_please_input_known_keys_split_by_comma }}</div>
     <input type="text" id="keys" value="ffffffffffff,">
     <br>
     <div class="final-button">
-        <button onclick="window.electronAPI.closeInputKeysWindow()">取消</button>
-        <button onclick="window.electronAPI.execAction('done-input-keys-read-IC', document.getElementById('keys').value);window.electronAPI.closeInputKeysWindow()">确定</button>
+        <button onclick="window.electronAPI.closeInputKeysWindow()">{{ dialog_button_cancel }}</button>
+        <button onclick="window.electronAPI.execAction('done-input-keys-read-IC', document.getElementById('keys').value);window.electronAPI.closeInputKeysWindow()">{{ dialog_button_ok }}</button>
     </div>
 </body>
+<script src="../js/i18n.js"></script>
 </html>

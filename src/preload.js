@@ -31,5 +31,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     closeDictTestWindow: () => ipcRenderer.invoke("close-dict-test-window"),
     okayDictTestWindow: (configs) => ipcRenderer.invoke("okay-dict-test-window", configs),
 
-    startDrag: (path) => {ipcRenderer.send('ondragstart', path)}
+    startDrag: (path) => {ipcRenderer.send('ondragstart', path)},
+    rendered: () => ipcRenderer.send('rendered'),
+    getText: (key) => ipcRenderer.sendSync('get-text', key),
+    getLanguage: () => ipcRenderer.sendSync('get-language'),
 })

@@ -3,6 +3,7 @@ const {app, BrowserWindow, ipcMain, Menu} = require('electron')
 const {closeMainWindow, minMainWindow,createMainWindow, closeInputKeysWindow, closeHardNestedWindow, closeDictTestWindow} = require('./windows')
 const {killProcess} = require('./execUtils')
 const path = require("path");
+const i18n = require('./i18n');
 
 Menu.setApplicationMenu(null)
 
@@ -32,11 +33,24 @@ ipcMain.on('ondragstart', (event, filePath) => {
         icon: path.join(__dirname, 'renderer/assets/icon/16/drag.png')
     })
 })
+ipcMain.on('get-text', (event, key) => {
+    event.returnValue = i18n.getText(key);
+});
+ipcMain.on('get-language', (event) => {
+    event.returnValue = i18n.getLanguage();
+});
+ipcMain.on('rendered', (event) => {
+    BrowserWindow.fromWebContents(event.sender).show()
+})
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can onlybe used after this event occurs.
-app.on('ready', createMainWindow)
+app.on('ready', () => {
+    i18n.init();
+    createMainWindow();
+})
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

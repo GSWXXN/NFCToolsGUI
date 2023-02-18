@@ -2,21 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>转储比较器</title>
+    <title>{{ html_dump_comparator }}</title>
     <link rel="stylesheet" href="../css/dumpComparator.css">
 </head>
 <body>
 <div id="top-bar">
-    <span>转储1 (A): </span>
-    <button id="dump-A">选择文件</button>
+    <span>{{ html_dump }} (A): </span>
+    <button id="dump-A">{{ html_choose_file }}</button>
     <br>
-    <span>转储2 (B): </span>
-    <button id="dump-B">选择文件</button>
+    <span>{{ html_dump }} (B): </span>
+    <button id="dump-B">{{ html_choose_file }}</button>
     <hr>
 </div>
 
 <div id="compare-container"></div>
 </body>
 <script src="../js/jquery-3.6.3.min.js"></script>
+<script src="../js/i18n.js"></script>
 <script src="../js/dumpComparator.js"></script>
 </html>

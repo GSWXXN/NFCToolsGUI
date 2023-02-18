@@ -236,11 +236,12 @@ select{
   border: none;
   color: #333434;
   width: 150px;
-  height: 50px;
+  height: 55px;
   border-radius: 12px;
   box-shadow: 0 6px 12px rgb(65 104 207 / 20%);
   font-size: 15px;
   cursor: pointer;
+  vertical-align: middle;
 }
 .main-button:hover{
   background-color: #4168cf;

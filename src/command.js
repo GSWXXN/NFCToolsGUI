@@ -1,11 +1,26 @@
 const {exec, killProcess, printExitLog, printLog, printStatus} = require("./execUtils")
 const fs = require('fs')
 const {dialog} = require('electron')
-const {createDumpHistoryWindow, createDumpComparatorWindow, createDumpEditorWindow, createInputKeysWindow, createHardNestedWindow, createDictTestWindow, sendToMainWindow, sentToDictTestWindow, sentToDumpEditorWindow, sentToDumpComparatorWindow, sentToDumpHistoryWindow} = require("./windows")
 const cp = require("child_process");
 const status = require("./status")
 const { SerialPort } = require('serialport')
-const path = require("path");
+const path = require("path")
+const { i18n } = require('./i18n')
+const {
+    createDumpHistoryWindow,
+    createDumpComparatorWindow,
+    createDumpEditorWindow,
+    createInputKeysWindow,
+    createHardNestedWindow,
+    createDictTestWindow,
+
+    sendToMainWindow,
+    sentToDictTestWindow,
+    sentToDumpEditorWindow,
+    sentToDumpComparatorWindow,
+    sentToDumpHistoryWindow
+} = require("./windows")
+
 
 const knownKeysFile = "keys.txt"
 const tempMFDFilePath = "temp.mfd"
@@ -62,7 +77,7 @@ const actions = {
     // 连接设备
     "conn-usb-devices": (device) => {
         if (device === " ") {status.currentDevice = null; return}
-        printStatus("正在连接设备")
+        printStatus(i18n("indicator_connecting_device"))
         status.currentDevice = device
         setNFCConfig()
     },
@@ -76,23 +91,23 @@ const actions = {
 
     // 一键解卡
     "read-IC": () => {
-        printStatus("正在解卡")
+        printStatus(i18n("indicator_reading_ic_card"))
         mfoc([`-O${tempMFDFilePath}`, `-f${knownKeysFile}`])
     },
 
     // 一键写卡
     "write-IC": () => {
         dialog.showOpenDialog({
-            title: "请选择要写入的 MFD 文件",
+            title: i18n("dialog_title_choose_dump_need_to_write"),
             defaultPath: dumpFilesPath,
-            buttonLabel: "打开",
-            filters: [{ name: 'MFD 文件', extensions: ['dump', 'mfd'] }]
+            buttonLabel: i18n("dialog_button_open"),
+            filters: [{ name: i18n("file_type_dump"), extensions: ['dump', 'mfd'] }]
         }).then(result => {
             if (result["canceled"] === true) return
             let mfdFilePath = result["filePaths"][0]
 
             readICThenExec(
-                "开始执行写入 M1 卡片", "正在写卡", true,
+                i18n("log_msg_start_write_card"), i18n("indicator_writing_ic_card"), true,
                 "nfc-mfclassic", ["w", "A", "u", mfdFilePath, tempMFDFilePath, "f"]
             )
         })
@@ -101,7 +116,7 @@ const actions = {
     // 格式化
     "format-card": () => {
         readICThenExec(
-            "开始执行格式化 M1 卡片", "正在格式化卡片", true,
+            i18n("log_msg_start_format_card"), i18n("indicator_formatting_ic_card"), true,
             "nfc-mfclassic", ["f", "A", "u", tempMFDFilePath, tempMFDFilePath, "f"]
         )
     },
@@ -113,7 +128,7 @@ const actions = {
         keys.match(/[0-9A-Fa-f]{12}/g).forEach(key => {
             keyArg.push(`-k${key}`)
         })
-        printStatus("正在解卡")
+        printStatus(i18n("indicator_reading_ic_card"))
         mfoc(keyArg.concat([`-O${tempMFDFilePath}`, `-f${knownKeysFile}`]))
     },
 
@@ -122,9 +137,9 @@ const actions = {
         checkKeyFileExist()
         knownKeyInfo = []
         unknownKeyInfo = []
-        printStatus("正在检测卡片")
+        printStatus(i18n("indicator_detecting_ic_card"))
         exec(
-            "开始执行检测卡片类型",
+            i18n("log_msg_start_detect_card"),
             'nfc-mfdetect', [`-N`, `-f${knownKeysFile}`],
             (value) => {keyInfoStatistic(value)},
         )
@@ -134,13 +149,13 @@ const actions = {
     "lock-ufuid": () => {
         dialog.showMessageBox({
             type: "warning",
-            buttons: ["确定", "取消"],
-            title: "危险操作警告",
-            message: "该操作将会锁死UFUID卡片！！！\n锁死后不可恢复！无法再次更改0块！请确认是否要继续操作？",
+            buttons: [i18n("dialog_button_ok"), i18n("dialog_button_cancel")],
+            title: i18n("dialog_title_danger_operation"),
+            message: i18n("dialog_msg_card_will_be_locked"),
         }).then((response) => {
             if (response.response === 0) {
-                printStatus("正在锁 UFUID")
-                exec("开始执行UFUID卡片锁定", "nfc-mflock", ["-q"])
+                printStatus(i18n("indicator_locking_ufuid"))
+                exec(i18n("log_msg_start_lock_ufuid"), "nfc-mflock", ["-q"])
             }
         })
     },
@@ -157,20 +172,20 @@ const actions = {
         catch (e) {createHardNestedWindow()}},
     "hard-nested-config-done": (configs) => {
         if (configs.autoRun) {
-            readICThenExec("开始自动解密 HardHested",
-                `正在 HardNested 解密 - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`,
+            readICThenExec(i18n("lod_msg_start_auto_hard_nested"),
+                `${i18n("indicator_doing_hard_nested")} - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`,
                 false,
                 () => {
                     if (configs.fromUser) totalUnknownKeys = unknownKeyInfo.length
-                    printStatus(`正在执行 HardNested 解密 - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`)
+                    printStatus(`${i18n("indicator_doing_hard_nested")} - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`)
 
                     if (knownKeyInfo.length === 0) {
-                        printLog("\n未发现已知密钥");
+                        printLog(`\n${i18n("log_msg_not_found_known_key")}`);
                         printExitLog(1);
                         return;
                     }
                     if (unknownKeyInfo.length === 0) {
-                        printLog("\n已尝试解密全部未知密钥\n");
+                        printLog(`\n${i18n("log_msg_tried_decrypt_all_unknown_keys")}\n`);
                         printExitLog(0);
                         return;
                     }
@@ -190,7 +205,7 @@ const actions = {
         configs.targetSector = (parseInt(configs.targetSector) + 1) * 4 - 1
 
         exec(
-            "开始收集 Nonces\n\n",
+            `${i18n("log_msg_start_collect_nonces")}\n\n`,
             "libnfc-collect", [
                 configs.knownKey,
                 configs.knownSector,
@@ -214,22 +229,22 @@ const actions = {
             () => {
                 if (configs.collectOnly) {
                     const url = dialog.showSaveDialogSync({
-                        title: "保存到...",
+                        title: i18n("dialog_title_save_to"),
                         defaultPath: uid ? `${uid}_0${sector}${keyType}` : "nonces",
-                        filters: [{ name: 'bin 文件', extensions: ['bin'] }],
-                        message: "选择保存位置"
+                        filters: [{ name: i18n("file_type_bin"), extensions: ['bin'] }],
+                        message: i18n("dialog_msg_choose_save_path")
                     })
                     if (!url) {
-                        printLog("未保存")
+                        printLog(i18n("log_msg_not_saved"))
                     } else {
                         fs.rename(noncesFilesPath, url, (err) => {
                             if (err) {
-                                printLog("保存失败")
+                                printLog(i18n("log_msh_save_failed"))
                                 printExitLog(1)
                                 throw err
                             }
                             else {
-                                printLog(  `\n\n已保存到 ${url}\n`)
+                                printLog(  `\n\n${i18n("log_msg_already_saved_to")} ${url}\n`)
                                 printExitLog(0)
                             }
                         })
@@ -240,7 +255,7 @@ const actions = {
             () => {
                 if (!configs.collectOnly)  {
                     exec(
-                        "开始执行 HardNested 解密",
+                        i18n("lod_msg_start_hard_nested"),
                         "cropto1_bs", [],
                         (value) => {
                             let i = value.indexOf("Key found:")
@@ -275,10 +290,10 @@ const actions = {
     //打开字典文件
     "open-dict-file": () => {
         const url = dialog.showOpenDialogSync({
-            title: "选择字典文件",
+            title: i18n("dialog_title_choose_dictionary_file"),
             defaultPath: dictPath,
-            filters: [{ name: '字典文件', extensions: ['txt', 'dic'] }],
-            message: "选择字典文件",
+            filters: [{ name: i18n("file_type_dict"), extensions: ['txt', 'dic'] }],
+            message: i18n("dialog_msg_choose_dictionary_file"),
             properties: ['openFile']
         })
         if (url) {
@@ -298,8 +313,8 @@ const actions = {
         catch (e) {createDictTestWindow()}
     },
     "dict-test-config-done": (configs) => {
-        printStatus("正在字典测试")
-        exec("开始执行字典测试",
+        printStatus(i18n("indicator_testing_dictionary"))
+        exec(i18n("log_msg_start_test_dictionary"),
             "nfc-mfdict", [`-s${configs.sector}`, `-t${configs.keyType}`, `-l${configs.startPosition}`, `-d${dictPath}`],
             (value) => {
                 let i = value.indexOf("Found Key: ")
@@ -324,11 +339,11 @@ const actions = {
     "dump-editor-choose-file": (filePath) => {
         console.log(filePath)
         const filePaths = filePath ? filePath : dialog.showOpenDialogSync({
-            title: "选择转储文件",
+            title: i18n("dialog_title_choose_dump_file"),
             defaultPath: dictPath,
             properties: ['openFile'],
             filters: [{ name: 'Dump Files', extensions: ['mfd', 'dump'] }],
-            message: "选择转储文件",
+            message: i18n("dialog_msg_choose_dump_file"),
         })[0]
         fs.readFile(filePaths, (err, data) => {
             if (err) throw err;
@@ -366,11 +381,11 @@ const actions = {
     "dump-comparator-choose-file": (type) => {
         const dumpType = type.type
         const filePaths = type.path ? type.path : dialog.showOpenDialogSync({
-            title: "选择转储文件",
+            title: i18n("dialog_title_choose_dump_file"),
             defaultPath: dictPath,
             properties: ['openFile'],
             filters: [{ name: 'Dump Files', extensions: ['mfd', 'dump'] }],
-            message: "选择转储文件",
+            message: i18n("dialog_msg_choose_dump_file"),
         })[0]
         fs.readFile(filePaths, (err, data) => {
             if (err) throw err;
@@ -395,8 +410,8 @@ const actions = {
         // 弹出确认框
         const confirmDelete = dialog.showMessageBoxSync({
             type: 'question',
-            buttons: ['确定', '取消'],
-            message: "你确定要删除这些转储吗?",
+            buttons: [i18n("dialog_button_ok"), i18n("dialog_button_cancel")],
+            message: i18n("dialog_msg_are_you_sure_to_delete_these_dumps"),
             detail: files.join('\n'),
         });
 
@@ -426,23 +441,23 @@ const actions = {
     // 保存日志
     "save-log": (content) => {
         const url = dialog.showSaveDialogSync({
-            title: "保存到...",
+            title: i18n("dialog_title_save_to"),
             defaultPath: `NFCTools_log_${getTimeList().join("_")}`,
-            filters: [{ name: 'txt 文件', extensions: ['txt'] }],
-            message: "选择保存位置"
+            filters: [{ name: i18n("file_type_txt"), extensions: ['txt'] }],
+            message: i18n("dialog_msg_choose_save_path")
         })
 
         if (!url) {
-            printLog("未保存")
+            printLog(i18n("log_msg_not_saved"))
         } else {
             fs.writeFile(url, content, (err) => {
                 if (err) {
-                    printLog("保存失败")
+                    printLog(i18n("log_msh_save_failed"))
                     printExitLog(1)
                     throw err
                 }
                 else {
-                    printLog(  `\n\n已保存到 ${url}\n`)
+                    printLog(`\n\n${i18n("log_msg_file_already_saved_to")} ${url}\n`)
                     printExitLog(0)
                 }
             })
@@ -469,9 +484,9 @@ function readICThenExec(msg, statusMsg, isSaveDumpFile, cmd, args, processHandle
     newKeys = []
     knownKeyInfo = []
     unknownKeyInfo = []
-    printStatus("正在检测卡片")
+    printStatus(i18n("indicator_detecting_ic_card"))
     exec(
-        "先读卡，然后利用解卡密钥进行后续操作\n\n# 开始执行MFOC解密",
+        i18n("log_msg_read_ic_then_execute"),
         'nfc-mfdetect', isSaveDumpFile ? [`-O${tempMFDFilePath}`, `-f${knownKeysFile}`] : [`-N`, `-f${knownKeysFile}`],
         (value) => {keyInfoStatistic(value)},
         () => {
@@ -505,7 +520,7 @@ function mfoc(args) {
     unknownKeyInfo = []
     checkKeyFileExist()
     exec(
-        "开始执行MFOC解密",
+        i18n("log_msg_start_mfoc"),
         'mfoc', args,
         (value) => {
             keyInfoStatistic(value)
@@ -523,7 +538,7 @@ function mfoc(args) {
                     if(err) throw err;
                 })
             } else {
-                fs.mkdir("./dumpfiles", () => {
+                fs.mkdir(dumpsFolder, () => {
                     fs.rename(tempMFDFilePath, `${dumpFilesPath}/${cardID}_${getTimeList().join("_")}.mfd`, (err) =>{
                         if (err) throw err
                     })
@@ -564,15 +579,15 @@ function setNFCConfig() {
     const content = `device.name = "NFC_Device"\ndevice.connstring = "pn532_uart:${status.currentDevice}:${status.currentSpeed}"`
     fs.writeFile(nfcConfigFilePath, content, (err) => {
         if (err) throw err
-        exec("连接设备",
+        exec(i18n("log_msg_start_connect_device"),
             "nfc-list", [],
             (value) => {
                 if (value.indexOf("NFC device: NFC_Device opened") >= 0) {
-                    printLog("\n*** 发现设备 ***\n")
+                    printLog(`\n*** ${i18n("log_msg_discover_device")} ***\n`)
                     status.isDeviceConnected = true
                 }
                 if (value.indexOf("Unable to open NFC_device") >= 0) {
-                    printLog("\n*** 未发现设备! ***\n")
+                    printLog(`\n*** ${i18n("log_msg_not_found_device")} ***\n`)
                     status.isDeviceConnected = false
                 }
             },

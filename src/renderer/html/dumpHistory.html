@@ -2,19 +2,20 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>历史记录</title>
+  <title>{{ html_dump_history }}</title>
   <link rel="stylesheet" href="../css/dumpHistory.css">
 </head>
 <body>
 <ul id="dumpsList"></ul>
 
 <div id="buttons">
-  <button id="compareDumpsButton" disabled>比较转储</button>
-  <button id="editDumpButton" disabled>编辑转储</button>
-  <button id="deleteSelectedButton">删除选中</button>
+  <button id="compareDumpsButton" disabled>{{ html_compute_dump }}</button>
+  <button id="editDumpButton" disabled>{{ html_edit_dump }}</button>
+  <button id="deleteSelectedButton">{{ html_delete_checked }}</button>
 </div>
 
 </body>
 <script src="../js/jquery-3.6.3.min.js"></script>
+<script src="../js/i18n.js"></script>
 <script src="../js/dumpHistory.js"></script>
 </html>

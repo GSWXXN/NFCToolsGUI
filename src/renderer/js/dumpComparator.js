@@ -98,7 +98,7 @@ function showMarkedDump(dumpA, dumpB, subArrLength, strLength) {
     // 遍历 dumpA 和 dumpB 的子数组，生成包含标记的字符串，将它们插入到页面上
     let sector = 0
     markedDumpA.forEach((subArrA, index) => {
-        container.append($("<div>").html(`扇区 ${sector++}`).addClass('sector-tag'))
+        container.append($("<div>").html(`${i18n("html_sector")} ${sector++}`).addClass('sector-tag'))
         const subArrB = markedDumpB[index]
         const row = $("<div>")
         subArrA.forEach((strA, j) => {
