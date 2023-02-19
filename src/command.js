@@ -208,6 +208,7 @@ const actions = {
         configs.knownSector = (parseInt(configs.knownSector) + 1) * 4 - 1
         configs.targetSector = (parseInt(configs.targetSector) + 1) * 4 - 1
 
+        printStatus(`${i18n("indicator_collecting_nonces")}`)
         exec(
             `${i18n("log_msg_start_collect_nonces")}\n\n`,
             "libnfc-collect", [
@@ -225,16 +226,18 @@ const actions = {
                     uid = value.substring(i + 19, i + 27)
                     i = value.indexOf("collecting nonces for key")
                     if (i >= 0) {
+                        const pattern = /\(sector (\d{1,2})\)/;
+                        const match = pattern.exec(value);
+                        if (match) sector = match[1]
                         keyType = value.substring(i + 26, i + 27)
-                        sector = value.substring(i + 48, i + 49)
                     }
                 }
             },
             () => {
-                if (configs.collectOnly) {
+                if (configs.collectOnly && fs.statSync(noncesFilesPath).size !== 0) {
                     const url = dialog.showSaveDialogSync({
                         title: i18n("dialog_title_save_to"),
-                        defaultPath: uid ? `${uid}_0${sector}${keyType}` : "nonces",
+                        defaultPath: uid ? `${uid}_${sector}${keyType}` : "nonces",
                         filters: [{ name: i18n("file_type_bin"), extensions: ['bin'] }],
                         message: i18n("dialog_msg_choose_save_path")
                     })
@@ -253,10 +256,8 @@ const actions = {
                             }
                         })
                     }
-
                 }
-            },
-            () => {
+            }).then(() => {
                 if (!configs.collectOnly)  {
                     exec(
                         i18n("lod_msg_start_hard_nested"),
@@ -270,9 +271,7 @@ const actions = {
                                 if (unknownKeyInfo.length === 0) return
                                 if (unknownKeyInfo[0][0] === sector && unknownKeyInfo[0][1] === keyType) unknownKeyInfo.shift()
                             }
-                        },
-                        null,
-                        () => {
+                        }).then(() => {
                             if (configs.autoRun) {
                                 execAction("hard-nested-config-done", {
                                     knownKey: knownKeyInfo[0][0],
@@ -284,11 +283,9 @@ const actions = {
                                     autoRun: true
                                 })
                             } else {printExitLog(0)}
-                        }
-                    )
+                        })
                 }
-            }
-        )
+            }).catch()
     },
 
     //打开字典文件
@@ -498,8 +495,7 @@ function readICThenExec(msg, statusMsg, isSaveDumpFile, cmd, args, processHandle
             if (isSaveDumpFile && fs.statSync(tempMFDFilePath).size === 0) {
                 fs.unlinkSync(tempMFDFilePath)
             }
-        },
-        () => {
+        }).then(() => {
             printStatus(statusMsg)
             if (!isCmdFunc) {cmd(); return;}
             if (isSaveDumpFile && !fs.existsSync(tempMFDFilePath)) {
@@ -512,8 +508,7 @@ function readICThenExec(msg, statusMsg, isSaveDumpFile, cmd, args, processHandle
                     if(err) throw err;
                 })
             })
-        }
-    )
+        })
 }
 
 // 执行MFOC解密
@@ -590,13 +585,13 @@ function setNFCConfig() {
                     printLog(`\n*** ${i18n("log_msg_discover_device")} ***\n`)
                     status.isDeviceConnected = true
                 }
-                if (value.indexOf("Unable to open NFC_device") >= 0) {
+                if (value.indexOf("Unable to open NFC device") >= 0) {
                     printLog(`\n*** ${i18n("log_msg_not_found_device")} ***\n`)
                     status.isDeviceConnected = false
                 }
             },
             () => {sendToMainWindow("setting-nfc-config", status.isDeviceConnected ? "success" : "failed")},
-            () => {if (status.isDeviceConnected) printExitLog(0); else printExitLog(1)})
+        )
     })
 }
 

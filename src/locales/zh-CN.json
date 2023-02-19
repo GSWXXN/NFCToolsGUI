@@ -11,6 +11,7 @@
   "indicator_locking_ufuid": "正在锁 UFUID",
   "indicator_doing_hard_nested": "正在执行 HardNested 解密",
   "indicator_testing_dictionary": "正在进行字典测试",
+  "indicator_collecting_nonces": "正在收集 Nonces",
 
   "dialog_title_error" : "出错",
   "dialog_title_device_busy": "设备忙",

@@ -9,8 +9,9 @@
   "indicator_formatting_ic_card": "Formatting card",
   "indicator_detecting_ic_card": "Detecting card",
   "indicator_locking_ufuid": "Locking UFUID",
-  "indicator_doing_hard_nested": "Performing HardNested decryption",
+  "indicator_doing_hard_nested": "Performing HardNested",
   "indicator_testing_dictionary": "Testing dictionary",
+  "indicator_collecting_nonces": "Collecting Nonces",
 
   "dialog_title_error": "Error",
   "dialog_title_device_busy": "Device Busy",

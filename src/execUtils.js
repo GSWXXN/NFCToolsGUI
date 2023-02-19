@@ -6,39 +6,48 @@ const { i18n } = require('./i18n')
 
 let task = null
 
-function exec(msg, cmd, args, processHandler, finishHandler, followupTask) {
-    if (status.currentDevice === null || (!status.isDeviceConnected && cmd !== "nfc-list")) {
-        printStatus(i18n("indicator_error"), "error")
-        dialog.showErrorBox(i18n("dialog_title_error"), i18n("dialog_msg_not_connected_device"))
-        return
-    }
-    if (status.isRunningTask) {
-        dialog.showErrorBox(i18n("dialog_title_device_busy"), i18n("dialog_msg_running_task"))
-        return
-    }
-    status.isRunningTask = true
-    printLog(`\n\n### ${msg}\n`)
-    task = cp.spawn(`./framework/bin/${cmd}`, args)
+function exec(msg, cmd, args, processHandler, finishHandler) {
+    return new Promise((resolve, reject) => {
+        if (status.currentDevice === null || (!status.isDeviceConnected && cmd !== "nfc-list")) {
+            printStatus(i18n("indicator_error"), "error")
+            dialog.showErrorBox(i18n("dialog_title_error"), i18n("dialog_msg_not_connected_device"))
+            reject(new Error(i18n("dialog_msg_not_connected_device")))
+            return
+        }
+        if (status.isRunningTask) {
+            dialog.showErrorBox(i18n("dialog_title_device_busy"), i18n("dialog_msg_running_task"))
+            reject(new Error(i18n("dialog_msg_running_task")))
+            return
+        }
+        status.isRunningTask = true
+        printLog(`\n\n### ${msg}\n`)
+        task = cp.spawn(`./framework/bin/${cmd}`, args)
 
-    task.stdout.on('data', (data) => {
-        printLog(data.toString());
-        if (processHandler) processHandler(data.toString())
-    });
+        task.stdout.on('data', (data) => {
+            printLog(data.toString());
+            if (processHandler) processHandler(data.toString())
+        });
 
-    task.stderr.on('data', (data) => {
-        printLog(`\n${data.toString()}`)
-        if (processHandler) processHandler(data.toString())
-    });
+        task.stderr.on('data', (data) => {
+            printLog(`\n${data.toString()}`)
+            if (processHandler) processHandler(data.toString())
+        });
 
-    task.on('close', (code, signal) => {
-        if (finishHandler) finishHandler(code, signal)
+        task.on('close', (code, signal) => {
+            if (finishHandler) finishHandler(code, signal)
 
-        status.isRunningTask = false
-        if (code !== 0) if (signal) printExitLog(2); else printExitLog(1)
-        else if (!followupTask) printExitLog(0)
-        else followupTask()
+            status.isRunningTask = false
+            if (code !== 0) {
+                if (signal) printExitLog(2); else printExitLog(1)
+                reject(new Error(i18n("dialog_msg_task_failed")))
+            } else {
+                printExitLog(0)
+                resolve()
+            }
+        })
     })
 }
+
 
 function killProcess() {
     try { task.kill() } catch (e) {}
