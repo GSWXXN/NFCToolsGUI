@@ -33,14 +33,12 @@
 <br>
 <br>
 <div class="final-button">
-    <button onclick="window.electronAPI.closeDictTestWindow()">{{ dialog_button_cancel }}</button>
-    <button onclick="window.electronAPI.okayDictTestWindow(
-        {
-            sector: $('#sector').val(),
-            keyType: getRatioValue('target-key-type'),
-            startPosition: $('#start-position').val(),
-        }
-    )">{{ dialog_button_ok }}</button>
+    <button onclick="window.electronAPI.closeCurrentWindow()">{{ dialog_button_cancel }}</button>
+    <button onclick="window.electronAPI.execAction('dict-test-config-done', {
+        sector: $('#sector').val(),
+        keyType: getRatioValue('target-key-type'),
+        startPosition: $('#start-position').val(),
+    }); window.electronAPI.closeCurrentWindow()">{{ dialog_button_ok }}</button>
 </div>
 </body>
 <script src="../js/jquery-3.6.3.min.js"></script>

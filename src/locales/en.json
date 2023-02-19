@@ -62,6 +62,7 @@
   "log_msg_not_found_device": "Device not found!",
 
   "html_tools": "Tools",
+  "html_settings": "Settings",
   "html_edit_history_key": "Edit Historical Keys",
   "html_dump_editor": "Dump Editor",
   "html_dump_comparator": "Dump Comparator",

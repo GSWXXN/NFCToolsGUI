@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!--suppress JSValidateTypes -->
 <html lang="">
 <head>
     <meta charset="UTF-8" />
@@ -32,16 +31,16 @@
                     <li class="menu-item" onclick="mainProcess.execAction('dump-history')"><span class="text">{{ html_dump_history }}</span></li>
                 </ul>
             </div>
-<!--            <button class="bar-button" onclick="">-->
-<!--                <img class="button-img" src="./assets/icon/settings.svg" alt="设置">-->
+<!--            <button class="bar-button" onclick="mainProcess.execAction('open-settings-window')">-->
+<!--                <img class="button-img" src="../assets/icon/svg/settings.svg" alt="{{ html_settings }}">-->
 <!--            </button>-->
         </div>
 
         <div class="windows-control" hidden>
-            <button id="minimize-app" onclick="mainProcess.minimizeWindow()">
+            <button id="minimize-app" onclick="mainProcess.minimizeCurrentWindow()">
                 <img src="../assets/icon/svg/minimize.svg" alt="{{ html_minimize }}">
             </button>
-            <button id="close-app" onclick="mainProcess.closeApp()">
+            <button id="close-app" onclick="window.electronAPI.closeCurrentWindow()">
                 <img src="../assets/icon/svg/close.svg" alt="{{ html_close }}">
             </button>
         </div>

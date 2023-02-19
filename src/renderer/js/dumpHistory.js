@@ -24,7 +24,7 @@ window["electronAPI"].onCreateDumpHistoryWindow((_event, dumps) => {
         }).hide();
 
         // 重命名按钮
-        const renameIMG = $('<img>').attr('src', '../assets/icon/svg/rename.svg').addClass("dump-action-button-img")
+        const renameIMG = $('<img>').attr('src', '../assets/icon/svg/rename.svg').addClass("dump-action-button-img").addClass("invert-color-when-dark")
         const $renameButton = $('<button>').addClass('dump-action-button').append(renameIMG).click(function(event) {
             event.stopPropagation();
             // 编辑框
@@ -51,7 +51,7 @@ window["electronAPI"].onCreateDumpHistoryWindow((_event, dumps) => {
         // 添加元素
         $dumpItem.append($renameButton);
         $dumpItem.append($deleteButton);
-        $dumpsList.append($('<li>').append($dumpItem).addClass('dump-item-wrapper'));
+        $dumpsList.append($('<li>').append($dumpItem).append("<hr>").addClass('dump-item-wrapper'));
 
         // 显示/隐藏按钮
         $dumpItem.hover(function() {

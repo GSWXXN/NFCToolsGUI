@@ -9,8 +9,8 @@
     <input type="text" id="keys" value="ffffffffffff,">
     <br>
     <div class="final-button">
-        <button onclick="window.electronAPI.closeInputKeysWindow()">{{ dialog_button_cancel }}</button>
-        <button onclick="window.electronAPI.execAction('done-input-keys-read-IC', document.getElementById('keys').value);window.electronAPI.closeInputKeysWindow()">{{ dialog_button_ok }}</button>
+        <button onclick="window.electronAPI.closeCurrentWindow()">{{ dialog_button_cancel }}</button>
+        <button onclick="window.electronAPI.execAction('done-input-keys-read-IC', document.getElementById('keys').value);window.electronAPI.closeCurrentWindow()">{{ dialog_button_ok }}</button>
     </div>
 </body>
 <script src="../js/i18n.js"></script>

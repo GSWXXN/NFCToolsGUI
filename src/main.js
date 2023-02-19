@@ -1,6 +1,6 @@
 const {execAction} = require('./command')
-const {app, BrowserWindow, ipcMain, Menu} = require('electron')
-const {closeMainWindow, minMainWindow,createMainWindow, closeInputKeysWindow, closeHardNestedWindow, closeDictTestWindow} = require('./windows')
+const {app, BrowserWindow, ipcMain, Menu, nativeTheme} = require('electron')
+const {createMainWindow} = require('./windows')
 const {killProcess} = require('./execUtils')
 const path = require("path");
 const i18n = require('./i18n');
@@ -10,23 +10,30 @@ Menu.setApplicationMenu(null)
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {app.quit()}
 
+ipcMain.handle('minimize-current-window', (event) => {
+    BrowserWindow.fromWebContents(event.sender).minimize()
+})
+ipcMain.handle("close-current-window", (event) => {
+    BrowserWindow.fromWebContents(event.sender).close()
+})
+ipcMain.on('rendered', (event) => {
+    BrowserWindow.fromWebContents(event.sender).show()
+})
+
 ipcMain.handle('get-app-version', () => {return app.getVersion()})
-ipcMain.handle('close-app', closeMainWindow)
-ipcMain.handle('minimize-window', minMainWindow)
 ipcMain.handle('exec-action', (event, action, arg) => {
     execAction(action, arg)
 })
-ipcMain.handle('close-input-keys-window', closeInputKeysWindow)
-ipcMain.handle('close-hard-nested-window', closeHardNestedWindow)
-ipcMain.handle('okay-hard-nested-window', (event, configs) => {
-    execAction("hard-nested-config-done", configs)
-    closeHardNestedWindow()
+ipcMain.handle('dark-mode:system', () => {
+    nativeTheme.themeSource = 'system'
 })
-ipcMain.handle('close-dict-test-window', closeDictTestWindow)
-ipcMain.handle('okay-dict-test-window', (event, configs) => {
-    execAction("dict-test-config-done", configs)
-    closeDictTestWindow()
+ipcMain.handle('dark-mode:light', () => {
+    nativeTheme.themeSource = 'light'
 })
+ipcMain.handle('dark-mode:dark', () => {
+    nativeTheme.themeSource = 'dark'
+})
+
 ipcMain.on('ondragstart', (event, filePath) => {
     event.sender.startDrag({
         file: filePath,
@@ -39,9 +46,6 @@ ipcMain.on('get-text', (event, key) => {
 ipcMain.on('get-language', (event) => {
     event.returnValue = i18n.getLanguage();
 });
-ipcMain.on('rendered', (event) => {
-    BrowserWindow.fromWebContents(event.sender).show()
-})
 
 
 // This method will be called when Electron has finished

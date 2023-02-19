@@ -13,6 +13,7 @@ const {
     createInputKeysWindow,
     createHardNestedWindow,
     createDictTestWindow,
+    createSettingsWindow,
 
     sendToMainWindow,
     sentToDictTestWindow,
@@ -52,6 +53,9 @@ const defaultKeys = [
 ]
 
 const actions = {
+    // 打开设置窗口
+    "open-settings-window": createSettingsWindow,
+
     // 扫描设备
     "scan-usb-devices": () => {
         if (process.platform === "win32") {

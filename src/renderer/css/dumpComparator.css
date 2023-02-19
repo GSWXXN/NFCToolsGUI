@@ -14,8 +14,6 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: #fff;
-    color: #000;
     user-select: text;
 }
 .sector-tag{
@@ -23,7 +21,6 @@
 }
 
 #top-bar{
-    background-color: white;
     padding-top: 10px;
     position: fixed;
     top: 0;
@@ -37,22 +34,15 @@
 }
 #top-bar button{
     height: 20px;
-    background-color: #486bc7;
     border: none;
     border-radius: 5px;
-    color: white;
     vertical-align: middle;
-    box-shadow: 0 0 5px rgb(72 107 199 / 30%);
-}
-#top-bar button:active{
-    background-color: #3856b0;
 }
 
 #top-bar button:focus{
     outline: none;
 }
 #top-bar hr {
-    background-color: white;
     margin-bottom: 0;
 }
 #compare-container{
@@ -62,7 +52,6 @@
 #compare-container hr{
     border: 0;
     padding-top: 1px;
-    background: linear-gradient(to right, transparent, #b0b0b4, transparent);
     margin-top: 8px;
     margin-bottom: 8px;
 }
@@ -70,9 +59,78 @@
 body{
     user-select: none;
 }
-mark{
-    background-color: #ffd6d6;
-}
 button{
     cursor: pointer;
+}
+
+@media (prefers-color-scheme: light) {
+    .dump-text {
+        background-color: #fff;
+        color: #000;
+    }
+
+    #top-bar {
+        background-color: white;
+    }
+
+    #top-bar button {
+        background-color: #486bc7;
+        color: white;
+        box-shadow: 0 0 5px rgb(72 107 199 / 30%);
+    }
+
+    #top-bar button:active {
+        background-color: #3856b0;
+    }
+
+    #top-bar hr {
+        background-color: white;
+    }
+
+    #compare-container hr {
+        background: linear-gradient(to right, transparent, #b0b0b4, transparent);
+    }
+
+    mark {
+        background-color: #ffd6d6;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1b202b;
+        color: #cbcdce;
+    }
+
+    .dump-text {
+        background-color: #1b202b;
+        color: #cbcdce;
+    }
+
+    #top-bar {
+        background-color: #1b202b;
+    }
+
+    #top-bar button {
+        background-color: #384151;
+        color: #cbcdce;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    #top-bar button:active {
+        background-color: #475467;
+    }
+
+    #top-bar hr {
+        background-color: white;
+    }
+
+    #compare-container hr {
+        background: linear-gradient(to right, transparent, #b0b0b4, transparent);
+    }
+
+    mark {
+        color: #cbcdce;
+        background-color: #7c5d5d;
+    }
 }

@@ -50,8 +50,8 @@
 <br><br>
 
 <div class="final-button">
-<button onclick="window.electronAPI.closeHardNestedWindow()">{{ dialog_button_cancel }}</button>
-<button onclick="window.electronAPI.okayHardNestedWindow({
+<button onclick="window.electronAPI.closeCurrentWindow()">{{ dialog_button_cancel }}</button>
+<button onclick="window.electronAPI.execAction('hard-nested-config-done', {
     knownKey: document.getElementById('known-key').value,
     knownSector: document.getElementById('known-sector').value,
     knownKeyType: getRatioValue('known-key-type'),
@@ -60,7 +60,7 @@
     collectOnly: document.getElementById('auto-run').checked ? false : document.getElementById('collect-only').checked,
     autoRun: document.getElementById('auto-run').checked,
     fromUser: true
-})">{{ html_execute }}</button>
+}); window.electronAPI.closeCurrentWindow()">{{ html_execute }}</button>
 
 </div>
 </body>

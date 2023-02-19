@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../css/subWindow.css" />
+</head>
+<body>
+
+<button id="dark-mode" onclick="window.darkMode.dark()">Toggle Dark Mode</button>
+<button id="light-mode" onclick="window.darkMode.light()">Toggle Light Mode</button>
+<button id="follow-system-mode" onclick="window.darkMode.system()">Follow system</button>
+
+<div class="final-button">
+    <button onclick="window.electronAPI.closeCurrentWindow()">{{ dialog_button_cancel }}</button>
+</div>
+</body>
+<script src="../js/i18n.js"></script>
+</html>

@@ -13,6 +13,7 @@ let dictTestWindow = null
 let dumpEditorWindow = null
 let dumpComparatorWindow = null
 let dumpHistoryWindow = null
+let settingsWindow = null
 
 const createMainWindow = () => {
 
@@ -46,6 +47,24 @@ const createMainWindow = () => {
         }
     })
     mainWindow.loadFile(path.join(__dirname, 'renderer/html/index.html'));
+}
+
+const createSettingsWindow = () => {
+    settingsWindow = new BrowserWindow({
+        parent: mainWindow,
+        modal: true,
+        width: 400,
+        height: process.platform === "win32" ? 470 : 510,
+        show: false,
+        resizable: false,
+        maximizable: false,
+        minimizable: false,
+        titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+        },
+    })
+    settingsWindow.loadFile(path.join(__dirname, 'renderer/html/settings.html'))
 }
 
 const createInputKeysWindow = () => {
@@ -165,25 +184,6 @@ const createDumpHistoryWindow = (dumpFiles) => {
     return dumpHistoryWindow
 }
 
-const closeMainWindow = () => {
-    mainWindow.close()
-}
-const minMainWindow = () => {
-    mainWindow.minimize()
-}
-
-const closeInputKeysWindow = () => {
-    inputKeysWindow.close()
-}
-
-const closeHardNestedWindow = () => {
-    hardNestedWindow.close()
-}
-
-const closeDictTestWindow = () => {
-    dictTestWindow.close()
-}
-
 const sendToMainWindow = (channel, args) => {
     try {
         mainWindow.webContents.send(channel, args)
@@ -216,8 +216,6 @@ const sentToDumpHistoryWindow = (channel, args) => {
 
 
 module.exports = {
-    minMainWindow,
-
     createMainWindow,
     createDictTestWindow,
     createInputKeysWindow,
@@ -225,16 +223,11 @@ module.exports = {
     createDumpComparatorWindow,
     createHardNestedWindow,
     createDumpHistoryWindow,
-
+    createSettingsWindow,
 
     sendToMainWindow,
     sentToDictTestWindow,
     sentToDumpEditorWindow,
     sentToDumpComparatorWindow,
     sentToDumpHistoryWindow,
-
-    closeInputKeysWindow,
-    closeMainWindow,
-    closeHardNestedWindow,
-    closeDictTestWindow,
 }

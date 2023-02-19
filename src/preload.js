@@ -19,20 +19,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onOpenDictFile: (callback) => ipcRenderer.on("dict-file-name", callback),
     onOpenDumpFile: (callback) => ipcRenderer.on("binary-data", callback),
     onSavedDumpFile: (callback) => ipcRenderer.on("saved-binary-data", callback),
-    onDeDumpFile: (callback) => ipcRenderer.on("saved-binary-data", callback),
 
     getVersion: () => ipcRenderer.invoke("get-app-version"),
-    closeApp: () => ipcRenderer.invoke("close-app"),
-    minimizeWindow: () => ipcRenderer.invoke("minimize-window"),
+    closeCurrentWindow: () => ipcRenderer.invoke("close-current-window"),
+    minimizeCurrentWindow: () => ipcRenderer.invoke("minimize-current-window"),
     execAction: (action, arg) => ipcRenderer.invoke("exec-action", action, arg),
-    closeInputKeysWindow: () => ipcRenderer.invoke("close-input-keys-window"),
-    closeHardNestedWindow: () => ipcRenderer.invoke("close-hard-nested-window"),
-    okayHardNestedWindow: (configs) => ipcRenderer.invoke("okay-hard-nested-window", configs),
-    closeDictTestWindow: () => ipcRenderer.invoke("close-dict-test-window"),
-    okayDictTestWindow: (configs) => ipcRenderer.invoke("okay-dict-test-window", configs),
 
     startDrag: (path) => {ipcRenderer.send('ondragstart', path)},
     rendered: () => ipcRenderer.send('rendered'),
     getText: (key) => ipcRenderer.sendSync('get-text', key),
     getLanguage: () => ipcRenderer.sendSync('get-language'),
+})
+contextBridge.exposeInMainWorld('darkMode', {
+    light: () => ipcRenderer.invoke('dark-mode:light'),
+    dark: () => ipcRenderer.invoke('dark-mode:dark'),
+    system: () => ipcRenderer.invoke('dark-mode:system')
 })
