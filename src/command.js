@@ -24,7 +24,7 @@ const {
 
 
 const knownKeysFile = "keys.txt"
-const tempMFDFilePath = "temp.mfd"
+const tempMFDFilePath = "./temp.mfd"
 const dumpFilesPath = "./dumpfiles"
 const noncesFilesPath = "./nonces.bin"
 const nfcConfigFilePath = "./libnfc.conf"
