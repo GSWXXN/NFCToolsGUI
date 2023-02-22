@@ -38,8 +38,13 @@ function exec(msg, cmd, args, processHandler, finishHandler) {
 
             status.isRunningTask = false
             if (code !== 0) {
-                if (signal) printExitLog(2); else printExitLog(1)
-                reject(new Error(i18n("dialog_msg_task_failed")))
+                if (signal) printExitLog(2)
+                else {
+                    const message = `error occurred, error code: ${code}, signal: ${signal}`
+                    printLog(message)
+                    printExitLog(1)
+                    reject(new Error(message))
+                }
             } else {
                 printExitLog(0)
                 resolve()

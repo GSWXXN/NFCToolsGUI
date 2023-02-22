@@ -62,7 +62,7 @@ const actions = {
             SerialPort.list().then(ports => {
                 const devices = []
                 ports.forEach(port => {
-                    devices.push(`/dev/ttyS${(parseInt(port["path"].split("COM")[1]) - 1)}`)
+                    devices.push(port["path"])
                 })
                 sendToMainWindow("update-usb-devices", devices)
             });
@@ -338,7 +338,6 @@ const actions = {
         createDumpEditorWindow(file ? path.join(dumpsFolder, file) : null)
     },
     "dump-editor-choose-file": (filePath) => {
-        console.log(filePath)
         const filePaths = filePath ? filePath : dialog.showOpenDialogSync({
             title: i18n("dialog_title_choose_dump_file"),
             defaultPath: dictPath,

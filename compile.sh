@@ -1,5 +1,5 @@
 #!/bin/bash
-# C:\msys64\msys2_shell.cmd -msys -defterm -here -no-start -c ./compile.sh
+# C:\msys64\msys2_shell.cmd -mingw64 -defterm -here -no-start -c ./compile.sh
 set -e
 
 os=$(uname -o)
@@ -11,17 +11,21 @@ fi
 
 echo "============================== os = ""$os"" =============================="
 
-# install msys2 dependancy
+# install msys2 dependency
 echo "============================== install msys dependancy =============================="
-if [ "$os" == "Msys" ]; then
-    pacman -S --noconfirm unzip
-    pacman -S --noconfirm zlib-devel
-    pacman -S --noconfirm autotools
-    pacman -S --noconfirm pkg-config
-    pacman -S --noconfirm gcc
-    pacman -S --noconfirm liblzma-devel
-    pacman -S --noconfirm libreadline-devel
-fi
+#if [ "$os" == "Msys" ]; then
+#    pacman -S --noconfirm unzip
+#    pacman -S --noconfirm mingw-w64-x86_64-crt-git
+#    pacman -S --noconfirm mingw-w64-x86_64-gcc
+#    pacman -S --noconfirm mingw-w64-x86_64-make
+#    pacman -S --noconfirm mingw-w64-x86_64-pkgconf
+#    pacman -S --noconfirm mingw-w64-x86_64-zlib
+#    pacman -S --noconfirm mingw-w64-x86_64-autotools
+#    pacman -S --noconfirm mingw-w64-x86_64-cmake
+#    pacman -S --noconfirm mingw-w64-x86_64-xz
+#    pacman -S --noconfirm mingw-w64-x86_64-readline
+#    pacman -S --noconfirm mingw-w64-x86_64-headers-git
+#fi
 
 workdir=$(pwd)
 prefix=$workdir/framework
@@ -29,10 +33,21 @@ rm -rf "$prefix"
 rm -rf "$workdir"/work
 mkdir "$prefix"
 mkdir "$workdir"/work
-cd "$workdir"/work
+mkdir "$prefix"/bin
 
 # libusb
-if [ "$os" == "Darwin" ]; then
+cd "$workdir"/work
+if [ "$os" == "Msys" ]; then
+    echo
+    echo
+    echo "============================== libusb =============================="
+    curl -Lo libusb-win32.zip https://github.com/mcuee/libusb-win32/releases/download/snapshot_1.2.7.3/libusb-win32-bin-1.2.7.3.zip
+    unzip libusb-win32.zip
+    cd ./libusb-win32-bin-1.2.7.3
+    cp ./bin/x86/libusb0_x86.dll "$prefix"/bin/libusb0.dll
+    cp -a ./include "$prefix"
+    cp -a ./lib "$prefix"
+elif [ "$os" == "Darwin" ]; then
     echo
     echo
     echo "============================== libusb =============================="
@@ -51,12 +66,23 @@ curl -LO https://github.com/GSWXXN/libnfc/archive/refs/heads/libnfc.zip
 unzip ./libnfc.zip
 cd ./libnfc-libnfc
 if [ "$os" == "Msys" ]; then
-    aclocal -I m4 --install
+    CMAKE_INSTALL_PREFIX=$prefix
+    LIBNFC_DRIVER_ACR122S=OFF
+    LIBNFC_DRIVER_ACR122_USB=OFF
+    LIBNFC_DRIVER_ARYGON=OFF
+    LIBNFC_DRIVER_PN53X_USB=OFF
+    LIBUSB_INCLUDE_DIRS=$prefix/include
+    LIBUSB_LIBRARIES=$prefix/lib/gcc/libusb.a
+    cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX="$CMAKE_INSTALL_PREFIX" -DLIBUSB_INCLUDE_DIRS="$LIBUSB_INCLUDE_DIRS" -DLIBUSB_LIBRARIES="$LIBUSB_LIBRARIES" -DLIBNFC_DRIVER_ACR122S="$LIBNFC_DRIVER_ACR122S" -DLIBNFC_DRIVER_ACR122_USB="$LIBNFC_DRIVER_ACR122_USB" -DLIBNFC_DRIVER_ARYGON=$LIBNFC_DRIVER_ARYGON -DLIBNFC_DRIVER_PN53X_USB=$LIBNFC_DRIVER_PN53X_USB
+    mingw32-make install
+    cp ./libnfc/libnfc.dll.a "$prefix"/lib/libnfc.a
+    cp ./contrib/win32/err.h "$prefix"/include
+else
+    autoreconf -vis
+    autoreconf -is
+    ./configure prefix="$prefix" LDFLAGS=-L"$prefix"/lib/libusb-legacy --with-drivers=pn532_uart
+    make && make install
 fi
-autoreconf -vis
-autoreconf -is
-./configure prefix="$prefix" LDFLAGS=-L"$prefix"/lib/libusb-legacy --with-drivers=pn532_uart
-make && make install
 
 
 # mfoc
@@ -68,7 +94,11 @@ curl -Lo mfoc.zip https://github.com/GSWXXN/mfoc/archive/refs/heads/master.zip
 unzip mfoc.zip
 cd ./mfoc-master
 autoreconf -vis
-./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
+if [ "$os" == "Msys" ]; then
+    LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
+else
+    ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
+fi
 make && make install
 
 
@@ -82,7 +112,11 @@ curl -LO https://github.com/GSWXXN/mfoc/archive/refs/heads/nfc-mfdict.zip
 unzip nfc-mfdict.zip
 cd ./mfoc-nfc-mfdict
 autoreconf -vis
-./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
+if [ "$os" == "Msys" ]; then
+    LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
+else
+    ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
+fi
 make && make install
 
 
@@ -95,7 +129,11 @@ curl -LO https://github.com/GSWXXN/mfoc/archive/refs/heads/nfc-mfdetect.zip
 unzip nfc-mfdetect.zip
 cd ./mfoc-nfc-mfdetect
 autoreconf -vis
-./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
+if [ "$os" == "Msys" ]; then
+    LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
+else
+    ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
+fi
 make && make install
 
 
@@ -131,7 +169,7 @@ if [ "$(uname -m)" == "arm64" ] && [ "$os" == "Darwin" ]; then
 else
     ./configure LDFLAGS=-L"$prefix"/lib' '-Wl,--allow-multiple-definition prefix="$prefix" CPPFLAGS=-I"$prefix"/include CFLAGS='-std=gnu99 -O3 -march=native'
 fi
-make && make install
+make libnfc-collect && make install
 
 
 # cropto1_bs
@@ -151,11 +189,8 @@ make && make install
 # copy library
 if [ "$os" == "Msys" ]; then
     echo "- copy library"
-    cp /usr/bin/msys-lzma-5.dll "$prefix"/bin
-    cp /usr/bin/msys-2.0.dll "$prefix"/bin
-    cp /usr/bin/msys-readline8.dll "$prefix"/bin
-    cp /usr/bin/msys-gcc_s-seh-1.dll "$prefix"/bin
-    cp /usr/bin/msys-ncursesw6.dll "$prefix"/bin
+    cp /mingw64/bin/libreadline8.dll "$prefix"/bin
+    cp /mingw64/bin/libtermcap-0.dll "$prefix"/bin
 fi
 
 
