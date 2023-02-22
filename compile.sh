@@ -29,14 +29,13 @@ fi
 
 workdir=$(pwd)
 prefix=$workdir/framework
+source=$workdir/source
 rm -rf "$prefix"
-rm -rf "$workdir"/work
 mkdir "$prefix"
-mkdir "$workdir"/work
 mkdir "$prefix"/bin
 
 # libusb
-cd "$workdir"/work
+cd "$source"
 if [ "$os" == "Msys" ]; then
     echo
     echo
@@ -51,6 +50,8 @@ elif [ "$os" == "Darwin" ]; then
     echo
     echo
     echo "============================== libusb =============================="
+    mkdir ./libusb
+    cd ./libusb
     curl -LO https://pub-3d2f9df4304d45e38bbebe723816c4a3.r2.dev/libusb-legacy-0.1.12_4.darwin_22.x86_64.tbz2
     tar -xvf libusb-legacy-0.1.12_4.darwin_22.x86_64.tbz2
     mv ./opt/local/* "$prefix"/
@@ -61,10 +62,7 @@ fi
 echo
 echo
 echo "============================== libnfc =============================="
-cd "$workdir"/work
-curl -LO https://github.com/GSWXXN/libnfc/archive/refs/heads/libnfc.zip
-unzip ./libnfc.zip
-cd ./libnfc-libnfc
+cd "$source"/libnfc
 if [ "$os" == "Msys" ]; then
     CMAKE_INSTALL_PREFIX=$prefix
     LIBNFC_DRIVER_ACR122S=OFF
@@ -89,10 +87,7 @@ fi
 echo
 echo
 echo "============================== mfoc =============================="
-cd "$workdir"/work
-curl -Lo mfoc.zip https://github.com/GSWXXN/mfoc/archive/refs/heads/master.zip
-unzip mfoc.zip
-cd ./mfoc-master
+cd "$source"/mfoc
 autoreconf -vis
 if [ "$os" == "Msys" ]; then
     LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
@@ -107,10 +102,7 @@ make && make install
 echo
 echo
 echo "============================== nfc-mfdict =============================="
-cd "$workdir"/work
-curl -LO https://github.com/GSWXXN/mfoc/archive/refs/heads/nfc-mfdict.zip
-unzip nfc-mfdict.zip
-cd ./mfoc-nfc-mfdict
+cd "$source"/nfc-mfdict
 autoreconf -vis
 if [ "$os" == "Msys" ]; then
     LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
@@ -124,10 +116,7 @@ make && make install
 echo
 echo
 echo "============================== nfc-mfdetect =============================="
-cd "$workdir"/work
-curl -LO https://github.com/GSWXXN/mfoc/archive/refs/heads/nfc-mfdetect.zip
-unzip nfc-mfdetect.zip
-cd ./mfoc-nfc-mfdetect
+cd "$source"/nfc-mfdetect
 autoreconf -vis
 if [ "$os" == "Msys" ]; then
     LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
@@ -141,10 +130,7 @@ make && make install
 echo
 echo
 echo "============================== nfc-mflock =============================="
-cd "$workdir"/work
-curl -LO https://github.com/GSWXXN/nfc-mflock/archive/refs/heads/nfc-mflock.zip
-unzip nfc-mflock.zip
-cd ./nfc-mflock-nfc-mflock
+cd "$source"/nfc-mflock
 autoreconf -vis
 ./configure LDFLAGS=-L"$prefix"/lib prefix="$prefix" CPPFLAGS=-I"$prefix"/include
 make && make install
@@ -154,10 +140,7 @@ make && make install
 echo
 echo
 echo "============================== libnfc_collect =============================="
-cd "$workdir"/work
-curl -LO https://github.com/GSWXXN/crypto1_bs/archive/refs/heads/libnfc_collect.zip
-unzip libnfc_collect.zip
-cd ./crypto1_bs-libnfc_collect
+cd "$source"/libnfc_collect
 curl -LO https://pub-3d2f9df4304d45e38bbebe723816c4a3.r2.dev/craptev1-v1.1.tar.xz
 tar -xf craptev1-v1.1.tar.xz
 mkdir crapto1-v3.3
@@ -176,10 +159,7 @@ make libnfc-collect && make install
 echo
 echo
 echo "============================== cropto1_bs =============================="
-cd "$workdir"/work
-curl -LO https://github.com/GSWXXN/cropto1_bs/archive/refs/heads/cropto1_bs.zip
-unzip cropto1_bs.zip
-cd ./cropto1_bs-cropto1_bs
+cd "$source"/cropto1_bs
 autoreconf -vis
 ./configure prefix="$prefix" CFLAGS=-I/opt/local/include' '-I"$prefix"/include LDFLAGS=-L"$prefix"/lib
 make && make install
@@ -216,7 +196,6 @@ echo "- clean up"
 rm -rf "$prefix"/bin2/
 rm -rf "$prefix"/include/
 rm -rf "$prefix"/share/
-rm -rf "$workdir"/work
 if [ "$os" == "Msys" ]; then
     rm -rf "${prefix:?}/lib/"
 fi

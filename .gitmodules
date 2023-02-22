@@ -1,0 +1,28 @@
+[submodule "source/libnfc"]
+	path = source/libnfc
+	url = https://github.com/GSWXXN/libnfc.git
+	branch = libnfc
+[submodule "source/nfc-mfdetect"]
+	path = source/nfc-mfdetect
+	url = https://github.com/GSWXXN/mfoc.git
+	branch = nfc-mfdetect
+[submodule "source/nfc-mfdict"]
+	path = source/nfc-mfdict
+	url = https://github.com/GSWXXN/mfoc.git
+	branch = nfc-mfdict
+[submodule "source/nfc-mflock"]
+	path = source/nfc-mflock
+	url = https://github.com/GSWXXN/nfc-mflock.git
+	branch = nfc-mflock
+[submodule "source/cropto1_bs"]
+	path = source/cropto1_bs
+	url = https://github.com/GSWXXN/cropto1_bs.git
+	branch = cropto1_bs
+[submodule "source/libnfc_collect"]
+	path = source/libnfc_collect
+	url = https://github.com/GSWXXN/crypto1_bs.git
+	branch = libnfc_collect
+[submodule "source/mfoc"]
+	path = source/mfoc
+	url = https://github.com/GSWXXN/mfoc.git
+	branch = master
