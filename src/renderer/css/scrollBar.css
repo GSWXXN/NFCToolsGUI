@@ -2,7 +2,7 @@
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
-    background-color: #f5f5f5;
+    background-color: rgba(245, 245, 245, 0.3);
     border-radius: 5px;
 }
 
@@ -23,7 +23,7 @@
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #f5f5f5;
+    background-color: rgba(245, 245, 245, 0.3);
     border-radius: 5px;
 }
 

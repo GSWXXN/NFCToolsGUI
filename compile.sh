@@ -13,7 +13,7 @@ echo "============================== os = ""$os"" ==============================
 
 # install msys2 dependency
 if [ "$os" == "Msys" ]; then
-    echo "============================== install msys dependancy =============================="
+    echo "============================== install msys dependency =============================="
     pacman -S --noconfirm unzip
     pacman -S --noconfirm mingw-w64-x86_64-crt-git
     pacman -S --noconfirm mingw-w64-x86_64-gcc
