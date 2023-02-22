@@ -1,0 +1,56 @@
+/* 正常模式下的样式 */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-button {
+    background-color: #e5e5e5;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #c2c2c2;
+    border-radius: 5px;
+    min-height: 30px;
+    min-width: 30px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #a7a7a7;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+    display: none;
+}
+
+/* 深色模式下的样式 */
+@media (prefers-color-scheme: dark) {
+    ::-webkit-scrollbar {
+        background-color: #333333;
+    }
+
+    ::-webkit-scrollbar-button {
+        background-color: #444444;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #444547;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #545457;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #333333;
+    }
+}
