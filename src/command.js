@@ -135,7 +135,7 @@ const actions = {
             i18n("log_msg_start_detect_card"),
             'nfc-mfdetect', [`-N`, `-f${knownKeysFile}`],
             (value) => {keyInfoStatistic(value)},
-        )
+        ).then().catch(() => {})
     },
 
     // 锁 UFUID
@@ -148,7 +148,7 @@ const actions = {
         }).then((response) => {
             if (response.response === 0) {
                 printStatus(i18n("indicator_locking_ufuid"))
-                exec(i18n("log_msg_start_lock_ufuid"), "nfc-mflock", ["-q"])
+                exec(i18n("log_msg_start_lock_ufuid"), "nfc-mflock", ["-q"]).then().catch(() => {})
             }
         })
     },
@@ -272,9 +272,9 @@ const actions = {
                                     autoRun: true
                                 })
                             } else {printExitLog(0)}
-                        })
+                        }).catch(() => {})
                 }
-            }).catch()
+            }).catch(() => {})
     },
 
     //打开字典文件
@@ -316,7 +316,7 @@ const actions = {
                     if (unknownKeyInfo[0][0] === configs.sector && unknownKeyInfo[0][1] === configs.keyType) unknownKeyInfo.shift()
                 }
             }
-        )
+        ).then().catch(() => {})
     },
 
     // 打开历史密钥
@@ -495,8 +495,8 @@ function readICThenExec(msg, statusMsg, isSaveDumpFile, cmd, args, processHandle
                 fs.unlink(tempMFDFilePath, (err) => {
                     if(err) throw err;
                 })
-            })
-        })
+            }).then().catch(() => {})
+        }).catch(() => {})
 }
 
 // 执行MFOC解密
@@ -533,7 +533,7 @@ function mfoc(args) {
                 })
             }
         }
-    )
+    ).then().catch(() => {})
 }
 
 // 统计密钥信息
@@ -579,7 +579,7 @@ function setNFCConfig() {
                 }
             },
             () => {sendToMainWindow("setting-nfc-config", status.isDeviceConnected ? "success" : "failed")},
-        )
+        ).then().catch(() => {})
     })
 }
 
