@@ -6,7 +6,7 @@ window['electronAPI'].onUpdateDumpEditorFile((event, data) => {
 
 $('#drag').on('dragstart', (e) => {
     e.preventDefault()
-    window['electronAPI'].startDrag(currentFilePath)
+    if (currentFilePath) window['electronAPI'].startDrag(currentFilePath)
 })
 
 // buttons

@@ -58,24 +58,13 @@ const actions = {
 
     // 扫描设备
     "scan-usb-devices": () => {
-        if (process.platform === "win32") {
-            SerialPort.list().then(ports => {
-                const devices = []
-                ports.forEach(port => {
-                    devices.push(port["path"])
-                })
-                sendToMainWindow("update-usb-devices", devices)
-            });
-        } else if (process.platform === "darwin") {
-            cp.exec("ls /dev/tty.*", (err, stdout) => {
-                if (err) throw err
-                const devices = stdout.split(/\s+/g)
-                devices.forEach((value, index) => {
-                    if (value.length === 0) devices.splice(index, 1)
-                })
-                sendToMainWindow("update-usb-devices", devices)
+        SerialPort.list().then(ports => {
+            const devices = []
+            ports.forEach(port => {
+                devices.push(port["path"])
             })
-        }
+            sendToMainWindow("update-usb-devices", devices)
+        });
     },
 
     // 连接设备
