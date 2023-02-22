@@ -12,20 +12,20 @@ fi
 echo "============================== os = ""$os"" =============================="
 
 # install msys2 dependency
-echo "============================== install msys dependancy =============================="
-#if [ "$os" == "Msys" ]; then
-#    pacman -S --noconfirm unzip
-#    pacman -S --noconfirm mingw-w64-x86_64-crt-git
-#    pacman -S --noconfirm mingw-w64-x86_64-gcc
-#    pacman -S --noconfirm mingw-w64-x86_64-make
-#    pacman -S --noconfirm mingw-w64-x86_64-pkgconf
-#    pacman -S --noconfirm mingw-w64-x86_64-zlib
-#    pacman -S --noconfirm mingw-w64-x86_64-autotools
-#    pacman -S --noconfirm mingw-w64-x86_64-cmake
-#    pacman -S --noconfirm mingw-w64-x86_64-xz
-#    pacman -S --noconfirm mingw-w64-x86_64-readline
-#    pacman -S --noconfirm mingw-w64-x86_64-headers-git
-#fi
+if [ "$os" == "Msys" ]; then
+    echo "============================== install msys dependancy =============================="
+    pacman -S --noconfirm unzip
+    pacman -S --noconfirm mingw-w64-x86_64-crt-git
+    pacman -S --noconfirm mingw-w64-x86_64-gcc
+    pacman -S --noconfirm mingw-w64-x86_64-make
+    pacman -S --noconfirm mingw-w64-x86_64-pkgconf
+    pacman -S --noconfirm mingw-w64-x86_64-zlib
+    pacman -S --noconfirm mingw-w64-x86_64-autotools
+    pacman -S --noconfirm mingw-w64-x86_64-cmake
+    pacman -S --noconfirm mingw-w64-x86_64-xz
+    pacman -S --noconfirm mingw-w64-x86_64-readline
+    pacman -S --noconfirm mingw-w64-x86_64-headers-git
+fi
 
 workdir=$(pwd)
 prefix=$workdir/framework
