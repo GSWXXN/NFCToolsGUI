@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>{{ html_about }}</title>
+  <link rel="stylesheet" href="../css/about.css">
+  <link rel="stylesheet" href="../css/scrollBar.css">
+</head>
+<body>
+<div class="container">
+  <div class="icon">
+    <img src="../assets/icon/svg/icon.svg" alt="icon">
+  </div>
+  <div class="info">
+    <div class="title">
+      <h1>{{ app_name }}</h1>
+      <div>
+        <span class="tag">{{ html_version_code }}</span>
+        <span id="version-code"></span>
+        <button>{{html_check_update}}</button>
+      </div>
+      <div>
+        <span class="tag">{{ html_open_source_repository }}</span>
+        <a href="https://github.com/GSWXXN/NFCToolsGUI">https://github.com/GSWXXN/NFCToolsGUI</a>
+      </div>
+      <div>
+        <span class="tag">{{ html_license: }}</span>
+        <span><a href="https://github.com/GSWXXN/NFCToolsGUI/blob/master/LICENSE">AGPL-3.0</a></span>
+      </div>
+      <div>
+        <span class="tag">{{ html_this_program_use_following_open_source_project }}</span>
+        <div class="opensource">
+          <ul>
+            <li>Electron<div class="opensource_link"><a href="https://github.com/electron/electron">{{ html_source_code }}</a> - <a href="https://github.com/electron/electron/blob/main/LICENSE">{{ html_license }} (MIT)</a></div></li>
+            <li>Electron Forge<div class="opensource_link"><a href="https://github.com/electron/forge">{{ html_source_code }}</a> - <a href="https://github.com/electron/forge/blob/main/LICENSE">{{ html_license }} (MIT)</a></div></li>
+            <li>jQuery<div class="opensource_link"><a href="https://github.com/jquery/jquery">{{ html_source_code }}</a> - <a href="https://github.com/jquery/jquery/blob/main/LICENSE.txt">{{ html_license }} (MIT)</a></div></li>
+            <li>mfoc<div class="opensource_link"><a href="https://github.com/nfc-tools/mfoc">{{ html_source_code }}</a> - <a href="https://github.com/nfc-tools/mfoc/blob/master/COPYING">{{ html_license }} (GPL-2.0)</a></div></li>
+            <li>crypto1_bs<div class="opensource_link"><a href="https://github.com/aczid/crypto1_bs">{{ html_source_code }}</a> - <a href="https://github.com/aczid/crypto1_bs#license">{{ html_license }} (GPL-2.0)</a></div></li>
+            <li>cropto1_bs<div class="opensource_link"><a href="https://github.com/vk496/cropto1_bs">{{ html_source_code }}</a> - <a href="https://github.com/vk496/cropto1_bs/blob/master/README.md">{{ html_license }} (GPL-2.0)</a></div></li>
+            <li>libnfc<div class="opensource_link"><a href="https://github.com/nfc-tools/libnfc">{{ html_source_code }}</a> - <a href="https://github.com/nfc-tools/libnfc/blob/master/COPYING">{{ html_license }} (LGPL-3.0)</a></div></li>
+            <li>nfc-mflock<div class="opensource_link"><a href="https://github.com/duament/nfc-mflock">{{ html_source_code }}</a> - <a href="https://github.com/duament/nfc-mflock/blob/master/LICENSE">{{ html_license }} (BSD-2-Clause)</a></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<script src="../js/i18n.js"></script>
+<script>
+  window.electronAPI.getVersion().then((version) => {
+    document.getElementById("version-code").innerText = version.toString()
+  });
+
+  const links = document.querySelectorAll('a[href]')
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      const url = link.getAttribute('href');
+      e.preventDefault();
+      window.electronAPI.openLink(url);
+    });
+  });
+</script>
+</html>

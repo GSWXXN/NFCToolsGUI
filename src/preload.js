@@ -23,6 +23,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getVersion: () => ipcRenderer.invoke("get-app-version"),
     closeCurrentWindow: () => ipcRenderer.invoke("close-current-window"),
     minimizeCurrentWindow: () => ipcRenderer.invoke("minimize-current-window"),
+    openLink: (link) => ipcRenderer.invoke("open-link", link),
     execAction: (action, arg) => ipcRenderer.invoke("exec-action", action, arg),
 
     startDrag: (path) => {ipcRenderer.send('ondragstart', path)},

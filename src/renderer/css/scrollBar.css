@@ -1,6 +1,6 @@
 /* 正常模式下的样式 */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
     height: 10px;
     background-color: rgba(245, 245, 245, 0.3);
     border-radius: 5px;

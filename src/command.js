@@ -14,6 +14,7 @@ const {
     createHardNestedWindow,
     createDictTestWindow,
     createSettingsWindow,
+    createAboutWindow,
 
     sendToMainWindow,
     sentToDictTestWindow,
@@ -452,6 +453,8 @@ const actions = {
             })
         }
     },
+    // about page
+    "open-about": createAboutWindow
 }
 
 // 保存密钥

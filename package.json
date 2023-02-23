@@ -2,7 +2,7 @@
   "name": "nfctoolsgui",
   "productName": "NFCToolsGUI",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "NFCToolsGUI",
   "main": "src/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -16,7 +16,7 @@
     "name": "GSWXXN",
     "email": "819269088@qq.com"
   },
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "config": {
     "forge": {
       "packagerConfig": {},

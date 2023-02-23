@@ -287,6 +287,12 @@ select{
   width: 50%;
   vertical-align: middle;
 }
+#app-title-icon{
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
 
 @media (prefers-color-scheme: light) {
   body {
@@ -486,6 +492,9 @@ select{
     filter: invert(0);
   }
   #close-app:hover img{
+    filter: invert(0);
+  }
+  #app-title-icon{
     filter: invert(0);
   }
 }

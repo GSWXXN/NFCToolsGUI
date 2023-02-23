@@ -1,0 +1,110 @@
+body{
+    user-select: none;
+    background-color: #f7f8fa;
+}
+h1{
+    margin-bottom: 0;
+}
+.container {
+    display: flex;
+}
+
+.icon {
+    width: 150px;
+    height: 150px;
+    margin-top: 40px;
+    margin-left: 20px;
+}
+
+.info {
+    flex: 1;
+    padding-left: 20px;
+}
+.opensource {
+    height: 200px;
+    width: calc(100% - 20px);
+    overflow-y: scroll;
+    background-color: lightgray;
+    border-radius: 20px;
+    padding-top: 0;
+    user-select: text;
+}
+ul{
+    margin: 10px;
+}
+span{
+    font-size: 14px;
+    display: inline-block;
+    padding-top: 8px;
+    padding-bottom: 2px;
+}
+
+a:link {
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+}
+a:visited {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+button{
+    border: none;
+    background-color: lightgray;
+    cursor: pointer;
+    font-size: 12px;
+    color: #000000;
+    border-radius: 20px;
+    padding: 3px 8px 3px 8px;
+    margin-left: 5px;
+}
+button:hover{
+    background-color: #dcdbdb;
+}
+button:focus{
+    outline: none;
+}
+ul{
+    padding-left: 0;
+    font-size: 14px;
+}
+li{
+    background-color: #eae9e9;
+    padding: 5px;
+    border-radius: 8px;
+    list-style: none;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.opensource_link{
+    float: right;
+    display: inline-block;
+}
+.tag{
+    font-weight: bold;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1b202b;
+        color: #cbcdce;
+    }
+    .opensource {
+        background-color: #212121;
+    }
+    a:link {
+        color: #cbcdce;;
+    }
+    button {
+        background-color: #3a4150;
+        color: #cbcdce;
+    }
+    button:hover {
+        background-color: #53565d;
+    }
+    li {
+        background-color: #444444;
+    }
+}

@@ -14,6 +14,7 @@ let dumpEditorWindow = null
 let dumpComparatorWindow = null
 let dumpHistoryWindow = null
 let settingsWindow = null
+let aboutWindow = null
 
 const createMainWindow = () => {
 
@@ -184,6 +185,22 @@ const createDumpHistoryWindow = (dumpFiles) => {
     return dumpHistoryWindow
 }
 
+const createAboutWindow = () => {
+    aboutWindow = new BrowserWindow({
+        width: 600,
+        height: 450,
+        parent: mainWindow,
+        show: false,
+        resizable: false,
+        maximizable: false,
+        minimizable: false,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+        },
+    })
+    aboutWindow.loadFile(path.join(__dirname, 'renderer/html/about.html'))
+}
+
 const sendToMainWindow = (channel, args) => {
     try {
         mainWindow.webContents.send(channel, args)
@@ -224,6 +241,7 @@ module.exports = {
     createHardNestedWindow,
     createDumpHistoryWindow,
     createSettingsWindow,
+    createAboutWindow,
 
     sendToMainWindow,
     sentToDictTestWindow,

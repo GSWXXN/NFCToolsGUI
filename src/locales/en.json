@@ -116,5 +116,12 @@
   "html_known_key": "Known Key",
   "html_execute": "Execute",
   "html_target_sector_info": "Target Sector Information",
-  "html_collect_only": "Collect Only without Calculation"
+  "html_collect_only": "Collect Only without Calculation",
+  "html_about": "About",
+  "html_version_code": "Version: ",
+  "html_open_source_repository": "Open Source Repository: ",
+  "html_license:": "License: ",
+  "html_this_program_use_following_open_source_project": "This program uses the following open source projects:",
+  "html_source_code": "Source Code",
+  "html_license": "License"
 }

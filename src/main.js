@@ -1,5 +1,5 @@
 const {execAction} = require('./command')
-const {app, BrowserWindow, ipcMain, Menu, nativeTheme} = require('electron')
+const {app, BrowserWindow, ipcMain, Menu, nativeTheme, shell} = require('electron')
 const {createMainWindow} = require('./windows')
 const {killProcess} = require('./execUtils')
 const path = require("path");
@@ -23,6 +23,9 @@ ipcMain.on('rendered', (event) => {
 ipcMain.handle('get-app-version', () => {return app.getVersion()})
 ipcMain.handle('exec-action', (event, action, arg) => {
     execAction(action, arg)
+})
+ipcMain.handle('open-link', (event, url) => {
+    shell.openExternal(url)
 })
 ipcMain.handle('dark-mode:system', () => {
     nativeTheme.themeSource = 'system'
