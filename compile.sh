@@ -1,18 +1,17 @@
 #!/bin/bash
-# C:\msys64\msys2_shell.cmd -mingw64 -defterm -here -no-start -c ./compile.sh
 set -e
 
 os=$(uname -o)
 
-if [ "$os" != "Msys" ] && [ "$os" != "Darwin" ]; then
-    echo "This system is neither Msys nor Darwin. Exiting..."
+if [ "$os" != "Msys" ] && [ "$os" != "Darwin" ] && [ "$os" != "Linux" ]; then
+    echo "This system is not supported. Exiting..."
     exit 1
 fi
 
 echo "============================== os = ""$os"" =============================="
 
 # install msys2 dependency
-if [ "$os" == "Msys" ]; then
+if [ "$os" = "Msys" ]; then
     echo "============================== install msys dependency =============================="
     pacman -S --noconfirm unzip
     pacman -S --noconfirm mingw-w64-x86_64-crt-git
@@ -36,25 +35,28 @@ mkdir "$prefix"/bin
 
 # libusb
 cd "$source"
-if [ "$os" == "Msys" ]; then
-    echo
-    echo
-    echo "============================== libusb =============================="
+  echo
+  echo
+  echo "============================== libusb =============================="
+if [ "$os" = "Msys" ]; then
     curl -Lo libusb-win32.zip https://github.com/mcuee/libusb-win32/releases/download/snapshot_1.2.7.3/libusb-win32-bin-1.2.7.3.zip
-    unzip libusb-win32.zip
+    unzip -o libusb-win32.zip
     cd ./libusb-win32-bin-1.2.7.3
     cp ./bin/x86/libusb0_x86.dll "$prefix"/bin/libusb0.dll
     cp -a ./include "$prefix"
     cp -a ./lib "$prefix"
-elif [ "$os" == "Darwin" ]; then
-    echo
-    echo
-    echo "============================== libusb =============================="
+elif [ "$os" = "Darwin" ]; then
     mkdir ./libusb
     cd ./libusb
     curl -LO https://pub-3d2f9df4304d45e38bbebe723816c4a3.r2.dev/libusb-legacy-0.1.12_4.darwin_22.x86_64.tbz2
     tar -xvf libusb-legacy-0.1.12_4.darwin_22.x86_64.tbz2
     mv ./opt/local/* "$prefix"/
+else
+    curl -LO https://pub-3d2f9df4304d45e38bbebe723816c4a3.r2.dev/libusb-0.1.12.zip
+    unzip -o libusb-0.1.12.zip
+    cd ./libusb-0.1.12
+    ./configure prefix="$prefix"
+    make && make install
 fi
 
 
@@ -63,7 +65,7 @@ echo
 echo
 echo "============================== libnfc =============================="
 cd "$source"/libnfc
-if [ "$os" == "Msys" ]; then
+if [ "$os" = "Msys" ]; then
     CMAKE_INSTALL_PREFIX=$prefix
     LIBNFC_DRIVER_ACR122S=OFF
     LIBNFC_DRIVER_ACR122_USB=OFF
@@ -89,7 +91,7 @@ echo
 echo "============================== mfoc =============================="
 cd "$source"/mfoc
 autoreconf -vis
-if [ "$os" == "Msys" ]; then
+if [ "$os" = "Msys" ]; then
     LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
 else
     ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
@@ -104,7 +106,7 @@ echo
 echo "============================== nfc-mfdict =============================="
 cd "$source"/nfc-mfdict
 autoreconf -vis
-if [ "$os" == "Msys" ]; then
+if [ "$os" = "Msys" ]; then
     LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
 else
     ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
@@ -118,7 +120,7 @@ echo
 echo "============================== nfc-mfdetect =============================="
 cd "$source"/nfc-mfdetect
 autoreconf -vis
-if [ "$os" == "Msys" ]; then
+if [ "$os" = "Msys" ]; then
     LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
 else
     ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
@@ -143,11 +145,11 @@ echo "============================== libnfc_collect ============================
 cd "$source"/libnfc_collect
 curl -LO https://pub-3d2f9df4304d45e38bbebe723816c4a3.r2.dev/craptev1-v1.1.tar.xz
 tar -xf craptev1-v1.1.tar.xz
-mkdir crapto1-v3.3
+mkdir -p crapto1-v3.3
 curl -LO https://pub-3d2f9df4304d45e38bbebe723816c4a3.r2.dev/crapto1-v3.3.tar.xz
 tar -xf crapto1-v3.3.tar.xz -C crapto1-v3.3
 autoreconf -vis
-if [ "$(uname -m)" == "arm64" ] && [ "$os" == "Darwin" ]; then
+if [ "$(uname -m)" = "arm64" ] && [ "$os" = "Darwin" ]; then
     ./configure LDFLAGS=-L"$prefix"/lib prefix="$prefix" CPPFLAGS=-I"$prefix"/include CFLAGS='-std=gnu99 -O3 -mcpu=apple-m1'
 else
     ./configure LDFLAGS=-L"$prefix"/lib' '-Wl,--allow-multiple-definition prefix="$prefix" CPPFLAGS=-I"$prefix"/include CFLAGS='-std=gnu99 -O3 -march=native'
@@ -167,7 +169,7 @@ make && make install
 
 
 # copy library
-if [ "$os" == "Msys" ]; then
+if [ "$os" = "Msys" ]; then
     echo "- copy library"
     cp /mingw64/bin/libreadline8.dll "$prefix"/bin
     cp /mingw64/bin/libtermcap-0.dll "$prefix"/bin
@@ -187,7 +189,7 @@ mv "$prefix"/bin2/nfc-mfdetect* "$prefix"/bin
 mv "$prefix"/bin2/nfc-mflock* "$prefix"/bin
 mv "$prefix"/bin2/libnfc-collect* "$prefix"/bin
 mv "$prefix"/bin2/cropto1_bs* "$prefix"/bin
-if [ "$os" == "Msys" ]; then
+if [ "$os" = "Msys" ]; then
     mv "$prefix"/bin2/*.dll "$prefix"/bin
 fi
 
@@ -196,13 +198,13 @@ echo "- clean up"
 rm -rf "$prefix"/bin2/
 rm -rf "$prefix"/include/
 rm -rf "$prefix"/share/
-if [ "$os" == "Msys" ]; then
+if [ "$os" = "Msys" ]; then
     rm -rf "${prefix:?}/lib/"
 fi
 
 
 # install_name_tool -change
-if [ "$os" == "Darwin" ]; then
+if [ "$os" = "Darwin" ]; then
     echo "- install_name_tool"
     cd "$prefix"/bin
     for i in *; do
@@ -211,6 +213,12 @@ if [ "$os" == "Darwin" ]; then
 
     for i in *; do
         install_name_tool -change /usr/local/lib/libnfc.6.dylib @loader_path/../lib/libnfc.6.dylib "$prefix"/bin/"$i"
+    done
+elif [ "$os" = "Linux" ]; then
+    echo "- patchelf"
+    cd "$prefix"/bin
+    for i in *; do
+        patchelf --set-rpath '$ORIGIN/../lib/' "$prefix"/bin/"$i"
     done
 fi
 echo "- Done!"
