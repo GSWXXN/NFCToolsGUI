@@ -47,8 +47,7 @@
     "child_process": "^1.0.2",
     "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.6.3",
-    "serialport": "^10.5.0",
-    "usb": "^2.7.0"
+    "serialport": "^10.5.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.4",

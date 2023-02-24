@@ -22,6 +22,7 @@ const createMainWindow = () => {
         width: 800,
         height: 700,
         resizable: false,
+        frame: false,
         maximizable: false,
         show: false,
         titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',

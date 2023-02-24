@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-os=$(uname -o)
+os=$(uname -s)
 
 if [ "$os" != "Msys" ] && [ "$os" != "Darwin" ] && [ "$os" != "Linux" ]; then
     echo "This system is not supported. Exiting..."
