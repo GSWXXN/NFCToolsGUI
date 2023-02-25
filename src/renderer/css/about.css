@@ -24,7 +24,7 @@ h1{
     height: 200px;
     width: calc(100% - 20px);
     overflow-y: scroll;
-    background-color: lightgray;
+    background-color: #eaeaea;
     border-radius: 20px;
     padding-top: 0;
     user-select: text;
@@ -71,7 +71,7 @@ ul{
     font-size: 14px;
 }
 li{
-    background-color: #eae9e9;
+    background-color: #f3f3f3;
     padding: 5px;
     border-radius: 8px;
     list-style: none;
