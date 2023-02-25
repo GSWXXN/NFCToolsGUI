@@ -40,7 +40,7 @@ function exec(msg, cmd, args, processHandler, finishHandler) {
             if (code !== 0) {
                 if (signal) printExitLog(2)
                 else {
-                    const message = `error occurred, error code: ${code}, signal: ${signal}`
+                    const message = `\nexit code: ${code}`
                     printLog(message)
                     printExitLog(1)
                     reject(new Error(message))

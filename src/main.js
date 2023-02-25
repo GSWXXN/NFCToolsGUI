@@ -5,6 +5,8 @@ const {killProcess} = require('./execUtils')
 const path = require("path");
 const i18n = require('./i18n');
 
+process.env['LIBNFC_SYSCONFDIR'] = app.getPath('userData')
+
 Menu.setApplicationMenu(null)
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.

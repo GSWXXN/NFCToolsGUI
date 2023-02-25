@@ -56,7 +56,7 @@
   "log_msh_save_failed": "保存失败",
   "log_msg_file_already_saved_to": "已保存到",
   "log_msg_start_test_dictionary": "开始执行字典测试",
-  "log_msg_read_ic_then_execute": "先读卡，然后利用解卡密钥进行后续操作\n\n# 开始执行MFOC解密",
+  "log_msg_read_ic_then_execute": "先读卡，然后利用解卡密钥进行后续操作\n\n# 开始执行检测卡片",
   "log_msg_start_mfoc": "开始执行 MFOC 解密",
   "log_msg_start_connect_device": "开始连接设备",
   "log_msg_discover_device": "发现设备",

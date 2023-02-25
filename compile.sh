@@ -46,7 +46,7 @@ if [ "$os" = "Msys" ]; then
     cp -a ./include "$prefix"
     cp -a ./lib "$prefix"
 elif [ "$os" = "Darwin" ]; then
-    mkdir ./libusb
+    mkdir -p ./libusb
     cd ./libusb
     curl -LO https://pub-3d2f9df4304d45e38bbebe723816c4a3.r2.dev/libusb-legacy-0.1.12_4.darwin_22.x86_64.tbz2
     tar -xvf libusb-legacy-0.1.12_4.darwin_22.x86_64.tbz2

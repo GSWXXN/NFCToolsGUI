@@ -408,7 +408,7 @@ select{
   }
 
   .selection .selection-value {
-    color: #cbcdce;
+    color: white;
   }
 
   .selection:hover{
@@ -416,7 +416,7 @@ select{
   }
 
   .selection-value::placeholder {
-    color: #cbcdce;
+    color: white;
   }
 
   .down-arrow {

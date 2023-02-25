@@ -56,7 +56,7 @@
   "log_msh_save_failed": "Save Failed",
   "log_msg_file_already_saved_to": "Already Saved to",
   "log_msg_start_test_dictionary": "Start Dictionary Test",
-  "log_msg_read_ic_then_execute": "Read the card first, then use the decryption key for subsequent operations\n\n# Start MFOC decryption",
+  "log_msg_read_ic_then_execute": "Read the card first, then use the decryption key for subsequent operations\n\n# Start detection",
   "log_msg_start_mfoc": "Start MFOC decryption",
   "log_msg_start_connect_device": "Start Connecting Device",
   "log_msg_discover_device": "Device Discovered",

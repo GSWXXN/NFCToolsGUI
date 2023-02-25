@@ -1,6 +1,6 @@
 const {exec, killProcess, printExitLog, printLog, printStatus} = require("./execUtils")
 const fs = require('fs')
-const {dialog} = require('electron')
+const {dialog, app} = require('electron')
 const cp = require("child_process");
 const status = require("./status")
 const { SerialPort } = require('serialport')
@@ -23,14 +23,15 @@ const {
     sentToDumpHistoryWindow
 } = require("./windows")
 
+const userDataPath = app.getPath('userData')
 
-const knownKeysFile = "keys.txt"
-const tempMFDFilePath = "./temp.mfd"
-const dumpFilesPath = "./dumpfiles"
-const noncesFilesPath = "./nonces.bin"
-const nfcConfigFilePath = "./libnfc.conf"
-let dictPath = "./dict.dic"
-const dumpsFolder = path.join(__dirname, "../dumpfiles")
+const knownKeysFile = path.join(userDataPath, "keys.txt")
+const tempMFDFilePath = path.join(userDataPath, "./temp.mfd")
+const dumpFilesPath = path.join(userDataPath, "./dumpfiles")
+const noncesFilesPath = path.join(userDataPath, "./nonces.bin")
+const nfcConfigFilePath = path.join(userDataPath, "./libnfc.conf")
+let dictPath = path.join(userDataPath, "./dict.dic")
+const dumpsFolder = path.join(userDataPath, "./dumpfiles")
 
 let newKeys = []
 let knownKeyInfo = []
@@ -59,6 +60,8 @@ const actions = {
 
     // 扫描设备
     "scan-usb-devices": () => {
+        console.log(userDataPath)
+        console.log(nfcConfigFilePath)
         SerialPort.list().then(ports => {
             const devices = []
             ports.forEach(port => {
@@ -251,7 +254,7 @@ const actions = {
                 if (!configs.collectOnly)  {
                     exec(
                         i18n("lod_msg_start_hard_nested"),
-                        "cropto1_bs", [],
+                        "cropto1_bs", [noncesFilesPath],
                         (value) => {
                             let i = value.indexOf("Key found:")
                             if (i >= 0) {
@@ -392,8 +395,10 @@ const actions = {
 
     // 历史记录
     "dump-history": () => {
-        const dumpFiles = fs.readdirSync(dumpsFolder).filter(file => file.endsWith('.mfd'));
-        createDumpHistoryWindow(dumpFiles)
+        fs.mkdir(dumpsFolder, () => {
+            const dumpFiles = fs.readdirSync(dumpsFolder).filter(file => file.endsWith('.mfd'));
+            createDumpHistoryWindow(dumpFiles)
+        });
     },
     // 删除历史记录
     "delete-dump": (files) => {
