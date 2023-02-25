@@ -1,17 +1,27 @@
 #!/bin/bash
 set -e
 
-os=$(uname -s)
-
-if [ "$os" != "Msys" ] && [ "$os" != "Darwin" ] && [ "$os" != "Linux" ]; then
-    echo "This system is not supported. Exiting..."
-    exit 1
-fi
-
-echo "============================== os = ""$os"" =============================="
+case $(uname -s) in
+    MINGW64*)
+        os="MINGW64"
+        echo "Running on MINGW64"
+        ;;
+    Darwin*)
+        os="Darwin"
+        echo "Running on MacOS"
+        ;;
+    Linux*)
+        os="Linux"
+        echo "Running on Linux"
+        ;;
+    *)
+        echo "$os: This system is not supported. Exiting..."
+        exit 1
+        ;;
+esac
 
 # install msys2 dependency
-if [ "$os" = "Msys" ]; then
+if [ "$os" = "MINGW64" ]; then
     echo "============================== install msys dependency =============================="
     pacman -S --noconfirm unzip
     pacman -S --noconfirm mingw-w64-x86_64-crt-git
@@ -38,7 +48,7 @@ cd "$source"
   echo
   echo
   echo "============================== libusb =============================="
-if [ "$os" = "Msys" ]; then
+if [ "$os" = "MINGW64" ]; then
     curl -Lo libusb-win32.zip https://github.com/mcuee/libusb-win32/releases/download/snapshot_1.2.7.3/libusb-win32-bin-1.2.7.3.zip
     unzip -o libusb-win32.zip
     cd ./libusb-win32-bin-1.2.7.3
@@ -65,7 +75,7 @@ echo
 echo
 echo "============================== libnfc =============================="
 cd "$source"/libnfc
-if [ "$os" = "Msys" ]; then
+if [ "$os" = "MINGW64" ]; then
     CMAKE_INSTALL_PREFIX=$prefix
     LIBNFC_DRIVER_ACR122S=OFF
     LIBNFC_DRIVER_ACR122_USB=OFF
@@ -91,7 +101,7 @@ echo
 echo "============================== mfoc =============================="
 cd "$source"/mfoc
 autoreconf -vis
-if [ "$os" = "Msys" ]; then
+if [ "$os" = "MINGW64" ]; then
     LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
 else
     ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
@@ -106,7 +116,7 @@ echo
 echo "============================== nfc-mfdict =============================="
 cd "$source"/nfc-mfdict
 autoreconf -vis
-if [ "$os" = "Msys" ]; then
+if [ "$os" = "MINGW64" ]; then
     LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
 else
     ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
@@ -120,7 +130,7 @@ echo
 echo "============================== nfc-mfdetect =============================="
 cd "$source"/nfc-mfdetect
 autoreconf -vis
-if [ "$os" = "Msys" ]; then
+if [ "$os" = "MINGW64" ]; then
     LIBS=$prefix/lib/libnfc.a ./configure LDFLAGS=-L"$prefix"/lib CPPFLAGS=-I"$prefix"/include PKG_CONFIG=: prefix="$prefix"
 else
     ./configure LDFLAGS=-L"$prefix"/lib PKG_CONFIG_PATH="$prefix"/lib/pkgconfig prefix="$prefix"
@@ -169,7 +179,7 @@ make && make install
 
 
 # copy library
-if [ "$os" = "Msys" ]; then
+if [ "$os" = "MINGW64" ]; then
     echo "- copy library"
     cp /mingw64/bin/libreadline8.dll "$prefix"/bin
     cp /mingw64/bin/libtermcap-0.dll "$prefix"/bin
@@ -189,7 +199,7 @@ mv "$prefix"/bin2/nfc-mfdetect* "$prefix"/bin
 mv "$prefix"/bin2/nfc-mflock* "$prefix"/bin
 mv "$prefix"/bin2/libnfc-collect* "$prefix"/bin
 mv "$prefix"/bin2/cropto1_bs* "$prefix"/bin
-if [ "$os" = "Msys" ]; then
+if [ "$os" = "MINGW64" ]; then
     mv "$prefix"/bin2/*.dll "$prefix"/bin
 fi
 
@@ -198,7 +208,7 @@ echo "- clean up"
 rm -rf "$prefix"/bin2/
 rm -rf "$prefix"/include/
 rm -rf "$prefix"/share/
-if [ "$os" = "Msys" ]; then
+if [ "$os" = "MINGW64" ]; then
     rm -rf "${prefix:?}/lib/"
 fi
 
