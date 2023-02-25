@@ -125,6 +125,7 @@
   "html_collect_only": "Collect Only without Calculation",
   "html_about": "About",
   "html_version_code": "Version: ",
+  "html_compiler": "Compiler: ",
   "html_open_source_repository": "Open Source Repository: ",
   "html_license:": "License: ",
   "html_this_program_use_following_open_source_project": "This program uses the following open source projects:",

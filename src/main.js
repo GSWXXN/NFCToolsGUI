@@ -1,3 +1,4 @@
+const os = require('os')
 const {execAction} = require('./command')
 const {app, BrowserWindow, ipcMain, Menu, nativeTheme, shell} = require('electron')
 const {createMainWindow} = require('./windows')
@@ -23,6 +24,9 @@ ipcMain.on('rendered', (event) => {
 })
 
 ipcMain.handle('get-app-version', () => {return app.getVersion()})
+ipcMain.handle('get-compiler', () => {
+    return process.env["NFCTOOLSGUI_COMPILER"] ? process.env["NFCTOOLSGUI_COMPILER"] : os.userInfo().username
+})
 ipcMain.handle('exec-action', (event, action, arg) => {
     execAction(action, arg)
 })

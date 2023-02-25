@@ -125,6 +125,7 @@
   "html_collect_only": "只采集不计算",
   "html_about": "关于",
   "html_version_code": "版本号: ",
+  "html_compiler": "编译者: ",
   "html_open_source_repository": "开源仓库: ",
   "html_license:": "许可证: ",
   "html_this_program_use_following_open_source_project": "本程序使用了以下开源项目:",

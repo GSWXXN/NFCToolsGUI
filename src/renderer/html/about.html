@@ -20,6 +20,10 @@
         <button onclick="window['electronAPI'].execAction('check-update')">{{html_check_update}}</button>
       </div>
       <div>
+        <span class="tag">{{ html_compiler }}</span>
+        <span id="compiler"></span>
+      </div>
+      <div>
         <span class="tag">{{ html_open_source_repository }}</span>
         <a href="https://github.com/GSWXXN/NFCToolsGUI">https://github.com/GSWXXN/NFCToolsGUI</a>
       </div>
@@ -50,6 +54,10 @@
 <script>
   window.electronAPI.getVersion().then((version) => {
     document.getElementById("version-code").innerText = version.toString()
+  });
+
+  window.electronAPI.getCompiler().then((compiler) => {
+    document.getElementById("compiler").innerText = compiler.toString()
   });
 
   const links = document.querySelectorAll('a[href]')

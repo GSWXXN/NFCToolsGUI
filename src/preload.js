@@ -21,6 +21,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onSavedDumpFile: (callback) => ipcRenderer.on("saved-binary-data", callback),
 
     getVersion: () => ipcRenderer.invoke("get-app-version"),
+    getCompiler: () => ipcRenderer.invoke('get-compiler'),
     closeCurrentWindow: () => ipcRenderer.invoke("close-current-window"),
     minimizeCurrentWindow: () => ipcRenderer.invoke("minimize-current-window"),
     openLink: (link) => ipcRenderer.invoke("open-link", link),
