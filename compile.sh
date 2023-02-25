@@ -208,6 +208,8 @@ echo "- clean up"
 rm -rf "$prefix"/bin2/
 rm -rf "$prefix"/include/
 rm -rf "$prefix"/share/
+rm -rf "$prefix"/lib/pkgconfig/
+rm -rf "$prefix"/lib/libnfc.la
 if [ "$os" = "MINGW64" ]; then
     rm -rf "${prefix:?}/lib/"
 fi
