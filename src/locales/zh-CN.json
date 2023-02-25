@@ -30,11 +30,16 @@
   "dialog_msg_choose_dictionary_file": "请选择字典文件",
   "dialog_msg_choose_dump_file": "请选择转储文件",
   "dialog_msg_are_you_sure_to_delete_these_dumps": "你确定要删除这些转储文件吗？",
+  "dialog_msg_new_version_found": "发现新版本",
+  "dialog_msg_version": "版本",
+  "dialog_msg_update_logs": "更新日志",
+  "dialog_msg_check_update_failed": "检查更新失败",
 
   "dialog_button_cancel" : "取消",
   "dialog_button_still_exit" : "仍然退出",
   "dialog_button_ok" : "确定",
   "dialog_button_open" : "打开",
+  "dialog_button_go_to_download": "前往下载",
 
   "file_type_dump": "转储文件",
   "file_type_bin": "BIN 文件",
@@ -61,7 +66,7 @@
   "log_msg_start_connect_device": "开始连接设备",
   "log_msg_discover_device": "发现设备",
   "log_msg_not_found_device": "未发现设备!",
-
+  "log_msg_check_update_failed": "检查更新失败",
 
   "html_tools": "工具",
   "html_settings": "设置",

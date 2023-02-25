@@ -30,11 +30,16 @@
   "dialog_msg_choose_dictionary_file": "Please choose a dictionary file",
   "dialog_msg_choose_dump_file": "Please choose a dump file",
   "dialog_msg_are_you_sure_to_delete_these_dumps": "Are you sure you want to delete these dump files?",
+  "dialog_msg_new_version_found": "New version found",
+  "dialog_msg_version": "Version",
+  "dialog_msg_update_logs": "Update Logs",
+  "dialog_msg_check_update_failed": "Check for updates failed",
 
   "dialog_button_cancel": "Cancel",
   "dialog_button_still_exit": "Still Exit",
   "dialog_button_ok": "OK",
   "dialog_button_open": "Open",
+  "dialog_button_go_to_download": "Go to Download",
 
   "file_type_dump": "Dump File",
   "file_type_bin": "BIN File",
@@ -61,6 +66,7 @@
   "log_msg_start_connect_device": "Start Connecting Device",
   "log_msg_discover_device": "Device Discovered",
   "log_msg_not_found_device": "Device not found!",
+  "log_msg_check_update_failed": "Check for updates failed",
 
   "html_tools": "Tools",
   "html_settings": "Settings",

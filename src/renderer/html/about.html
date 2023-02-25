@@ -17,7 +17,7 @@
       <div>
         <span class="tag">{{ html_version_code }}</span>
         <span id="version-code"></span>
-        <button>{{html_check_update}}</button>
+        <button onclick="window['electronAPI'].execAction('check-update')">{{html_check_update}}</button>
       </div>
       <div>
         <span class="tag">{{ html_open_source_repository }}</span>
