@@ -25,7 +25,7 @@ const {
 
 const userDataPath = app.getPath('userData')
 
-const knownKeysFile = path.join(userDataPath, "keys.txt")
+const knownKeysFile = path.join(userDataPath, "./keys.txt")
 const tempMFDFilePath = path.join(userDataPath, "./temp.mfd")
 const dumpFilesPath = path.join(userDataPath, "./dumpfiles")
 const noncesFilesPath = path.join(userDataPath, "./nonces.bin")
@@ -60,8 +60,6 @@ const actions = {
 
     // 扫描设备
     "scan-usb-devices": () => {
-        console.log(userDataPath)
-        console.log(nfcConfigFilePath)
         SerialPort.list().then(ports => {
             const devices = []
             ports.forEach(port => {
@@ -139,7 +137,7 @@ const actions = {
             i18n("log_msg_start_detect_card"),
             'nfc-mfdetect', [`-N`, `-f${knownKeysFile}`],
             (value) => {keyInfoStatistic(value)},
-        ).then().catch(() => {})
+        ).then(()=>{printExitLog(0)}).catch(() => {})
     },
 
     // 锁 UFUID
@@ -152,7 +150,7 @@ const actions = {
         }).then((response) => {
             if (response.response === 0) {
                 printStatus(i18n("indicator_locking_ufuid"))
-                exec(i18n("log_msg_start_lock_ufuid"), "nfc-mflock", ["-q"]).then().catch(() => {})
+                exec(i18n("log_msg_start_lock_ufuid"), "nfc-mflock", ["-q"]).then(()=>{printExitLog(0)}).catch(() => {})
             }
         })
     },
@@ -320,11 +318,11 @@ const actions = {
                     if (unknownKeyInfo[0][0] === configs.sector && unknownKeyInfo[0][1] === configs.keyType) unknownKeyInfo.shift()
                 }
             }
-        ).then().catch(() => {})
+        ).then(()=>{printExitLog(0)}).catch(() => {})
     },
 
     // 打开历史密钥
-    "open-history-keys": () => {cp.exec(`${process.platform === "win32" ? "start" : "open"} ${knownKeysFile}`)},
+    "open-history-keys": () => {cp.exec(`${process.platform === "win32" ? "start" : "open"} "${knownKeysFile}"`)},
 
     // 转储编辑器
     "open-dump-editor": (file) => {
@@ -503,7 +501,7 @@ function readICThenExec(msg, statusMsg, isSaveDumpFile, cmd, args, processHandle
                 fs.unlink(tempMFDFilePath, (err) => {
                     if(err) throw err;
                 })
-            }).then().catch(() => {})
+            }).then(()=>{printExitLog(0)}).catch(() => {})
         }).catch(() => {})
 }
 
@@ -541,7 +539,7 @@ function mfoc(args) {
                 })
             }
         }
-    ).then().catch(() => {})
+    ).then(()=>{printExitLog(0)}).catch(() => {})
 }
 
 // 统计密钥信息
@@ -587,7 +585,7 @@ function setNFCConfig() {
                 }
             },
             () => {sendToMainWindow("setting-nfc-config", status.isDeviceConnected ? "success" : "failed")},
-        ).then().catch(() => {})
+        ).then(()=>{printExitLog(0)}).catch(() => {})
     })
 }
 

@@ -46,7 +46,6 @@ function exec(msg, cmd, args, processHandler, finishHandler) {
                     reject(new Error(message))
                 }
             } else {
-                printExitLog(0)
                 resolve()
             }
         })
