@@ -3,8 +3,10 @@ const { dialog } = require('electron')
 const { sendToMainWindow } = require("./windows")
 const status = require("./status")
 const { i18n } = require('./i18n')
+const path = require("path");
 
 let task = null
+const binPath = path.join(__dirname, "../framework/bin/")
 
 function exec(msg, cmd, args, processHandler, finishHandler) {
     return new Promise((resolve, reject) => {
@@ -21,7 +23,7 @@ function exec(msg, cmd, args, processHandler, finishHandler) {
         }
         status.isRunningTask = true
         printLog(`\n\n### ${msg}\n`)
-        task = cp.spawn(`./framework/bin/${cmd}`, args)
+        task = cp.spawn(`${binPath}${cmd}`, args)
 
         task.stdout.on('data', (data) => {
             printLog(data.toString());
