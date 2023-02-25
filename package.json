@@ -19,8 +19,16 @@
   "license": "AGPL-3.0",
   "config": {
     "forge": {
-      "packagerConfig": {},
-      "rebuildConfig": {},
+      "packagerConfig": {
+        "packageManager": "npm",
+        "icon": "src/icons/icon",
+        "asar": true,
+        "overwrite": true,
+        "ignore": [
+          "source",
+          "compile.sh"
+        ]
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
@@ -34,7 +42,11 @@
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "options": {
+              "icon": "src/icons/icon.png"
+            }
+          }
         },
         {
           "name": "@electron-forge/maker-rpm",
@@ -46,7 +58,6 @@
   "dependencies": {
     "child_process": "^1.0.2",
     "electron-squirrel-startup": "^1.0.0",
-    "jquery": "^3.6.3",
     "serialport": "^10.5.0"
   },
   "devDependencies": {

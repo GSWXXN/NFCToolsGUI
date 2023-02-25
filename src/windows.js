@@ -19,6 +19,7 @@ let aboutWindow = null
 const createMainWindow = () => {
 
     mainWindow = new BrowserWindow({
+        icon: path.join(__dirname, './icons/64x64.png'),
         width: 800,
         height: 700,
         resizable: false,
