@@ -10,9 +10,6 @@ process.env['LIBNFC_SYSCONFDIR'] = app.getPath('userData')
 
 Menu.setApplicationMenu(null)
 
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {app.quit()}
-
 ipcMain.handle('minimize-current-window', (event) => {
     BrowserWindow.fromWebContents(event.sender).minimize()
 })

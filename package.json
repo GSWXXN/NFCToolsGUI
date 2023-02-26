@@ -7,20 +7,12 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
-  },
-  "keywords": [],
-  "author": {
-    "name": "GSWXXN",
-    "email": "819269088@qq.com"
+    "make": "electron-forge make"
   },
   "license": "AGPL-3.0",
   "config": {
     "forge": {
-      "packagerConfig":{
-        "executableName": "nfctoolsgui",
+      "packagerConfig": {
         "packageManager": "npm",
         "icon": "src/icons/icon",
         "asar": true,
@@ -45,42 +37,23 @@
       },
       "makers": [
         {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {}
-        },
-        {
           "name": "@electron-forge/maker-zip",
           "platforms": [
             "darwin",
-            "linux"
+            "linux",
+            "win32"
           ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "options": {
-              "icon": "src/icons/icon.png"
-            }
-          }
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
         }
       ]
     }
   },
   "dependencies": {
-    "child_process": "^1.0.2",
-    "electron-squirrel-startup": "^1.0.0",
     "serialport": "^10.5.0"
   },
   "devDependencies": {
+    "node-abi": "^3.33.0",
     "@electron-forge/cli": "^6.0.4",
-    "@electron-forge/maker-deb": "^6.0.4",
-    "@electron-forge/maker-rpm": "^6.0.4",
-    "@electron-forge/maker-squirrel": "^6.0.4",
     "@electron-forge/maker-zip": "^6.0.4",
-    "electron": "22.0.0"
+    "electron": "23.1.1"
   }
 }
