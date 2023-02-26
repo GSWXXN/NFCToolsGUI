@@ -19,7 +19,8 @@
   "license": "AGPL-3.0",
   "config": {
     "forge": {
-      "packagerConfig": {
+      "packagerConfig":{
+        "executableName": "nfctoolsgui",
         "packageManager": "npm",
         "icon": "src/icons/icon",
         "asar": true,
