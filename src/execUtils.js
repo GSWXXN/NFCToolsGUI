@@ -6,7 +6,7 @@ const { i18n } = require('./i18n')
 const path = require("path");
 
 let task = null
-const binPath = path.join(__dirname, "../framework/bin/")
+const binPath = path.join(process.resourcesPath, "./framework/bin/")
 
 function exec(msg, cmd, args, processHandler, finishHandler) {
     return new Promise((resolve, reject) => {
