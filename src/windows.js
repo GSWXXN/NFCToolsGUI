@@ -190,7 +190,7 @@ const createDumpHistoryWindow = (dumpFiles) => {
 const createAboutWindow = () => {
     aboutWindow = new BrowserWindow({
         width: 600,
-        height: 450,
+        height: 480,
         parent: mainWindow,
         show: false,
         resizable: false,

@@ -62,7 +62,6 @@ ipcMain.on('get-language', (event) => {
 // Some APIs can onlybe used after this event occurs.
 app.on('ready', () => {
     i18n.init();
-    execAction("check-update")
     createMainWindow();
 })
 
