@@ -1,7 +1,7 @@
 {
   "name": "nfctoolsgui",
   "productName": "NFCToolsGUI",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "NFCToolsGUI is an Electron-based cross-platform software that interact with PN532. It supports Windows, Linux, and macOS.",
   "main": "src/main.js",
   "scripts": {
