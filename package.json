@@ -31,7 +31,11 @@
           "README*",
           "LICENSE",
           "doc",
-          "dict.dic"
+          "dict.dic",
+          ".gitignore",
+          ".gitsubmodules",
+          ".idea",
+          ".vscode"
         ],
         "extraResource": [
           "framework",
@@ -46,7 +50,8 @@
         {
           "name": "@electron-forge/maker-zip",
           "platforms": [
-            "darwin"
+            "darwin",
+            "linux"
           ]
         },
         {
