@@ -32,7 +32,9 @@ const tempMFDFilePath = path.join(userDataPath, "./temp.mfd")
 const dumpFilesPath = path.join(userDataPath, "./dumpfiles")
 const noncesFilesPath = path.join(userDataPath, "./nonces.bin")
 const nfcConfigFilePath = path.join(userDataPath, "./libnfc.conf")
-let dictPath = path.join(process.resourcesPath, "./dict.dic")
+let dictPath = app.isPackaged ?
+    path.join(process.resourcesPath, "./dict.dic") :
+    path.join(__dirname, "../dict.dic")
 const dumpsFolder = path.join(userDataPath, "./dumpfiles")
 
 let newKeys = []

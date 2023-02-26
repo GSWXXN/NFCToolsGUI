@@ -1,12 +1,12 @@
 const cp = require('child_process')
-const { dialog } = require('electron')
+const { dialog, app } = require('electron')
 const { sendToMainWindow } = require("./windows")
 const status = require("./status")
 const { i18n } = require('./i18n')
 const path = require("path");
 
 let task = null
-const binPath = path.join(process.resourcesPath, "./framework/bin/")
+const binPath = app.isPackaged ? path.join(process.resourcesPath, "./framework/bin/") : path.join(__dirname, "../framework/bin/")
 
 function exec(msg, cmd, args, processHandler, finishHandler) {
     return new Promise((resolve, reject) => {
