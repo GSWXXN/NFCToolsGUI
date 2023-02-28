@@ -646,7 +646,7 @@ function getTimeList() {
     const time = [
         date.getFullYear(),
         date.getMonth() + 1,
-        date.getDay(),
+        date.getDate(),
         date.getHours(),
         date.getMinutes(),
         date.getSeconds()
