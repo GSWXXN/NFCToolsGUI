@@ -326,7 +326,7 @@ const actions = {
     },
 
     // 打开历史密钥
-    "open-history-keys": () => {cp.exec(`${process.platform === "win32" ? "start" : "open"} "${knownKeysFile}"`)},
+    "open-history-keys": () => {cp.exec(`${process.platform === "win32" ? "notepad.exe" : "open"} "${knownKeysFile}"`)},
 
     // 转储编辑器
     "open-dump-editor": (file) => {
