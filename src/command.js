@@ -176,7 +176,6 @@ const actions = {
                 false,
                 () => {
                     if (configs.fromUser) totalUnknownKeys = unknownKeyInfo.length
-                    printStatus(`${i18n("indicator_doing_hard_nested")} - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`)
 
                     if (knownKeyInfo.length === 0) {
                         printLog(`\n${i18n("log_msg_not_found_known_key")}`);
@@ -203,7 +202,7 @@ const actions = {
         configs.knownSector = (parseInt(configs.knownSector) + 1) * 4 - 1
         configs.targetSector = (parseInt(configs.targetSector) + 1) * 4 - 1
 
-        printStatus(`${i18n("indicator_collecting_nonces")}`)
+        printStatus(`${i18n("indicator_collecting_nonces")}${configs.autoRun ? ` - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}` : ""}`)
         exec(
             `${i18n("log_msg_start_collect_nonces")}\n\n`,
             "libnfc-collect", [
@@ -254,6 +253,7 @@ const actions = {
                 }
             }).then(() => {
                 if (!configs.collectOnly)  {
+                    printStatus(`${i18n("indicator_doing_hard_nested")} - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`)
                     exec(
                         i18n("lod_msg_start_hard_nested"),
                         "cropto1_bs", [noncesFilesPath],
@@ -498,7 +498,7 @@ const actions = {
             });
         }).on("error", (error) => {
             if (isShowErrorDialog)
-                dialog.showMessageBox({
+                dialog.showMessageBoxSync({
                     type: 'error',
                     buttons: [i18n("dialog_button_ok")],
                     message: i18n("dialog_msg_check_update_failed"),
