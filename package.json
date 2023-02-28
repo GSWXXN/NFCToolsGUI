@@ -10,43 +10,6 @@
     "make": "electron-forge make"
   },
   "license": "AGPL-3.0",
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "packageManager": "npm",
-        "icon": "src/icons/icon",
-        "asar": true,
-        "overwrite": true,
-        "ignore": [
-          "source",
-          "compile.sh",
-          "framework",
-          "README*",
-          "LICENSE",
-          "doc",
-          "dict.dic",
-          ".gitignore",
-          ".gitsubmodules",
-          ".idea",
-          ".vscode"
-        ],
-        "extraResource": [
-          "framework",
-          "dict.dic"
-        ]
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin",
-            "linux",
-            "win32"
-          ]
-        }
-      ]
-    }
-  },
   "dependencies": {
     "serialport": "^10.5.0"
   },
