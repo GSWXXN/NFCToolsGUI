@@ -39,7 +39,7 @@ module.exports = {
         }
     ],
     hooks: {
-        "generateAssets": () => {
+        "generateAssets": async () => {
             const hash = execSync('git rev-parse --short HEAD').toString().trim();
             const version = require('./package.json').version;
 
