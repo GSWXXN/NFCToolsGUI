@@ -1,9 +1,9 @@
-const os = require('os')
 const {execAction} = require('./command')
 const {app, BrowserWindow, ipcMain, Menu, nativeTheme, shell} = require('electron')
 const {createMainWindow} = require('./windows')
 const {killProcess} = require('./execUtils')
 const path = require("path");
+const buildInfo = require('./buildInfo.json');
 const i18n = require('./i18n');
 
 process.env['LIBNFC_SYSCONFDIR'] = app.getPath('userData')
@@ -20,10 +20,8 @@ ipcMain.on('rendered', (event) => {
     BrowserWindow.fromWebContents(event.sender).show()
 })
 
-ipcMain.handle('get-app-version', () => {return app.getVersion()})
-ipcMain.handle('get-compiler', () => {
-    return process.env["NFCTOOLSGUI_COMPILER"] ? process.env["NFCTOOLSGUI_COMPILER"] : os.userInfo().username
-})
+ipcMain.handle('get-app-version', () => {return buildInfo.version})
+ipcMain.handle('get-compiler', () => {return buildInfo.compiler})
 ipcMain.handle('exec-action', (event, action, arg) => {
     execAction(action, arg)
 })

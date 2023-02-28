@@ -1,5 +1,7 @@
 const path = require("path");
 const fs = require('fs');
+const { execSync } = require('child_process');
+const os = require("os");
 
 module.exports = {
     packagerConfig: {
@@ -37,15 +39,21 @@ module.exports = {
         }
     ],
     hooks: {
-        "packageAfterPrune": async (forgeConfig, buildPath) => {
-            if (process.platform === "win32") return;
-            const url = path.join(buildPath, 'node_modules/@serialport/bindings-cpp/build/node_gyp_bins')
-            fs.unlink(path.join(url, "python3"), (err) => {
-                if (err) throw err;
+        "generateAssets": () => {
+            const hash = execSync('git rev-parse --short HEAD').toString().trim();
+            const version = require('./package.json').version;
 
-                fs.rmdir(url, (err) => {
-                    if (err) throw err;
-                })
+            const data = {
+                version: `v${version}-${hash}`,
+                compiler: process.env["NFCTOOLSGUI_COMPILER"] ? process.env["NFCTOOLSGUI_COMPILER"] : os.userInfo().username
+            }
+
+            fs.writeFileSync('./src/buildInfo.json', JSON.stringify(data, null, 2), 'utf-8');
+        },
+        "packageAfterPrune": async (forgeConfig, buildPath) => {
+            const url = path.join(buildPath, 'node_modules/@serialport/bindings-cpp/build/node_gyp_bins')
+            fs.unlink(path.join(url, "python3"), () => {
+                fs.rmdir(url, () => {})
             });
         }
     }
