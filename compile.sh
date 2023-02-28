@@ -159,8 +159,8 @@ mkdir -p crapto1-v3.3
 curl -LO https://pub-3d2f9df4304d45e38bbebe723816c4a3.r2.dev/crapto1-v3.3.tar.xz
 tar -xf crapto1-v3.3.tar.xz -C crapto1-v3.3
 autoreconf -vis
-if [ "$(uname -m)" = "arm64" ] && [ "$os" = "Darwin" ]; then
-    ./configure LDFLAGS=-L"$prefix"/lib prefix="$prefix" CPPFLAGS=-I"$prefix"/include CFLAGS='-std=gnu99 -O3 -mcpu=apple-m1'
+if [ "$os" = "Darwin" ]; then
+    ./configure LDFLAGS=-L"$prefix"/lib prefix="$prefix" CPPFLAGS=-I"$prefix"/include CFLAGS='-std=gnu99 -O3'
 else
     ./configure LDFLAGS=-L"$prefix"/lib' '-Wl,--allow-multiple-definition prefix="$prefix" CPPFLAGS=-I"$prefix"/include CFLAGS='-std=gnu99 -O3 -march=native'
 fi
@@ -209,7 +209,7 @@ rm -rf "$prefix"/bin2/
 rm -rf "$prefix"/include/
 rm -rf "$prefix"/share/
 rm -rf "$prefix"/lib/pkgconfig/
-rm -rf "$prefix"/lib/libnfc.la
+rm -rf "$prefix"/lib/*.la
 if [ "$os" = "MINGW64" ]; then
     rm -rf "${prefix:?}/lib/"
 fi
