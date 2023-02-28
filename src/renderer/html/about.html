@@ -20,8 +20,8 @@
         <button onclick="window['electronAPI'].execAction('check-update')">{{html_check_update}}</button>
       </div>
       <div>
-        <span class="tag">{{ html_compiler }}</span>
-        <span id="compiler"></span>
+        <span class="tag">{{ html_builder }}</span>
+        <span id="builder"></span>
       </div>
       <div>
         <span class="tag">{{ html_open_source_repository }}</span>
@@ -57,8 +57,8 @@
     document.getElementById("version-code").innerText = version.toString()
   });
 
-  window.electronAPI.getCompiler().then((compiler) => {
-    document.getElementById("compiler").innerText = compiler.toString()
+  window.electronAPI.getBuilder().then((builder) => {
+    document.getElementById("builder").innerText = builder.toString()
   });
 
   const links = document.querySelectorAll('a[href]')

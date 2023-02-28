@@ -21,7 +21,7 @@ ipcMain.on('rendered', (event) => {
 })
 
 ipcMain.handle('get-app-version', () => {return buildInfo.version})
-ipcMain.handle('get-compiler', () => {return buildInfo.compiler})
+ipcMain.handle('get-builder', () => {return buildInfo.builder})
 ipcMain.handle('exec-action', (event, action, arg) => {
     execAction(action, arg)
 })

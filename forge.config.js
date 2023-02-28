@@ -45,7 +45,7 @@ module.exports = {
 
             const data = {
                 version: `v${version}-${hash}`,
-                compiler: process.env["NFCTOOLSGUI_COMPILER"] ? process.env["NFCTOOLSGUI_COMPILER"] : os.userInfo().username
+                builder: process.env["NFCTOOLSGUI_COMPILER"] ? process.env["NFCTOOLSGUI_COMPILER"] : os.userInfo().username
             }
 
             fs.writeFileSync('./src/buildInfo.json', JSON.stringify(data, null, 2), 'utf-8');
