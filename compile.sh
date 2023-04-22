@@ -34,6 +34,7 @@ if [ "$os" = "MINGW64" ]; then
     pacman -S --noconfirm mingw-w64-x86_64-xz
     pacman -S --noconfirm mingw-w64-x86_64-readline
     pacman -S --noconfirm mingw-w64-x86_64-headers-git
+    pacman -S --noconfirm mingw-w64-x86_64-libwinpthread-git
 fi
 
 workdir=$(pwd)
@@ -183,6 +184,7 @@ if [ "$os" = "MINGW64" ]; then
     echo "- copy library"
     cp /mingw64/bin/libreadline8.dll "$prefix"/bin
     cp /mingw64/bin/libtermcap-0.dll "$prefix"/bin
+    cp /mingw64/bin/libwinpthread-1.dll "$prefix"/bin
 fi
 
 
