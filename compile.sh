@@ -34,7 +34,6 @@ if [ "$os" = "MINGW64" ]; then
     pacman -S --noconfirm mingw-w64-x86_64-xz
     pacman -S --noconfirm mingw-w64-x86_64-readline
     pacman -S --noconfirm mingw-w64-x86_64-headers-git
-    pacman -S --noconfirm mingw-w64-x86_64-libwinpthread-git
 fi
 
 workdir=$(pwd)
