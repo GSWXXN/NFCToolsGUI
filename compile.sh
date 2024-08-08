@@ -230,6 +230,8 @@ if [ "$os" = "Darwin" ]; then
 elif [ "$os" = "Linux" ]; then
     echo "- patchelf"
     cd "$prefix"/bin
+    rm -rf "$prefix"/lib/libnfc.so.6
+    ln -s "$prefix"/lib/libnfc.so "$prefix"/lib/libnfc.so.6
     for i in *; do
         patchelf --set-rpath '$ORIGIN/../lib/' "$prefix"/bin/"$i"
     done
