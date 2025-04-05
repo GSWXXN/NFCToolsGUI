@@ -171,6 +171,7 @@ const actions = {
         catch (e) {createHardNestedWindow()}},
     "hard-nested-config-done": (configs) => {
         if (configs.autoRun) {
+            fs.writeFileSync(noncesFilesPath, '');
             readICThenExec(i18n("lod_msg_start_auto_hard_nested"),
                 `${i18n("indicator_doing_hard_nested")} - ${totalUnknownKeys - unknownKeyInfo.length + 1}/${totalUnknownKeys}`,
                 false,
