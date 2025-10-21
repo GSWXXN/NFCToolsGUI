@@ -31,7 +31,7 @@ jobs:
         if: matrix.os == 'macOS(ARM64)'
         run: rm -rf *
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
         with:
           submodules: 'recursive'
 
@@ -84,7 +84,7 @@ jobs:
           echo "$EOF" >> $GITHUB_ENV
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: NFCToolsGUI-${{ runner.os }}-${{ runner.arch }}
           path: ${{ env.output_files }}
@@ -107,7 +107,7 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
 
       - name: Find zip files
         id: find-zip-files
@@ -118,7 +118,7 @@ jobs:
           echo "$EOF" >> $GITHUB_ENV
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.head_commit.message }}
           files: ${{ env.articact_filesS }}
